@@ -9,148 +9,209 @@
 
 <style>
   :root {
-    --bg: #f5f7fb;
-    --card: #ffffff;
-    --accent: #0b63ce;
-    --accent-soft: #dfefff;
-    --danger: #d7263d;
-    --ok: #1b9c5c;
-    --text-main: #222;
-    --text-soft: #555;
-    --border-soft: #d0d7e2;
+    --bg: #0f1722;
+    --bg-alt: #151e2b;
+    --card: #1e2937;
+    --card-soft: #1b2432;
+    --accent: #0ea5e9;
+    --accent-soft: #1d4ed8;
+    --accent-gold-bg: #fff7cc;
+    --accent-gold-border: #e6c200;
+    --danger: #f97373;
+    --ok: #22c55e;
+    --text-main: #e5e7eb;
+    --text-soft: #9ca3af;
+    --border-soft: #374151;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    background: var(--bg);
+    background: radial-gradient(circle at top, #111827 0, #020617 55%);
     color: var(--text-main);
   }
-  .header-banner {
-    background: linear-gradient(90deg, #0b63ce, #27a9ff);
-    color: #fff;
-    padding: 18px 20px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+
+  /* HEADER */
+  .header-hero {
+    position: relative;
+    overflow: hidden;
+    height: 190px;
+    background: linear-gradient(120deg, #020617, #0b1120);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.6);
     margin-bottom: 20px;
   }
-  .header-banner h1 {
-    margin: 0;
-    font-size: 26px;
-    letter-spacing: 0.03em;
+  .header-hero img {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    opacity: 0.22;
+    object-fit: cover;
+    filter: saturate(1.1);
   }
-  .header-banner p {
-    margin: 4px 0 0 0;
+  .header-hero-overlay {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 18px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .header-title {
+    font-size: 30px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #f9fafb;
+  }
+  .header-subtitle {
+    margin-top: 6px;
     font-size: 14px;
-    opacity: 0.9;
+    color: var(--text-soft);
   }
+  .header-tagline {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #e5e7eb;
+    max-width: 520px;
+  }
+
   .page {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 16px 40px 16px;
   }
+
   h2 {
     margin-top: 24px;
     margin-bottom: 10px;
-    font-size: 20px;
+    font-size: 19px;
+    color: #e5e7eb;
   }
-  .grid {
+
+  .grid-main {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
-    gap: 18px;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.1fr) 260px;
+    gap: 16px;
   }
+  .grid-two {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+    gap: 16px;
+  }
+
   .card {
     background: var(--card);
     border-radius: 10px;
     padding: 14px 16px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.6);
     border: 1px solid var(--border-soft);
+  }
+  .card-soft {
+    background: var(--card-soft);
   }
   .card h3 {
     margin-top: 0;
     margin-bottom: 10px;
-    font-size: 17px;
+    font-size: 16px;
+    color: #f9fafb;
   }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-soft);
+    margin: 10px 0 4px 0;
+  }
+
   .form-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 8px;
+    gap: 8px;
+    margin-bottom: 6px;
     align-items: center;
   }
   .form-row label {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text-soft);
     min-width: 120px;
   }
   .form-row input[type="number"],
   .form-row select {
     padding: 5px 7px;
-    font-size: 14px;
+    font-size: 13px;
     border-radius: 5px;
-    border: 1px solid var(--border-soft);
+    border: 1px solid var(--accent-gold-border);
     min-width: 80px;
+    background: var(--accent-gold-bg);
+    color: #111827;
+  }
+  .form-row input[type="number"]:focus,
+  .form-row select:focus {
+    outline: 1px solid #facc15;
+    box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.5);
   }
   .form-row input[type="checkbox"],
   .form-row input[type="radio"] {
-    transform: scale(1.1);
+    transform: scale(1.05);
     margin-right: 4px;
   }
   .inline-label {
-    font-size: 14px;
-    color: var(--text-soft);
-    margin-right: 10px;
-  }
-  .section-label {
     font-size: 13px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
     color: var(--text-soft);
-    margin-bottom: 6px;
+    margin-right: 8px;
   }
+
   .badge {
     display: inline-block;
     padding: 2px 7px;
     border-radius: 999px;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
   }
   .badge-dx {
-    background: #ffe6cc;
-    color: #b35a00;
+    background: #f97316;
+    color: #111827;
   }
   .badge-seaside {
-    background: #dff7ff;
-    color: #006b8f;
+    background: #22d3ee;
+    color: #0f172a;
   }
+
   .summary-block {
-    background: #f0f2f8;
-    padding: 10px 12px;
+    background: #020617;
+    padding: 9px 10px;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 13px;
     margin-top: 6px;
+    border: 1px solid #1f2937;
+    color: #e5e7eb;
   }
   .warning-block {
-    margin-top: 10px;
-    padding: 10px 12px;
+    margin-top: 8px;
+    padding: 9px 10px;
     border-radius: 8px;
-    background: #ffe6e6;
-    border-left: 5px solid var(--danger);
-    font-size: 13px;
-    color: #7a0000;
+    background: rgba(248, 113, 113, 0.08);
+    border-left: 4px solid var(--danger);
+    font-size: 12px;
+    color: #fecaca;
   }
   .ok-block {
-    margin-top: 10px;
-    padding: 10px 12px;
+    margin-top: 8px;
+    padding: 9px 10px;
     border-radius: 8px;
-    background: #e6f7ec;
-    border-left: 5px solid var(--ok);
-    font-size: 13px;
-    color: #0f5a33;
+    background: rgba(34, 197, 94, 0.08);
+    border-left: 4px solid var(--ok);
+    font-size: 12px;
+    color: #bbf7d0;
   }
+
   .patterns-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -162,50 +223,125 @@
     width: 100%;
     height: 320px;
   }
+
   .table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
+    font-size: 12px;
     margin-top: 6px;
   }
   .table th,
   .table td {
-    border: 1px solid #dde2ec;
+    border: 1px solid #374151;
     padding: 4px 6px;
     text-align: left;
   }
   .table th {
-    background: #f3f6fb;
+    background: #020617;
     font-weight: 600;
+    color: #e5e7eb;
   }
+
   .diagram-container {
     width: 100%;
     height: 260px;
     border-radius: 8px;
-    border: 1px dashed #c5cfdf;
+    border: 1px dashed #4b5563;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #8a94a8;
+    color: var(--text-soft);
+    font-size: 12px;
+    background: #020617;
+  }
+
+  .equipment-card img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #374151;
+  }
+  .equipment-card h3 {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  .equipment-card p {
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-bottom: 8px;
+  }
+
+  .footer-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .footer-gallery img {
+    height: 70px;
+    border-radius: 6px;
+    border: 1px solid #374151;
+    object-fit: cover;
+  }
+
+  button {
+    background: #0ea5e9;
+    color: #0b1120;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 14px;
     font-size: 13px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #38bdf8;
+  }
+
+  @media (max-width: 1100px) {
+    .grid-main {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.1fr);
+    }
+    .equipment-card {
+      grid-column: 1 / -1;
+    }
   }
   @media (max-width: 900px) {
-    .grid { grid-template-columns: minmax(0, 1fr); }
-    .patterns-grid { grid-template-columns: minmax(0, 1fr); }
+    .grid-main {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .grid-two {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .patterns-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .header-hero {
+      height: 210px;
+    }
   }
 </style>
 </head>
 <body>
 
-<div class="header-banner">
-  <h1>Vertical Antenna Optimizer</h1>
-  <p>KG5IEF Antenna Lab · Ground‑mounted vertical array with DX Mode, seaside boost, and realistic ground‑reflected patterns.</p>
+<!-- HERO HEADER WITH YAESU FT-991A -->
+<div class="header-hero">
+  <img src="https://www.yaesu.com/jp/en/images/ft-991a_main.jpg" alt="Yaesu FT-991A">
+  <div class="header-hero-overlay">
+    <div class="header-title">Vertical Antenna Optimizer</div>
+    <div class="header-subtitle">KG5IEF Antenna Lab · HF Vertical Array Design Console</div>
+    <div class="header-tagline">
+      Ground-mounted vertical array modeling with DX Mode, seaside enhancement, realistic ground-reflected patterns,
+      and radial system analysis — all in your browser.
+    </div>
+  </div>
 </div>
 
 <div class="page">
 
-  <!-- CONFIGURATION PANEL -->
-  <div class="grid">
+  <!-- MAIN GRID: CONFIG + METRICS + EQUIPMENT CARD -->
+  <div class="grid-main">
+
+    <!-- CONFIGURATION PANEL -->
     <div class="card">
       <h3>Antenna Configuration</h3>
 
@@ -357,11 +493,20 @@
         <b>Good match:</b> Feedpoint impedance is close to 50 Ω. Only minor matching may be required.
       </div>
     </div>
-  </div>
 
-  <!-- ELEMENT TABLE -->
+    <!-- EQUIPMENT / PHOTO CARD -->
+    <div class="card equipment-card">
+      <h3>Equipment Inspiration</h3>
+      <p>Real-world rigs and antennas that pair beautifully with a well-designed vertical array.</p>
+      <img id="equipImg" src="https://www.yaesu.com/jp/en/images/ft-991a_main.jpg" alt="Yaesu FT-991A">
+      <p id="equipCaption">Yaesu FT‑991A — all-mode HF/6m/2m/70cm transceiver, perfect for driving a high-efficiency vertical.</p>
+    </div>
+
+  </div> <!-- end grid-main -->
+
+  <!-- ELEMENT TABLE + BOOM DIAGRAM -->
   <h2>Element Geometry & Boom Layout</h2>
-  <div class="grid">
+  <div class="grid-two">
     <div class="card">
       <h3>Element Table</h3>
       <table class="table" id="elementTable">
@@ -393,7 +538,7 @@
 
   <!-- GROUND SYSTEM -->
   <h2>Ground System & Current Distribution</h2>
-  <div class="grid">
+  <div class="grid-two">
     <div class="card">
       <h3>Radial Layout</h3>
       <div id="radialDiagram" class="diagram-container"></div>
@@ -418,14 +563,14 @@
         <div id="elevationPlot"></div>
       </div>
     </div>
-    <h3>3D Radiation Pattern (Realistic Ground-Reflected Gain)</h3>
+    <h3>3D Radiation Pattern (Ground-Reflected Gain)</h3>
     <div id="pattern3D"></div>
   </div>
 
   <!-- TEACHING CARDS -->
-  <div class="card" style="margin-top:20px;">
+  <div class="card card-soft" style="margin-top:20px;">
     <h3>How to Improve Your Vertical Antenna Performance</h3>
-    <ol style="font-size:14px; color:#333;">
+    <ol style="font-size:13px; color:var(--text-main);">
       <li><b>Add a reflector</b> — Improves front‑to‑back ratio and pushes more signal forward.</li>
       <li><b>Add a director</b> — Narrows the beam and increases forward gain.</li>
       <li><b>Add more directors</b> — Each one adds a bit more gain and directivity (with diminishing returns).</li>
@@ -434,18 +579,18 @@
       <li><b>Lengthen the elements to ~0.70 λ</b> — Creates a strong low‑angle DX lobe (requires matching).</li>
       <li><b>Choose the best time of day or night</b> — Propagation can outperform hardware improvements.</li>
     </ol>
-    <p style="font-size:13px; color:#777; margin-top:10px;">
+    <p style="font-size:12px; color:var(--text-soft); margin-top:8px;">
       Seaside operation is not listed here, but remains one of the strongest environmental boosts when available.
     </p>
   </div>
 
-  <div class="card" style="margin-top:20px;">
+  <div class="card card-soft" style="margin-top:20px;">
     <h3>Ground Enhancements: Moisture, Conductivity & Alternatives to Radials</h3>
-    <p style="font-size:14px; color:#555;">
+    <p style="font-size:13px; color:var(--text-main);">
       A vertical’s efficiency depends heavily on how easily RF current can return to ground.
       Radials are powerful, but several other techniques can improve conductivity and reduce ground loss.
     </p>
-    <ul style="font-size:14px; color:#333; line-height:1.45;">
+    <ul style="font-size:13px; color:var(--text-main); line-height:1.45;">
       <li><b>Ground screen (wire mesh)</b> — A sheet of welded wire mesh or hardware cloth under the base reduces near‑field loss when full radials aren’t possible.</li>
       <li><b>Conductive fabric / Faraday cloth</b> — Flexible alternative to metal mesh for portable or stealth setups.</li>
       <li><b>Ground rods</b> — Great for lightning and DC grounding; modest RF benefit unless combined with radials or a screen.</li>
@@ -457,16 +602,28 @@
       <li><b>Saltwater buckets or trenches</b> — A controlled way to boost conductivity without spreading salt everywhere.</li>
       <li><b>Seasonal moisture</b> — After rain, snowmelt, or in winter, ground conductivity improves naturally and verticals often “wake up.”</li>
     </ul>
-    <p style="font-size:13px; color:#777; margin-top:10px;">
+    <p style="font-size:12px; color:var(--text-soft); margin-top:8px;">
       Rule of thumb: ground rods help safety; radials, moisture, and ground screens move the needle for RF efficiency.
     </p>
   </div>
 
-  <div class="card" style="margin-top:20px;">
+  <div class="card card-soft" style="margin-top:20px;">
     <h3>Export / Copy Design Summary</h3>
-    <button id="copySummaryBtn" style="padding:8px 14px; font-size:14px; cursor:pointer;">
-      Copy Full Antenna Summary
-    </button>
+    <button id="copySummaryBtn">Copy Full Antenna Summary</button>
+  </div>
+
+  <!-- FOOTER GALLERY -->
+  <div class="card card-soft" style="margin-top:20px;">
+    <h3>Ham Shack & Antenna Gallery</h3>
+    <p style="font-size:12px; color:var(--text-soft);">
+      A few visual reminders of what all this modeling is really about: real RF in the air.
+    </p>
+    <div class="footer-gallery">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Amateur_radio_station.jpg" alt="Ham shack">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Vertical_antenna_with_radials.jpg" alt="Vertical with radials">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/Ham_radio_vertical_antenna.jpg" alt="HF vertical antenna">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Yaesu_FT-991A_front_panel.jpg" alt="Yaesu FT-991A front panel">
+    </div>
   </div>
 
 </div> <!-- end .page -->
@@ -533,7 +690,6 @@ const elementTableBody  = document.querySelector("#elementTable tbody");
 const boomLengthLabel   = document.getElementById("boomLengthLabel");
 const totalWireLabel    = document.getElementById("totalWireLabel");
 
-const boomDiagram       = document.getElementById("boomDiagram");
 const radialDiagram     = document.getElementById("radialDiagram");
 const currentDiagram    = document.getElementById("currentDiagram");
 
@@ -547,7 +703,7 @@ function groundGamma(thetaRad, seaside) {
   return base + tilt;
 }
 
-/* -------------- MAIN UPDATE FUNCTION (HYBRID NEC) -------------- */
+/* -------------- MAIN UPDATE FUNCTION -------------- */
 function updateAll() {
 
   /* --- FREQUENCY & WAVELENGTH --- */
@@ -768,11 +924,13 @@ function updateAll() {
     y: azGain,
     type: "scatter",
     mode: "lines",
-    line: {color: "#0b63ce"}
+    line: {color: "#0ea5e9"}
   }], {
     margin: {t: 20},
-    xaxis: {title: "Azimuth (°)"},
-    yaxis: {title: "Gain (dBi)"}
+    paper_bgcolor: "#111827",
+    plot_bgcolor: "#020617",
+    xaxis: {title: "Azimuth (°)", color:"#e5e7eb", gridcolor:"#1f2937"},
+    yaxis: {title: "Gain (dBi)", color:"#e5e7eb", gridcolor:"#1f2937"}
   });
 
   /* ============================================================
@@ -785,6 +943,7 @@ function updateAll() {
     const Ev    = Math.sin(thRad);
     const dphi  = 2 * k0 * heff * Math.sin(thRad);
     const Gamma = groundGamma(thRad, seaside);
+
     const E = Math.sqrt(
       Ev*Ev +
       (Gamma*Gamma) * Ev*Ev +
@@ -799,11 +958,13 @@ function updateAll() {
     y: elGain,
     type: "scatter",
     mode: "lines",
-    line: {color: "#d7263d"}
+    line: {color: "#f97316"}
   }], {
     margin: {t: 20},
-    xaxis: {title: "Elevation (°)"},
-    yaxis: {title: "Gain (dBi)"}
+    paper_bgcolor: "#111827",
+    plot_bgcolor: "#020617",
+    xaxis: {title: "Elevation (°)", color:"#e5e7eb", gridcolor:"#1f2937"},
+    yaxis: {title: "Gain (dBi)", color:"#e5e7eb", gridcolor:"#1f2937"}
   });
 
   /* ============================================================
@@ -851,10 +1012,12 @@ function updateAll() {
     },
     type: "scatter3d"
   }], {
+    paper_bgcolor: "#111827",
     scene: {
-      xaxis: {title: "X"},
-      yaxis: {title: "Y"},
-      zaxis: {title: "Z"}
+      xaxis: {title: "X", color:"#e5e7eb"},
+      yaxis: {title: "Y", color:"#e5e7eb"},
+      zaxis: {title: "Z", color:"#e5e7eb"},
+      bgcolor: "#020617"
     },
     margin: {t: 20}
   });
@@ -884,7 +1047,7 @@ function updateAll() {
     line.setAttribute("y1", cy);
     line.setAttribute("x2", x2);
     line.setAttribute("y2", y2);
-    line.setAttribute("stroke", "#0b63ce");
+    line.setAttribute("stroke", "#0ea5e9");
     line.setAttribute("stroke-width", "2");
     radialSVG.appendChild(line);
   }
@@ -900,7 +1063,7 @@ function updateAll() {
   const currentSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   currentSVG.setAttribute("width", "100%");
   currentSVG.setAttribute("height", "100%");
-  currentSVG.setAttribute("viewBox", "0 0 200 200");
+  currentSVG.setAttribute("viewBox", "0 0 220 200");
 
   const baseX = 20;
   const baseY = 180;
@@ -918,7 +1081,7 @@ function updateAll() {
     rect.setAttribute("y", baseY - barHeight);
     rect.setAttribute("width", barWidth);
     rect.setAttribute("height", barHeight);
-    rect.setAttribute("fill", "#d7263d");
+    rect.setAttribute("fill", "#f97316");
 
     currentSVG.appendChild(rect);
 
@@ -927,6 +1090,7 @@ function updateAll() {
     label.setAttribute("y", baseY + 15);
     label.setAttribute("text-anchor", "middle");
     label.setAttribute("font-size", "10");
+    label.setAttribute("fill", "#e5e7eb");
     label.textContent = el.name;
     currentSVG.appendChild(label);
   });
@@ -983,6 +1147,38 @@ copySummaryBtn.addEventListener("click", () => {
 });
 
 /* ============================================================
+   EQUIPMENT IMAGE ROTATOR
+   ============================================================ */
+const equipImg = document.getElementById("equipImg");
+const equipCaption = document.getElementById("equipCaption");
+
+const equipSlides = [
+  {
+    src: "https://www.yaesu.com/jp/en/images/ft-991a_main.jpg",
+    caption: "Yaesu FT‑991A — all-mode HF/6m/2m/70cm transceiver, perfect for driving a high-efficiency vertical."
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Vertical_antenna_with_radials.jpg",
+    caption: "Ground-mounted HF vertical with a radial field — exactly the kind of system this tool models."
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/0/0b/Amateur_radio_station.jpg",
+    caption: "A well-equipped ham shack — where optimized antennas turn into real QSOs."
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/5/5a/Ham_radio_vertical_antenna.jpg",
+    caption: "HF vertical antenna in the field — portable, simple, and powerful when properly matched."
+  }
+];
+
+let equipIndex = 0;
+setInterval(() => {
+  equipIndex = (equipIndex + 1) % equipSlides.length;
+  equipImg.src = equipSlides[equipIndex].src;
+  equipCaption.textContent = equipSlides[equipIndex].caption;
+}, 9000);
+
+/* ============================================================
    EVENT LISTENERS
    ============================================================ */
 document.querySelectorAll("input, select").forEach(el => {
@@ -995,4 +1191,3 @@ updateAll();
 
 </body>
 </html>
-
