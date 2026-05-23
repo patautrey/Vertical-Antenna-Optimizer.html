@@ -1,1 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vertical Antenna Optimizer – KG5IEF Antenna Lab</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+<style>
+  :root {
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --accent: #0b63ce;
+    --accent-soft: #dfefff;
+    --danger: #d7263d;
+    --ok: #1b9c5c;
+    --text-main: #222;
+    --text-soft: #555;
+    --border-soft: #d0d7e2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text-main);
+  }
+  .header-banner {
+    background: linear-gradient(90deg, #0b63ce, #27a9ff);
+    color: #fff;
+    padding: 18px 20px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    margin-bottom: 20px;
+  }
+  .header-banner h1 {
+    margin: 0;
+    font-size: 26px;
+    letter-spacing: 0.03em;
+  }
+  .header-banner p {
+    margin: 4px 0 0 0;
+    font-size: 14px;
+    opacity: 0.9;
+  }
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px 40px 16px;
+  }
+  h2 {
+    margin-top: 24px;
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
+    gap: 18px;
+  }
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    border: 1px solid var(--border-soft);
+  }
+  .card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 17px;
+  }
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+  .form-row label {
+    font-size: 14px;
+    color: var(--text-soft);
+    min-width: 120px;
+  }
+  .form-row input[type="number"],
+  .form-row select {
+    padding: 5px 7px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid var(--border-soft);
+    min-width: 80px;
+  }
+  .form-row input[type="checkbox"],
+  .form-row input[type="radio"] {
+    transform: scale(1.1);
+    margin-right: 4px;
+  }
+  .inline-label {
+    font-size: 14px;
+    color: var(--text-soft);
+    margin-right: 10px;
+  }
+  .section-label {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-soft);
+    margin-bottom: 6px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .badge-dx {
+    background: #ffe6cc;
+    color: #b35a00;
+  }
+  .badge-seaside {
+    background: #dff7ff;
+    color: #006b8f;
+  }
+  .summary-block {
+    background: #f0f2f8;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 6px;
+  }
+  .warning-block {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #ffe6e6;
+    border-left: 5px solid var(--danger);
+    font-size: 13px;
+    color: #7a0000;
+  }
+  .ok-block {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #e6f7ec;
+    border-left: 5px solid var(--ok);
+    font-size: 13px;
+    color: #0f5a33;
+  }
+  .patterns-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px;
+  }
+  #azimuthPlot,
+  #elevationPlot,
+  #pattern3D {
+    width: 100%;
+    height: 320px;
+  }
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 6px;
+  }
+  .table th,
+  .table td {
+    border: 1px solid #dde2ec;
+    padding: 4px 6px;
+    text-align: left;
+  }
+  .table th {
+    background: #f3f6fb;
+    font-weight: 600;
+  }
+  .diagram-container {
+    width: 100%;
+    height: 260px;
+    border-radius: 8px;
+    border: 1px dashed #c5cfdf;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8a94a8;
+    font-size: 13px;
+  }
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: minmax(0, 1fr); }
+    .patterns-grid { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header-banner">
+  <h1>Vertical Antenna Optimizer</h1>
+  <p>KG5IEF Antenna Lab · Ground‑mounted vertical array with DX Mode, seaside boost, and realistic ground‑reflected patterns.</p>
+</div>
+
+<div class="page">
+
+  <!-- CONFIGURATION PANEL -->
+  <div class="grid">
+    <div class="card">
+      <h3>Antenna Configuration</h3>
+
+      <div class="section-label">Frequency & Geometry</div>
+      <div class="form-row">
+        <label for="freqMHz">Frequency (MHz):</label>
+        <input type="number" id="freqMHz" value="3.55" step="0.01" min="1" max="60">
+        <span class="inline-label">Wavelength: <span id="lambdaLabel">–</span> m</span>
+      </div>
+
+      <div class="form-row">
+        <label>Elements:</label>
+        <span class="inline-label">
+          <input type="checkbox" id="addReflector">
+          Reflector
+        </span>
+        <span class="inline-label">
+          Directors:
+          <select id="numDirectors">
+            <option value="0">0</option>
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </span>
+      </div>
+
+      <div class="form-row">
+        <label for="directorSpacing">Director spacing (λ):</label>
+        <input type="number" id="directorSpacing" value="0.10" step="0.01" min="0.05" max="0.25">
+        <span class="inline-label">Director length (λ):</span>
+        <input type="number" id="directorLengthFactor" value="0.45" step="0.01" min="0.40" max="0.50">
+      </div>
+
+      <div class="form-row">
+        <label for="reflectorFactor">Reflector length factor:</label>
+        <input type="number" id="reflectorFactor" value="1.05" step="0.01" min="1.00" max="1.10">
+        <span class="inline-label">Driven length (λ): <span id="drivenLambdaLabel">0.25 λ</span></span>
+      </div>
+
+      <div class="section-label">Height & Location</div>
+      <div class="form-row">
+        <label for="elementHeight">Element height above ground (m):</label>
+        <input type="number" id="elementHeight" value="0.0" step="0.5" min="0" max="20">
+        <span class="inline-label">(0 = base at ground)</span>
+      </div>
+
+      <div class="form-row">
+        <label>Location model:</label>
+        <span class="inline-label">
+          <input type="radio" name="locationModel" id="locNormal" value="normal" checked>
+          Normal ground
+        </span>
+        <span class="inline-label">
+          <input type="radio" name="locationModel" id="locSeaside" value="seaside">
+          <span class="badge badge-seaside">Seaside DX</span>
+        </span>
+      </div>
+
+      <div class="section-label">DX Turbo Mode</div>
+      <div class="form-row">
+        <label>DX Mode:</label>
+        <span class="inline-label">
+          <input type="checkbox" id="dxMode">
+          <span class="badge badge-dx">DX Turbo</span>
+        </span>
+      </div>
+
+      <div id="dxWarning" class="warning-block" style="display:none;">
+        <b>DX Turbo Mode:</b> Radiator extended to ~0.70 λ, parasitics scaled, and low-angle gain optimized.
+        Expect higher feedpoint impedance and narrower bandwidth.
+      </div>
+
+      <div class="section-label">Radials & Ground System</div>
+      <div class="form-row">
+        <label for="radialCount">Radial count:</label>
+        <select id="radialCount">
+          <option value="4">4</option>
+          <option value="8" selected>8</option>
+          <option value="16">16</option>
+          <option value="32">32</option>
+        </select>
+        <span class="inline-label">Radial length (λ):</span>
+        <select id="radialLengthFactor">
+          <option value="0.25" selected>0.25 λ</option>
+          <option value="0.40">0.40 λ (DX)</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label for="elevatedRadials">
+          <input type="checkbox" id="elevatedRadials">
+          Elevated radials (~0.05 λ)
+        </label>
+      </div>
+
+      <div id="radialWarning" class="warning-block" style="display:none;">
+        <b>Note:</b> DX Mode prefers longer radials (0.40 λ) and at least 16 radials for best efficiency.
+      </div>
+
+      <div class="section-label">Power & Matching</div>
+      <div class="form-row">
+        <label for="txPower">Transmitter power (W):</label>
+        <input type="number" id="txPower" value="100" step="10" min="1" max="5000">
+        <span class="inline-label">Feedline loss (dB):</span>
+        <input type="number" id="feedlineLoss" value="1.0" step="0.1" min="0" max="10">
+      </div>
+
+      <div class="summary-block" id="configSummary">
+        Configuration: <span id="configText">No reflector · 1 director(s) · Ground-mounted radial system</span><br>
+        Design frequency: <span id="designFreqLabel">3.550 MHz</span> · Wavelength: <span id="designLambdaLabel">–</span> m
+      </div>
+    </div>
+
+    <!-- METRICS PANEL -->
+    <div class="card">
+      <h3>Key Performance Metrics</h3>
+
+      <div class="section-label">Gain, TOA & F/B</div>
+      <div class="summary-block">
+        <b>Estimated forward gain:</b> <span id="gainLabel">–</span> dBi<br>
+        <b>Maximum TOA:</b> <span id="toaLabel">–</span>° above horizon<br>
+        <b>Front-to-back ratio:</b> <span id="fbLabel">–</span> dB<br>
+        <b>Seaside / DX boost:</b> <span id="boostLabel">–</span> dB
+      </div>
+
+      <div class="section-label">Impedance, SWR & Bandwidth</div>
+      <div class="summary-block">
+        <b>Feedpoint impedance:</b> <span id="zLabel">–</span> Ω<br>
+        <b>SWR @ f₀:</b> <span id="swrCenterLabel">–</span><br>
+        <b>2:1 SWR bandwidth:</b> <span id="bw2Label">–</span> kHz<br>
+        <b>3:1 SWR bandwidth:</b> <span id="bw3Label">–</span> kHz
+      </div>
+
+      <div class="section-label">Efficiency, Ground Loss & ERP</div>
+      <div class="summary-block">
+        <b>Radiation resistance:</b> <span id="rradLabel">–</span> Ω<br>
+        <b>Ground loss resistance:</b> <span id="rgroundLabel">–</span> Ω<br>
+        <b>Total feedpoint resistance:</b> <span id="rtotalLabel">–</span> Ω<br>
+        <b>Radiation efficiency:</b> <span id="effLabel">–</span> %<br>
+        <b>ERP (relative to isotropic):</b> <span id="erpLabel">–</span> W
+      </div>
+
+      <div id="matchWarning" class="warning-block" style="display:none;">
+        <b>Matching note:</b> Feedpoint impedance is far from 50 Ω. A matching network (L, T, or gamma) will be required.
+      </div>
+
+      <div id="goodMatchNote" class="ok-block" style="display:none;">
+        <b>Good match:</b> Feedpoint impedance is close to 50 Ω. Only minor matching may be required.
+      </div>
+    </div>
+  </div>
+
+  <!-- ELEMENT TABLE -->
+  <h2>Element Geometry & Boom Layout</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Element Table</h3>
+      <table class="table" id="elementTable">
+        <thead>
+          <tr>
+            <th>Element</th>
+            <th>Type</th>
+            <th>Length (m)</th>
+            <th>Length (ft/in)</th>
+            <th>Position (m)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="summary-block">
+        <b>Total boom length:</b> <span id="boomLengthLabel">–</span> m<br>
+        <b>Total wire length (all elements):</b> <span id="totalWireLabel">–</span> m
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Boom Spacing Diagram</h3>
+      <div id="boomDiagram" class="diagram-container">
+        Boom spacing diagram will render here.
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUND SYSTEM -->
+  <h2>Ground System & Current Distribution</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Radial Layout</h3>
+      <div id="radialDiagram" class="diagram-container"></div>
+    </div>
+
+    <div class="card">
+      <h3>Current Distribution</h3>
+      <div id="currentDiagram" class="diagram-container"></div>
+    </div>
+  </div>
+
+  <!-- PATTERNS -->
+  <h2>Radiation Patterns</h2>
+  <div class="card">
+    <div class="patterns-grid">
+      <div>
+        <h3>Azimuth Pattern (H-plane)</h3>
+        <div id="azimuthPlot"></div>
+      </div>
+      <div>
+        <h3>Elevation Pattern (E-plane)</h3>
+        <div id="elevationPlot"></div>
+      </div>
+    </div>
+    <h3>3D Radiation Pattern (Realistic Ground-Reflected Gain)</h3>
+    <div id="pattern3D"></div>
+  </div>
+
+  <!-- TEACHING CARDS -->
+  <div class="card" style="margin-top:20px;">
+    <h3>How to Improve Your Vertical Antenna Performance</h3>
+    <ol style="font-size:14px; color:#333;">
+      <li><b>Add a reflector</b> — Improves front‑to‑back ratio and pushes more signal forward.</li>
+      <li><b>Add a director</b> — Narrows the beam and increases forward gain.</li>
+      <li><b>Add more directors</b> — Each one adds a bit more gain and directivity (with diminishing returns).</li>
+      <li><b>Add more radials</b> — Reduces ground loss and increases radiation efficiency dramatically.</li>
+      <li><b>Elevate the radials</b> — Turns lossy ground radials into efficient tuned counterpoises.</li>
+      <li><b>Lengthen the elements to ~0.70 λ</b> — Creates a strong low‑angle DX lobe (requires matching).</li>
+      <li><b>Choose the best time of day or night</b> — Propagation can outperform hardware improvements.</li>
+    </ol>
+    <p style="font-size:13px; color:#777; margin-top:10px;">
+      Seaside operation is not listed here, but remains one of the strongest environmental boosts when available.
+    </p>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <h3>Ground Enhancements: Moisture, Conductivity & Alternatives to Radials</h3>
+    <p style="font-size:14px; color:#555;">
+      A vertical’s efficiency depends heavily on how easily RF current can return to ground.
+      Radials are powerful, but several other techniques can improve conductivity and reduce ground loss.
+    </p>
+    <ul style="font-size:14px; color:#333; line-height:1.45;">
+      <li><b>Ground screen (wire mesh)</b> — A sheet of welded wire mesh or hardware cloth under the base reduces near‑field loss when full radials aren’t possible.</li>
+      <li><b>Conductive fabric / Faraday cloth</b> — Flexible alternative to metal mesh for portable or stealth setups.</li>
+      <li><b>Ground rods</b> — Great for lightning and DC grounding; modest RF benefit unless combined with radials or a screen.</li>
+      <li><b>Radials + ground screen</b> — A small mesh under the base plus several radials can outperform a large radial‑only system on poor soil.</li>
+      <li><b>Short radials + rods</b> — Multiple short radials tied into one or more rods still reduce RF loss compared to a rod alone.</li>
+      <li><b>Elevated radials</b> — Tuned elevated radials reduce dependence on soil conductivity and often outperform large ground‑mounted radial fields.</li>
+      <li><b>Watering the ground</b> — Moist soil improves conductivity; watering around the base and radial field can noticeably help on low bands.</li>
+      <li><b>Adding salt to the soil</b> — Saltwater has high conductivity and can temporarily improve RF performance. <b>Warning:</b> salt can damage or kill grass and plants.</li>
+      <li><b>Saltwater buckets or trenches</b> — A controlled way to boost conductivity without spreading salt everywhere.</li>
+      <li><b>Seasonal moisture</b> — After rain, snowmelt, or in winter, ground conductivity improves naturally and verticals often “wake up.”</li>
+    </ul>
+    <p style="font-size:13px; color:#777; margin-top:10px;">
+      Rule of thumb: ground rods help safety; radials, moisture, and ground screens move the needle for RF efficiency.
+    </p>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <h3>Export / Copy Design Summary</h3>
+    <button id="copySummaryBtn" style="padding:8px 14px; font-size:14px; cursor:pointer;">
+      Copy Full Antenna Summary
+    </button>
+  </div>
+
+</div> <!-- end .page -->
+
+<script>
+/* -------------- UTILITY FUNCTIONS -------------- */
+function metersToFeetInches(m) {
+  const totalInches = m * 39.3701;
+  const feet = Math.floor(totalInches / 12);
+  const inches = totalInches % 12;
+  return `${feet} ft ${inches.toFixed(1)} in`;
+}
+function db(x) { return 10 * Math.log10(x); }
+function undb(x) { return Math.pow(10, x / 10); }
+
+/* -------------- ELEMENT REFERENCES -------------- */
+const freqMHz           = document.getElementById("freqMHz");
+const lambdaLabel       = document.getElementById("lambdaLabel");
+const designFreqLabel   = document.getElementById("designFreqLabel");
+const designLambdaLabel = document.getElementById("designLambdaLabel");
+const drivenLambdaLabel = document.getElementById("drivenLambdaLabel");
+
+const addReflector      = document.getElementById("addReflector");
+const numDirectors      = document.getElementById("numDirectors");
+const directorSpacing   = document.getElementById("directorSpacing");
+const directorLengthFactor = document.getElementById("directorLengthFactor");
+const reflectorFactor   = document.getElementById("reflectorFactor");
+
+const elementHeight     = document.getElementById("elementHeight");
+const locSeaside        = document.getElementById("locSeaside");
+const dxMode            = document.getElementById("dxMode");
+
+const radialCount       = document.getElementById("radialCount");
+const radialLengthFactor= document.getElementById("radialLengthFactor");
+const elevatedRadials   = document.getElementById("elevatedRadials");
+
+const txPower           = document.getElementById("txPower");
+const feedlineLoss      = document.getElementById("feedlineLoss");
+
+const configText        = document.getElementById("configText");
+const dxWarning         = document.getElementById("dxWarning");
+const radialWarning     = document.getElementById("radialWarning");
+
+const gainLabel         = document.getElementById("gainLabel");
+const toaLabel          = document.getElementById("toaLabel");
+const fbLabel           = document.getElementById("fbLabel");
+const boostLabel        = document.getElementById("boostLabel");
+
+const zLabel            = document.getElementById("zLabel");
+const swrCenterLabel    = document.getElementById("swrCenterLabel");
+const bw2Label          = document.getElementById("bw2Label");
+const bw3Label          = document.getElementById("bw3Label");
+
+const rradLabel         = document.getElementById("rradLabel");
+const rgroundLabel      = document.getElementById("rgroundLabel");
+const rtotalLabel       = document.getElementById("rtotalLabel");
+const effLabel          = document.getElementById("effLabel");
+const erpLabel          = document.getElementById("erpLabel");
+
+const matchWarning      = document.getElementById("matchWarning");
+const goodMatchNote     = document.getElementById("goodMatchNote");
+
+const elementTableBody  = document.querySelector("#elementTable tbody");
+const boomLengthLabel   = document.getElementById("boomLengthLabel");
+const totalWireLabel    = document.getElementById("totalWireLabel");
+
+const boomDiagram       = document.getElementById("boomDiagram");
+const radialDiagram     = document.getElementById("radialDiagram");
+const currentDiagram    = document.getElementById("currentDiagram");
+
+const copySummaryBtn    = document.getElementById("copySummaryBtn");
+
+/* -------------- GROUND REFLECTION MODEL -------------- */
+function groundGamma(thetaRad, seaside) {
+  const sinT = Math.sin(thetaRad);
+  const base = seaside ? -0.95 : -0.6;
+  const tilt = 0.2 * (sinT - 0.5);
+  return base + tilt;
+}
+
+/* -------------- MAIN UPDATE FUNCTION (HYBRID NEC) -------------- */
+function updateAll() {
+
+  /* --- FREQUENCY & WAVELENGTH --- */
+  const fMHz = parseFloat(freqMHz.value) || 3.55;
+  const lambda = 300 / fMHz;
+
+  lambdaLabel.textContent       = lambda.toFixed(3);
+  designFreqLabel.textContent   = fMHz.toFixed(3) + " MHz";
+  designLambdaLabel.textContent = lambda.toFixed(3) + " m";
+
+  const dx      = dxMode.checked;
+  const seaside = locSeaside.checked;
+
+  let drivenLambda = dx ? 0.70 : 0.25;
+  drivenLambdaLabel.textContent = dx ? "0.70 λ (DX)" : "0.25 λ";
+  const drivenLength = drivenLambda * lambda;
+  const scale = dx ? 2.8 : 1.0;
+
+  /* --- ELEMENT GEOMETRY --- */
+  const nDir     = parseInt(numDirectors.value, 10) || 0;
+  const dSpacing = (parseFloat(directorSpacing.value) || 0) * lambda;
+  const dFactor  = parseFloat(directorLengthFactor.value) || 0.45;
+  const reflOn   = addReflector.checked;
+  const reflFactorVal = parseFloat(reflectorFactor.value) || 1.05;
+
+  const elements = [];
+  if (reflOn) {
+    elements.push({
+      name: "Reflector",
+      type: "Reflector",
+      length: reflFactorVal * lambda * scale,
+      pos: -dSpacing * scale
+    });
+  }
+  elements.push({
+    name: "Driven",
+    type: "Driven",
+    length: drivenLength * scale,
+    pos: 0
+  });
+  let pos = 0;
+  for (let i = 0; i < nDir; i++) {
+    pos += dSpacing * scale;
+    elements.push({
+      name: `Director ${i+1}`,
+      type: "Director",
+      length: dFactor * lambda * scale,
+      pos: pos
+    });
+  }
+  elements.sort((a,b) => a.pos - b.pos);
+
+  /* --- ELEMENT TABLE --- */
+  elementTableBody.innerHTML = "";
+  let totalWire = 0;
+  elements.forEach(el => {
+    totalWire += el.length;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${el.name}</td>
+      <td>${el.type}</td>
+      <td>${el.length.toFixed(3)}</td>
+      <td>${metersToFeetInches(el.length)}</td>
+      <td>${el.pos.toFixed(3)}</td>
+    `;
+    elementTableBody.appendChild(tr);
+  });
+
+  const boomLength = elements[elements.length - 1].pos - elements[0].pos;
+  boomLengthLabel.textContent = boomLength.toFixed(3);
+  totalWireLabel.textContent  = totalWire.toFixed(3);
+
+  /* --- CONFIG SUMMARY --- */
+  configText.textContent =
+    `${reflOn ? "Reflector" : "No reflector"} · ${nDir} director(s) · Ground-mounted radial system`;
+
+  dxWarning.style.display = dx ? "block" : "none";
+
+  /* --- RADIAL SYSTEM --- */
+  const radialCountVal = parseInt(radialCount.value, 10) || 4;
+  const radialFactor   = parseFloat(radialLengthFactor.value) || 0.25;
+  const elevated       = elevatedRadials.checked;
+
+  if (dx && (radialCountVal < 16 || radialFactor < 0.40)) {
+    radialWarning.style.display = "block";
+  } else {
+    radialWarning.style.display = "none";
+  }
+
+  /* --- IMPEDANCE MODEL --- */
+  let Rrad = 36;
+  if (dx) Rrad *= 1.8;
+
+  let Rground = 20 / radialCountVal;
+  if (radialFactor >= 0.40) Rground *= 0.6;
+  if (elevated) Rground *= 0.7;
+
+  const Rtotal = Rrad + Rground;
+  const X      = dx ? 25 : 5;
+
+  rradLabel.textContent    = Rrad.toFixed(1);
+  rgroundLabel.textContent = Rground.toFixed(1);
+  rtotalLabel.textContent  = Rtotal.toFixed(1);
+  zLabel.textContent       = `${Rtotal.toFixed(1)} + j${X.toFixed(1)}`;
+
+  const Zmag = Math.sqrt(Rtotal*Rtotal + X*X);
+  let swr = Zmag / 50;
+  if (swr < 1) swr = 1 / swr;
+  swrCenterLabel.textContent = swr.toFixed(2);
+
+  if (Zmag < 30 || Zmag > 80) {
+    matchWarning.style.display = "block";
+    goodMatchNote.style.display = "none";
+  } else {
+    matchWarning.style.display = "none";
+    goodMatchNote.style.display = "block";
+  }
+
+  const bw2 = (fMHz * (Rrad / Rtotal) * 0.015) * 1000;
+  const bw3 = bw2 * 1.5;
+  bw2Label.textContent = bw2.toFixed(0);
+  bw3Label.textContent = bw3.toFixed(0);
+
+  /* --- GAIN, TOA, F/B --- */
+  let gain = 2.1 + nDir * 1.2;
+  if (reflOn) gain += 1.0;
+  if (dx)     gain += 2.0;
+  if (seaside)gain += 3.0;
+  gainLabel.textContent = gain.toFixed(1);
+
+  const boost = (dx ? 2.0 : 0) + (seaside ? 3.0 : 0);
+  boostLabel.textContent = boost.toFixed(1);
+
+  let toa = 28;
+  if (dx) toa -= 8;
+  if (seaside) toa -= 6;
+  if (toa < 8) toa = 8;
+  toaLabel.textContent = toa.toFixed(1);
+
+  let fb = 8 + nDir * 4;
+  if (reflOn) fb += 6;
+  if (dx)     fb += 4;
+  fbLabel.textContent = fb.toFixed(1);
+
+  /* --- ERP --- */
+  const Ptx   = parseFloat(txPower.value) || 100;
+  const floss = parseFloat(feedlineLoss.value) || 0;
+  const eff   = (Rrad / Rtotal) * 100;
+  effLabel.textContent = eff.toFixed(1);
+
+  const Pfeed = Ptx * undb(-floss);
+  const Prad  = Pfeed * (eff / 100);
+  const ERP   = Prad * undb(gain);
+  erpLabel.textContent = ERP.toFixed(1);
+
+  /* --- CONSTANTS FOR PATTERNS --- */
+  const k0    = 2 * Math.PI / lambda;
+  const hBase = parseFloat(elementHeight.value) || 0;
+  const heff  = hBase + (drivenLength / 2);
+
+  /* ============================================================
+     HYBRID NEC + GROUND AZIMUTH PATTERN
+     ============================================================ */
+
+  function elementCurrent(elType) {
+    if (elType === "Reflector") {
+      return { mag: 0.8, phase: -40 * Math.PI/180 };
+    } else if (elType === "Director") {
+      return { mag: 0.6, phase: +25 * Math.PI/180 };
+    } else {
+      return { mag: 1.0, phase: 0 };
+    }
+  }
+
+  const toaRad = toa * Math.PI / 180;
+  const Ev_g   = Math.sin(toaRad);
+  const dphi_g = 2 * k0 * heff * Math.sin(toaRad);
+  const Gamma_g= groundGamma(toaRad, seaside);
+  const groundFactor = Math.sqrt(
+    Ev_g*Ev_g +
+    (Gamma_g*Gamma_g) * Ev_g*Ev_g +
+    2 * Ev_g*Ev_g * Gamma_g * Math.cos(dphi_g)
+  );
+
+  const az = [];
+  const azGain = [];
+  const azField = [];
+
+  for (let phi = 0; phi <= 360; phi += 5) {
+    const phiRad = phi * Math.PI / 180;
+    let sumRe = 0;
+    let sumIm = 0;
+
+    elements.forEach(el => {
+      const I = elementCurrent(el.type);
+      const phaseSpace = k0 * el.pos * Math.cos(phiRad);
+      const totalPhase = I.phase + phaseSpace;
+      sumRe += I.mag * Math.cos(totalPhase);
+      sumIm += I.mag * Math.sin(totalPhase);
+    });
+
+    let field = Math.sqrt(sumRe*sumRe + sumIm*sumIm);
+    field *= groundFactor;
+
+    az.push(phi);
+    azField.push(field);
+  }
+
+  const maxField = Math.max(...azField);
+  for (let i = 0; i < az.length; i++) {
+    const rel = azField[i] / (maxField || 1e-6);
+    const patDb = 20 * Math.log10(Math.max(rel, 1e-6));
+    azGain[i] = gain + patDb;
+  }
+
+  Plotly.newPlot("azimuthPlot", [{
+    x: az,
+    y: azGain,
+    type: "scatter",
+    mode: "lines",
+    line: {color: "#0b63ce"}
+  }], {
+    margin: {t: 20},
+    xaxis: {title: "Azimuth (°)"},
+    yaxis: {title: "Gain (dBi)"}
+  });
+
+  /* ============================================================
+     ELEVATION PATTERN
+     ============================================================ */
+  const el = [];
+  const elGain = [];
+  for (let th = 0; th <= 90; th += 2) {
+    const thRad = th * Math.PI / 180;
+    const Ev    = Math.sin(thRad);
+    const dphi  = 2 * k0 * heff * Math.sin(thRad);
+    const Gamma = groundGamma(thRad, seaside);
+    const E = Math.sqrt(
+      Ev*Ev +
+      (Gamma*Gamma) * Ev*Ev +
+      2 * Ev*Ev * Gamma * Math.cos(dphi)
+    );
+    el.push(th);
+    elGain.push(gain + db(Math.max(E, 1e-6)));
+  }
+
+  Plotly.newPlot("elevationPlot", [{
+    x: el,
+    y: elGain,
+    type: "scatter",
+    mode: "lines",
+    line: {color: "#d7263d"}
+  }], {
+    margin: {t: 20},
+    xaxis: {title: "Elevation (°)"},
+    yaxis: {title: "Gain (dBi)"}
+  });
+
+  /* ============================================================
+     3D PATTERN
+     ============================================================ */
+  const theta = [];
+  const phiArr = [];
+  const r = [];
+
+  for (let th = 0; th <= 180; th += 5) {
+    const elevDeg = th <= 90 ? th : 180 - th;
+    const thRad   = elevDeg * Math.PI / 180;
+    const Ev      = Math.sin(thRad);
+    const dphi    = 2 * k0 * heff * Math.sin(thRad);
+    const Gamma   = groundGamma(thRad, seaside);
+
+    const E = Math.sqrt(
+      Ev*Ev +
+      (Gamma*Gamma) * Ev*Ev +
+      2 * Ev*Ev * Gamma * Math.cos(dphi)
+    );
+
+    const Edb = gain + db(Math.max(E, 1e-6));
+
+    for (let ph = 0; ph <= 360; ph += 5) {
+      const phRad = ph * Math.PI / 180;
+      theta.push(th * Math.PI / 180);
+      phiArr.push(phRad);
+      r.push(Math.max(0.01, Edb));
+    }
+  }
+
+  const x = r.map((rv, i) => rv * Math.sin(theta[i]) * Math.cos(phiArr[i]));
+  const y = r.map((rv, i) => rv * Math.sin(theta[i]) * Math.sin(phiArr[i]));
+  const z = r.map((rv, i) => rv * Math.cos(theta[i]));
+
+  Plotly.newPlot("pattern3D", [{
+    x, y, z,
+    mode: "markers",
+    marker: {
+      size: 3,
+      color: r,
+      colorscale: "Jet",
+      showscale: true
+    },
+    type: "scatter3d"
+  }], {
+    scene: {
+      xaxis: {title: "X"},
+      yaxis: {title: "Y"},
+      zaxis: {title: "Z"}
+    },
+    margin: {t: 20}
+  });
+
+  /* ============================================================
+     RADIAL LAYOUT DIAGRAM
+     ============================================================ */
+  const radialCanvas = radialDiagram;
+  radialCanvas.innerHTML = "";
+
+  const radialSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  radialSVG.setAttribute("width", "100%");
+  radialSVG.setAttribute("height", "100%");
+  radialSVG.setAttribute("viewBox", "0 0 200 200");
+
+  const cx = 100, cy = 100;
+  const radials = radialCountVal;
+  const radius = 80;
+
+  for (let i = 0; i < radials; i++) {
+    const angle = (i / radials) * 2 * Math.PI;
+    const x2 = cx + radius * Math.cos(angle);
+    const y2 = cy + radius * Math.sin(angle);
+
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", cx);
+    line.setAttribute("y1", cy);
+    line.setAttribute("x2", x2);
+    line.setAttribute("y2", y2);
+    line.setAttribute("stroke", "#0b63ce");
+    line.setAttribute("stroke-width", "2");
+    radialSVG.appendChild(line);
+  }
+
+  radialCanvas.appendChild(radialSVG);
+
+  /* ============================================================
+     CURRENT DISTRIBUTION DIAGRAM
+     ============================================================ */
+  const currentCanvas = currentDiagram;
+  currentCanvas.innerHTML = "";
+
+  const currentSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  currentSVG.setAttribute("width", "100%");
+  currentSVG.setAttribute("height", "100%");
+  currentSVG.setAttribute("viewBox", "0 0 200 200");
+
+  const baseX = 20;
+  const baseY = 180;
+  const barWidth = 30;
+
+  elements.forEach((el, idx) => {
+    const I = el.type === "Driven" ? 1.0 :
+              el.type === "Reflector" ? 0.8 :
+              0.6;
+
+    const barHeight = I * 120;
+
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rect.setAttribute("x", baseX + idx * (barWidth + 10));
+    rect.setAttribute("y", baseY - barHeight);
+    rect.setAttribute("width", barWidth);
+    rect.setAttribute("height", barHeight);
+    rect.setAttribute("fill", "#d7263d");
+
+    currentSVG.appendChild(rect);
+
+    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    label.setAttribute("x", baseX + idx * (barWidth + 10) + barWidth / 2);
+    label.setAttribute("y", baseY + 15);
+    label.setAttribute("text-anchor", "middle");
+    label.setAttribute("font-size", "10");
+    label.textContent = el.name;
+    currentSVG.appendChild(label);
+  });
+
+  currentCanvas.appendChild(currentSVG);
+
+} /* END updateAll() */
+
+
+/* ============================================================
+   SUMMARY COPY FUNCTION
+   ============================================================ */
+function generateTextSummary() {
+  return `
+KG5IEF Vertical Antenna Optimizer
+---------------------------------
+Design Frequency: ${designFreqLabel.textContent}
+Wavelength: ${designLambdaLabel.textContent}
+
+Configuration:
+  ${configText.textContent}
+
+Element Geometry:
+  Total boom length: ${boomLengthLabel.textContent} m
+  Total wire length: ${totalWireLabel.textContent} m
+
+Performance Metrics:
+  Forward gain: ${gainLabel.textContent} dBi
+  TOA: ${toaLabel.textContent}°
+  Front-to-back ratio: ${fbLabel.textContent} dB
+  ERP: ${erpLabel.textContent} W
+
+Impedance & Matching:
+  Feedpoint impedance: ${zLabel.textContent}
+  SWR @ f₀: ${swrCenterLabel.textContent}
+  2:1 bandwidth: ${bw2Label.textContent} kHz
+  3:1 bandwidth: ${bw3Label.textContent} kHz
+
+Efficiency:
+  Radiation resistance: ${rradLabel.textContent} Ω
+  Ground loss resistance: ${rgroundLabel.textContent} Ω
+  Total resistance: ${rtotalLabel.textContent} Ω
+  Efficiency: ${effLabel.textContent} %
+
+Notes:
+  This summary was generated by KG5IEF’s Vertical Antenna Optimizer.
+  Patterns include realistic ground-reflection modeling.
+`;
+}
+
+copySummaryBtn.addEventListener("click", () => {
+  navigator.clipboard.writeText(generateTextSummary());
+  alert("Design summary copied to clipboard.");
+});
+
+/* ============================================================
+   EVENT LISTENERS
+   ============================================================ */
+document.querySelectorAll("input, select").forEach(el => {
+  el.addEventListener("input", updateAll);
+  el.addEventListener("change", updateAll);
+});
+
+updateAll();
+</script>
+
+</body>
+</html>
 
