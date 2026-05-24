@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Antenna System Optimizer – Phase 1</title>
+<title>Antenna System Optimizer – Phase 2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
 :root{
@@ -47,9 +47,7 @@ body{
   padding:16px 20px 10px 20px;
   border-bottom:1px solid rgba(255,255,255,0.04);
 }
-.app-title-block{
-  flex:1;
-}
+.app-title-block{flex:1;}
 .app-title{
   font-size:20px;
   font-weight:600;
@@ -81,9 +79,32 @@ body{
   border-color:var(--accent);
   color:var(--accent);
 }
+.app-tabs{
+  display:flex;
+  gap:6px;
+  padding:8px 16px 4px 16px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  flex-wrap:wrap;
+}
+.tab-btn{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  padding:5px 10px;
+  border-radius:999px;
+  border:1px solid transparent;
+  background:transparent;
+  color:var(--muted);
+  cursor:pointer;
+}
+.tab-btn.active{
+  border-color:var(--accent);
+  background:rgba(245,200,74,0.12);
+  color:#fff;
+}
 .app-body{
   display:grid;
-  grid-template-columns:minmax(0,1.1fr) minmax(0,1.1fr) minmax(0,1.2fr);
+  grid-template-columns:minmax(0,1.2fr) minmax(0,0.9fr) minmax(0,1.1fr);
   gap:12px;
   padding:12px 16px 16px 16px;
 }
@@ -156,9 +177,7 @@ input[type="text"]::placeholder{
   border-color:var(--focus-border);
   box-shadow:var(--focus-glow);
 }
-select.primary-input{
-  background:#15162a;
-}
+select.primary-input{background:#15162a;}
 .pills-row{
   display:flex;
   flex-wrap:wrap;
@@ -200,12 +219,10 @@ select.primary-input{
   border-color:var(--accent);
   background:rgba(245,200,74,0.08);
 }
-.summary-panel{
-  grid-column:span 2;
-}
+.summary-panel{}
 .summary-grid{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-columns:repeat(2,minmax(0,1fr));
   gap:6px;
   margin-top:6px;
 }
@@ -226,18 +243,10 @@ select.primary-input{
   font-size:13px;
   font-weight:600;
 }
-.summary-value.accent{
-  color:var(--accent);
-}
-.summary-value.good{
-  color:var(--good);
-}
-.summary-value.warn{
-  color:var(--warn);
-}
-.summary-value.bad{
-  color:var(--danger);
-}
+.summary-value.accent{color:var(--accent);}
+.summary-value.good{color:var(--good);}
+.summary-value.warn{color:var(--warn);}
+.summary-value.bad{color:var(--danger);}
 .plot-panel{
   background:var(--panel);
   border-radius:12px;
@@ -363,12 +372,11 @@ select.primary-input{
   border:1px solid #1b2238;
   padding:5px 7px;
 }
+.antenna-panel{display:none;}
+.antenna-panel.active{display:flex;}
 @media(max-width:1100px){
   .app-body{
     grid-template-columns:1fr;
-  }
-  .summary-panel{
-    grid-column:span 1;
   }
 }
 </style>
@@ -378,178 +386,315 @@ select.primary-input{
   <header class="app-header">
     <div class="app-title-block">
       <div class="app-title">Antenna System Optimizer</div>
-      <div class="app-subtitle">HF Multiband • Verticals • Doublets • Random‑Wire 9:1 • VF‑Aware • Boost + ERP Engine</div>
+      <div class="app-subtitle">HF Multiband • Verticals • Doublets • Random‑Wire 9:1 • EFHW • OCF • Fan • Loop • VF‑Aware • Boost + ERP</div>
       <div class="app-badges">
         <div class="badge hot">HF Lab Mode</div>
-        <div class="badge">Verticals</div>
-        <div class="badge">Doublets</div>
-        <div class="badge">Random‑Wire</div>
+        <div class="badge">Tabs Layout</div>
         <div class="badge">Boost Panel</div>
         <div class="badge">ERP</div>
       </div>
     </div>
   </header>
 
+  <nav class="app-tabs">
+    <button class="tab-btn active" data-tab="vertical">Vertical</button>
+    <button class="tab-btn" data-tab="doublet">Doublet</button>
+    <button class="tab-btn" data-tab="random">Random‑Wire</button>
+    <button class="tab-btn" data-tab="efhw">EFHW 49:1</button>
+    <button class="tab-btn" data-tab="ocf">OCF Dipole</button>
+    <button class="tab-btn" data-tab="fan">Fan Dipole</button>
+    <button class="tab-btn" data-tab="loop">Horizontal Loop</button>
+  </nav>
+
   <main class="app-body">
-    <!-- LEFT COLUMN: VERTICAL + DOUBLET -->
-    <section class="panel">
-      <div class="panel-header">
-        <div class="panel-title">Vertical Antenna Optimizer</div>
-        <div class="panel-tag">Ground / Elevated</div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Physical height (ft)</label>
-          <input id="vertHeight" type="number" class="primary-input" value="33" min="5" max="120" step="0.5">
+    <!-- LEFT COLUMN: ACTIVE ANTENNA PANEL -->
+    <section id="antennaColumn">
+      <!-- Vertical -->
+      <section class="panel antenna-panel active" id="tab-vertical">
+        <div class="panel-header">
+          <div class="panel-title">Vertical Antenna Optimizer</div>
+          <div class="panel-tag">Ground / Elevated</div>
         </div>
-        <div class="field">
-          <label>Wire VF</label>
-          <input id="vertVF" type="number" class="primary-input" value="0.97" min="0.80" max="0.99" step="0.01">
+        <div class="field-row">
+          <div class="field">
+            <label>Physical height (ft)</label>
+            <input id="vertHeight" type="number" class="primary-input" value="33" min="5" max="120" step="0.5">
+          </div>
+          <div class="field">
+            <label>Wire VF</label>
+            <input id="vertVF" type="number" class="primary-input" value="0.97" min="0.80" max="0.99" step="0.01">
+          </div>
         </div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Ground loss (Ω)</label>
-          <input id="vertGroundLoss" type="number" class="primary-input" value="5" min="1" max="50" step="0.5">
+        <div class="field-row">
+          <div class="field">
+            <label>Ground loss (Ω)</label>
+            <input id="vertGroundLoss" type="number" class="primary-input" value="5" min="1" max="50" step="0.5">
+          </div>
+          <div class="field">
+            <label>Radials count</label>
+            <input id="vertRadials" type="number" class="primary-input" value="16" min="0" max="64" step="1">
+          </div>
         </div>
-        <div class="field">
-          <label>Radials count</label>
-          <input id="vertRadials" type="number" class="primary-input" value="16" min="0" max="64" step="1">
+        <div class="pills-row" id="vertPills"></div>
+      </section>
+
+      <!-- Doublet -->
+      <section class="panel antenna-panel" id="tab-doublet">
+        <div class="panel-header">
+          <div class="panel-title">132 ft Doublet + Feedline</div>
+          <div class="panel-tag">Balanced Multiband</div>
         </div>
-      </div>
-      <div class="pills-row" id="vertPills"></div>
+        <div class="field-row">
+          <div class="field">
+            <label>Feedline type</label>
+            <select id="dblFeedType" class="primary-input">
+              <option value="450" selected>450 Ω ladder line</option>
+              <option value="300">300 Ω window line</option>
+              <option value="600">600 Ω open wire</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Line VF</label>
+            <input id="dblVF" type="number" class="primary-input" value="0.91" min="0.75" max="0.99" step="0.01">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Ladder line length (ft)</label>
+            <input id="dblLineLen" type="number" class="primary-input" value="47" min="10" max="150" step="1">
+          </div>
+          <div class="field">
+            <label>Leg length (ft)</label>
+            <input id="dblLegLen" type="number" class="primary-input" value="59.4" min="20" max="100" step="0.5">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Bands</label>
+            <select id="dblBands" class="primary-input">
+              <option value="80-60">80–60 m</option>
+              <option value="80-40">80–40 m</option>
+              <option value="40-20">40–20 m</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Notes</label>
+            <input type="text" value="Multiband tuner-fed" disabled>
+          </div>
+        </div>
+        <div class="pills-row" id="dblPills"></div>
+      </section>
+
+      <!-- Random-Wire -->
+      <section class="panel antenna-panel" id="tab-random">
+        <div class="panel-header">
+          <div class="panel-title">Random‑Wire + 9:1 Planner</div>
+          <div class="panel-tag">End‑Fed Non‑Resonant</div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Wire length (ft)</label>
+            <input id="rwLen" type="number" class="primary-input" value="41" min="15" max="150" step="0.5">
+          </div>
+          <div class="field">
+            <label>Wire VF</label>
+            <input id="rwVF" type="number" class="primary-input" value="0.97" min="0.80" max="0.99" step="0.01">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Counterpoise (ft)</label>
+            <input id="rwCP" type="number" class="primary-input" value="17" min="5" max="40" step="0.5">
+          </div>
+          <div class="field">
+            <label>Bands</label>
+            <select id="rwBands" class="primary-input">
+              <option value="80-10">80–10 m</option>
+              <option value="40-10">40–10 m</option>
+              <option value="60-20">60–20 m</option>
+            </select>
+          </div>
+        </div>
+        <div class="pills-row" id="rwPills"></div>
+      </section>
+
+      <!-- EFHW -->
+      <section class="panel antenna-panel" id="tab-efhw">
+        <div class="panel-header">
+          <div class="panel-title">EFHW 49:1 Multiband</div>
+          <div class="panel-tag">End‑Fed Half‑Wave</div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Wire length (ft)</label>
+            <input id="efhwLen" type="number" class="primary-input" value="132" min="40" max="200" step="0.5">
+          </div>
+          <div class="field">
+            <label>Wire VF</label>
+            <input id="efhwVF" type="number" class="primary-input" value="0.97" min="0.80" max="0.99" step="0.01">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Bands</label>
+            <select id="efhwBands" class="primary-input">
+              <option value="80-10">80–10 m</option>
+              <option value="40-10">40–10 m</option>
+              <option value="20-10">20–10 m</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Notes</label>
+            <input type="text" value="49:1 transformer assumed" disabled>
+          </div>
+        </div>
+        <div class="pills-row" id="efhwPills"></div>
+      </section>
+
+      <!-- OCF -->
+      <section class="panel antenna-panel" id="tab-ocf">
+        <div class="panel-header">
+          <div class="panel-title">OCF Dipole</div>
+          <div class="panel-tag">Off‑Center‑Fed</div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Total length (ft)</label>
+            <input id="ocfLen" type="number" class="primary-input" value="135" min="60" max="200" step="0.5">
+          </div>
+          <div class="field">
+            <label>Offset (%)</label>
+            <input id="ocfOffset" type="number" class="primary-input" value="33" min="10" max="40" step="1">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Feedline type</label>
+            <select id="ocfFeedType" class="primary-input">
+              <option value="coax" selected>Coax + 4:1 balun</option>
+              <option value="ladder">Ladder line</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Height (ft)</label>
+            <input id="ocfHeight" type="number" class="primary-input" value="35" min="15" max="80" step="1">
+          </div>
+        </div>
+        <div class="pills-row" id="ocfPills"></div>
+      </section>
+
+      <!-- Fan Dipole -->
+      <section class="panel antenna-panel" id="tab-fan">
+        <div class="panel-header">
+          <div class="panel-title">Fan Dipole</div>
+          <div class="panel-tag">Resonant Multiband</div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>40 m leg (ft)</label>
+            <input id="fan40" type="number" class="primary-input" value="33" min="20" max="60" step="0.5">
+          </div>
+          <div class="field">
+            <label>20 m leg (ft)</label>
+            <input id="fan20" type="number" class="primary-input" value="16.5" min="8" max="40" step="0.5">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>10 m leg (ft)</label>
+            <input id="fan10" type="number" class="primary-input" value="8.2" min="4" max="20" step="0.2">
+          </div>
+          <div class="field">
+            <label>Height (ft)</label>
+            <input id="fanHeight" type="number" class="primary-input" value="30" min="15" max="60" step="1">
+          </div>
+        </div>
+        <div class="pills-row" id="fanPills"></div>
+      </section>
+
+      <!-- Horizontal Loop -->
+      <section class="panel antenna-panel" id="tab-loop">
+        <div class="panel-header">
+          <div class="panel-title">Horizontal Loop (Skyloop)</div>
+          <div class="panel-tag">NVIS + DX</div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Perimeter (ft)</label>
+            <input id="loopPerim" type="number" class="primary-input" value="260" min="120" max="400" step="1">
+          </div>
+          <div class="field">
+            <label>Height (ft)</label>
+            <input id="loopHeight" type="number" class="primary-input" value="30" min="15" max="60" step="1">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Feedline type</label>
+            <select id="loopFeedType" class="primary-input">
+              <option value="450" selected>450 Ω ladder line</option>
+              <option value="300">300 Ω window line</option>
+              <option value="600">600 Ω open wire</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Line VF</label>
+            <input id="loopVF" type="number" class="primary-input" value="0.91" min="0.75" max="0.99" step="0.01">
+          </div>
+        </div>
+        <div class="pills-row" id="loopPills"></div>
+      </section>
     </section>
 
-    <section class="panel">
-      <div class="panel-header">
-        <div class="panel-title">132 ft Doublet + Feedline</div>
-        <div class="panel-tag">Balanced Multiband</div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Feedline type</label>
-          <select id="dblFeedType" class="primary-input">
-            <option value="450" selected>450 Ω ladder line</option>
-            <option value="300">300 Ω window line</option>
-            <option value="600">600 Ω open wire</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Line VF</label>
-          <input id="dblVF" type="number" class="primary-input" value="0.91" min="0.75" max="0.99" step="0.01">
-        </div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Ladder line length (ft)</label>
-          <input id="dblLineLen" type="number" class="primary-input" value="47" min="10" max="150" step="1">
-        </div>
-        <div class="field">
-          <label>Leg length (ft)</label>
-          <input id="dblLegLen" type="number" class="primary-input" value="59.4" min="20" max="100" step="0.5">
-        </div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Bands</label>
-          <select id="dblBands" class="primary-input">
-            <option value="80-60">80–60 m</option>
-            <option value="80-40">80–40 m</option>
-            <option value="40-20">40–20 m</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Notes</label>
-          <input type="text" value="Multiband tuner-fed" disabled>
-        </div>
-      </div>
-      <div class="pills-row" id="dblPills"></div>
-    </section>
-
-    <!-- RIGHT OF LEFT: RANDOM-WIRE -->
-    <section class="panel">
-      <div class="panel-header">
-        <div class="panel-title">Random‑Wire + 9:1 Planner</div>
-        <div class="panel-tag">End‑Fed Non‑Resonant</div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Wire length (ft)</label>
-          <input id="rwLen" type="number" class="primary-input" value="41" min="15" max="150" step="0.5">
-        </div>
-        <div class="field">
-          <label>Wire VF</label>
-          <input id="rwVF" type="number" class="primary-input" value="0.97" min="0.80" max="0.99" step="0.01">
-        </div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Counterpoise (ft)</label>
-          <input id="rwCP" type="number" class="primary-input" value="17" min="5" max="40" step="0.5">
-        </div>
-        <div class="field">
-          <label>Bands</label>
-          <select id="rwBands" class="primary-input">
-            <option value="80-10">80–10 m</option>
-            <option value="40-10">40–10 m</option>
-            <option value="60-20">60–20 m</option>
-          </select>
-        </div>
-      </div>
-      <div class="pills-row" id="rwPills"></div>
-    </section>
-
-    <!-- SYSTEM SUMMARY -->
+    <!-- MIDDLE COLUMN: SUMMARY -->
     <section class="panel summary-panel">
       <div class="panel-header">
         <div class="panel-title">System Summary</div>
-        <div class="panel-tag">Effective Lengths • Stress</div>
+        <div class="panel-tag">Active Antenna • Length • Stress</div>
       </div>
       <div class="summary-grid">
         <div class="summary-item">
-          <div class="summary-label">Vertical eff length</div>
-          <div class="summary-value" id="sumVertEff">32.0 ft</div>
+          <div class="summary-label">Active antenna</div>
+          <div class="summary-value accent" id="sumName">Vertical</div>
         </div>
         <div class="summary-item">
-          <div class="summary-label">Doublet eff length</div>
-          <div class="summary-value" id="sumDblEff">42.8 ft</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Random‑wire eff length</div>
-          <div class="summary-value" id="sumRwEff">39.8 ft</div>
+          <div class="summary-label">Eff length (VF‑adj)</div>
+          <div class="summary-value" id="sumEffLen">32.0 ft</div>
         </div>
         <div class="summary-item">
           <div class="summary-label">Tuner stress score</div>
-          <div class="summary-value warn" id="sumStress">3.66</div>
+          <div class="summary-value warn" id="sumStress">2.00</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Notes</div>
+          <div class="summary-value" id="sumNote">Quarter‑wave‑ish on 40 m.</div>
         </div>
       </div>
     </section>
 
-    <!-- PLOTS COLUMN -->
+    <!-- RIGHT COLUMN: PLOTS + BOOST -->
     <section class="plot-panel">
       <div class="plot-title">Electrical Length (VF‑Adjusted)</div>
       <div class="plot-box">
-        <div class="plot-placeholder">Electrical length vs band (conceptual plot)</div>
+        <div class="plot-placeholder">Electrical length vs band (conceptual)</div>
       </div>
       <div class="legend">
-        <div class="legend-item"><span class="legend-swatch swatch-vert"></span><span>Vertical</span></div>
-        <div class="legend-item"><span class="legend-swatch swatch-doub"></span><span>Doublet</span></div>
-        <div class="legend-item"><span class="legend-swatch swatch-rw"></span><span>Random‑Wire</span></div>
+        <div class="legend-item"><span class="legend-swatch swatch-vert"></span><span>Vertical / EFHW</span></div>
+        <div class="legend-item"><span class="legend-swatch swatch-doub"></span><span>Doublet / OCF / Fan</span></div>
+        <div class="legend-item"><span class="legend-swatch swatch-rw"></span><span>Random‑Wire / Loop</span></div>
       </div>
       <div class="plot-title" style="margin-top:8px;">Tuner Stress Zones</div>
       <div class="plot-box">
-        <div class="plot-placeholder">Low / Medium / High stress (conceptual plot)</div>
+        <div class="plot-placeholder">Low / Medium / High stress (conceptual)</div>
       </div>
     </section>
 
-    <!-- BOOST PANEL + ERP -->
     <section class="boost-panel">
       <div class="panel-header">
         <div class="panel-title">Boost Panel & ERP</div>
         <div class="panel-tag">Parasitics • Ground • Time</div>
       </div>
 
-      <!-- TX POWER -->
       <div class="boost-section-title">Transmitter Power</div>
       <div class="boost-row">
         <div class="boost-label">TX power (W)</div>
@@ -559,14 +704,13 @@ select.primary-input{
         </div>
       </div>
 
-      <!-- BOOST TOGGLES -->
       <div class="boost-section-title" style="margin-top:6px;">Geometry & Ground Boosts</div>
 
       <div class="boost-row">
         <div class="boost-label">Reflector</div>
         <div class="boost-toggle">
           <input id="boostReflector" type="checkbox">
-          <span class="small-note">Adds ~+2.5 dB, 1.05× length, 0.15 λ spacing.</span>
+          <span class="small-note">Adds ≈+2.5 dB, 1.05× length, 0.15 λ spacing.</span>
         </div>
       </div>
 
@@ -574,7 +718,7 @@ select.primary-input{
         <div class="boost-label">Directors</div>
         <div class="boost-toggle">
           <input id="boostDirectors" type="number" class="primary-input" value="0" min="0" max="4" step="1" style="width:60px;">
-          <span class="small-note">First ~+2.2 dB, +1 dB each additional.</span>
+          <span class="small-note">First ≈+2.2 dB, +1 dB each additional.</span>
         </div>
       </div>
 
@@ -582,7 +726,7 @@ select.primary-input{
         <div class="boost-label">Elevated radials</div>
         <div class="boost-toggle">
           <input id="boostElevatedRadials" type="checkbox">
-          <span class="small-note">Reduces ground loss, ~+1.5 dB.</span>
+          <span class="small-note">Reduces ground loss, ≈+1.5 dB.</span>
         </div>
       </div>
 
@@ -590,7 +734,7 @@ select.primary-input{
         <div class="boost-label">Seaside mode</div>
         <div class="boost-toggle">
           <input id="boostSeaside" type="checkbox">
-          <span class="small-note">High conductivity, ~+3 dB low‑angle.</span>
+          <span class="small-note">High conductivity, ≈+3 dB low‑angle.</span>
         </div>
       </div>
 
@@ -598,7 +742,7 @@ select.primary-input{
         <div class="boost-label">70% Turbo</div>
         <div class="boost-toggle">
           <input id="boostTurbo" type="checkbox">
-          <span class="small-note">0.7 λ geometry, ~+2 dB DX bias.</span>
+          <span class="small-note">0.7 λ geometry, ≈+2 dB DX bias.</span>
         </div>
       </div>
 
@@ -615,7 +759,6 @@ select.primary-input{
         </div>
       </div>
 
-      <!-- ERP -->
       <div class="boost-section-title" style="margin-top:8px;">Effective Radiated Power</div>
       <div class="erp-grid">
         <div class="erp-item">
@@ -632,20 +775,19 @@ select.primary-input{
         </div>
       </div>
 
-      <!-- CUT LENGTHS -->
       <div class="boost-section-title" style="margin-top:8px;">VF‑Corrected Cut Lengths</div>
       <div class="cutlength-grid">
         <div class="cut-item">
           <div class="erp-label">Driven element (40 m)</div>
-          <div class="erp-value" id="cutDriven40">~0.00 ft</div>
+          <div class="erp-value" id="cutDriven40">~0.0 ft</div>
         </div>
         <div class="cut-item">
           <div class="erp-label">Radial (40 m)</div>
-          <div class="erp-value" id="cutRadial40">~0.00 ft</div>
+          <div class="erp-value" id="cutRadial40">~0.0 ft</div>
         </div>
         <div class="cut-item">
           <div class="erp-label">Radial (80 m)</div>
-          <div class="erp-value" id="cutRadial80">~0.00 ft</div>
+          <div class="erp-value" id="cutRadial80">~0.0 ft</div>
         </div>
       </div>
     </section>
@@ -654,8 +796,9 @@ select.primary-input{
 
 <script>
 function clamp(v,min,max){return Math.min(max,Math.max(min,v));}
+let activeTab='vertical';
 
-// --- CORE CALCS ---
+// --- ANTENNA CALCS ---
 function calcVertical(){
   const h=parseFloat(document.getElementById('vertHeight').value)||0;
   const vf=parseFloat(document.getElementById('vertVF').value)||0.97;
@@ -663,17 +806,14 @@ function calcVertical(){
   const radials=parseFloat(document.getElementById('vertRadials').value)||0;
 
   const effLen=h*vf;
-  const qtr80=234/3.5;
   const qtr40=234/7.1;
-  const pct80=clamp((effLen/qtr80)*100,0,200);
   const pct40=clamp((effLen/qtr40)*100,0,200);
 
-  let stressBase=2.0;
-  if(pct40>80 && pct40<120) stressBase-=0.6;
-  if(pct80>30 && pct80<70) stressBase-=0.3;
-  if(radials>=16) stressBase-=0.3;
-  if(loss>10) stressBase+=0.4;
-  const stress=clamp(stressBase,0.5,5);
+  let stress=2.0;
+  if(pct40>80 && pct40<120) stress-=0.6;
+  if(radials>=16) stress-=0.3;
+  if(loss>10) stress+=0.4;
+  stress=clamp(stress,0.5,5);
 
   const pills=document.getElementById('vertPills');
   pills.innerHTML='';
@@ -683,12 +823,10 @@ function calcVertical(){
     d.innerHTML='<span class="pill-label">'+label+'</span><span class="pill-value">'+value+'</span>';
     pills.appendChild(d);
   }
-  pill('EFF',''+effLen.toFixed(1)+' ft','accent');
-  pill('80m',pct80.toFixed(0)+'%',(pct80>35&&pct80<70)?'good':'warn');
+  pill('EFF',effLen.toFixed(1)+' ft','accent');
   pill('40m',pct40.toFixed(0)+'%',(pct40>80&&pct40<120)?'good':'warn');
 
-  document.getElementById('sumVertEff').textContent=effLen.toFixed(1)+' ft';
-  return {effLen,stress};
+  return {name:'Vertical',effLen,stress,note:'Quarter‑wave‑ish on 40 m.'};
 }
 
 function calcDoublet(){
@@ -706,10 +844,9 @@ function calcDoublet(){
   const bands=document.getElementById('dblBands').value;
 
   const effLine=lineLen*vf;
-  const effLeg=legLen;
-  const effTotal=effLine*0.5+effLeg;
+  const effTotal=effLine*0.5+legLen;
 
-  let sweet=false,avoid=false,stressBase=2.0;
+  let sweet=false,avoid=false,stress=2.0;
   if(bands==='80-60'){
     if(effLine>40 && effLine<55) sweet=true;
     if(effLine>60 && effLine<90) avoid=true;
@@ -719,9 +856,9 @@ function calcDoublet(){
   }else{
     if(effLine>30 && effLine<50) sweet=true;
   }
-  if(sweet) stressBase-=0.7;
-  if(avoid) stressBase+=0.7;
-  const stress=clamp(stressBase,0.5,5);
+  if(sweet) stress-=0.7;
+  if(avoid) stress+=0.7;
+  stress=clamp(stress,0.5,5);
 
   const pills=document.getElementById('dblPills');
   pills.innerHTML='';
@@ -735,15 +872,13 @@ function calcDoublet(){
   pill('Clear',avoid?'NO':'YES',avoid?'bad':'good');
   pill('VF len',effLine.toFixed(1)+' ft','accent');
 
-  document.getElementById('sumDblEff').textContent=effTotal.toFixed(1)+' ft';
-  return {effLen:effTotal,stress};
+  return {name:'132 ft Doublet',effLen:effTotal,stress,note:sweet?'In tuner‑friendly window.':'General multiband doublet.'};
 }
 
 function calcRandomWire(){
   const len=parseFloat(document.getElementById('rwLen').value)||41;
   const vf=parseFloat(document.getElementById('rwVF').value)||0.97;
   const cp=parseFloat(document.getElementById('rwCP').value)||17;
-  const bands=document.getElementById('rwBands').value;
 
   const effLen=len*vf;
   const recommended=[29,35.5,41,58,71,84,107,124];
@@ -759,11 +894,11 @@ function calcRandomWire(){
   const isRec=nearRec.bd<=2.0;
   const isAvoid=nearAvoid.bd<=2.0;
 
-  let stressBase=2.2;
-  if(isRec) stressBase-=0.6;
-  if(isAvoid) stressBase+=0.8;
-  if(cp>=10 && cp<=25) stressBase-=0.2;
-  const stress=clamp(stressBase,0.5,5);
+  let stress=2.2;
+  if(isRec) stress-=0.6;
+  if(isAvoid) stress+=0.8;
+  if(cp>=10 && cp<=25) stress-=0.2;
+  stress=clamp(stress,0.5,5);
 
   const pills=document.getElementById('rwPills');
   pills.innerHTML='';
@@ -777,12 +912,111 @@ function calcRandomWire(){
   pill('Avoid',isAvoid?'YES':'NO',isAvoid?'bad':'');
   pill('VF len',effLen.toFixed(1)+' ft','accent');
 
-  document.getElementById('sumRwEff').textContent=effLen.toFixed(1)+' ft';
-  return {effLen,stress};
+  return {name:'Random‑Wire 9:1',effLen,stress,note:isRec?'Known good non‑resonant length.':'General random‑wire length.'};
+}
+
+function calcEFHW(){
+  const len=parseFloat(document.getElementById('efhwLen').value)||132;
+  const vf=parseFloat(document.getElementById('efhwVF').value)||0.97;
+  const effLen=len*vf;
+
+  const pills=document.getElementById('efhwPills');
+  pills.innerHTML='';
+  function pill(label,value,mode){
+    const d=document.createElement('div');
+    d.className='pill '+(mode||'');
+    d.innerHTML='<span class="pill-label">'+label+'</span><span class="pill-value">'+value+'</span>';
+    pills.appendChild(d);
+  }
+  pill('VF len',effLen.toFixed(1)+' ft','accent');
+  pill('Bands','80–10 m','good');
+
+  let stress=2.0;
+  if(len>120 && len<140) stress-=0.4;
+  stress=clamp(stress,0.5,5);
+  return {name:'EFHW 49:1',effLen,stress,note:'End‑fed half‑wave multiband.'};
+}
+
+function calcOCF(){
+  const len=parseFloat(document.getElementById('ocfLen').value)||135;
+  const offset=parseFloat(document.getElementById('ocfOffset').value)||33;
+  const h=parseFloat(document.getElementById('ocfHeight').value)||35;
+
+  const effLen=len; // simple
+  let stress=2.0;
+  if(offset>30 && offset<36) stress-=0.4;
+  if(h<25) stress+=0.3;
+  stress=clamp(stress,0.5,5);
+
+  const pills=document.getElementById('ocfPills');
+  pills.innerHTML='';
+  function pill(label,value,mode){
+    const d=document.createElement('div');
+    d.className='pill '+(mode||'');
+    d.innerHTML='<span class="pill-label">'+label+'</span><span class="pill-value">'+value+'</span>';
+    pills.appendChild(d);
+  }
+  pill('Offset',offset.toFixed(0)+'%','accent');
+  pill('Height',h.toFixed(0)+' ft','');
+  pill('Bands','80/40/20/10','good');
+
+  return {name:'OCF Dipole',effLen,stress,note:'Off‑center‑fed multiband dipole.'};
+}
+
+function calcFan(){
+  const l40=parseFloat(document.getElementById('fan40').value)||33;
+  const l20=parseFloat(document.getElementById('fan20').value)||16.5;
+  const l10=parseFloat(document.getElementById('fan10').value)||8.2;
+  const h=parseFloat(document.getElementById('fanHeight').value)||30;
+
+  const effLen=l40; // longest leg
+  let stress=1.8;
+  if(h<20) stress+=0.4;
+  stress=clamp(stress,0.5,5);
+
+  const pills=document.getElementById('fanPills');
+  pills.innerHTML='';
+  function pill(label,value,mode){
+    const d=document.createElement('div');
+    d.className='pill '+(mode||'');
+    d.innerHTML='<span class="pill-label">'+label+'</span><span class="pill-value">'+value+'</span>';
+    pills.appendChild(d);
+  }
+  pill('40m leg',l40.toFixed(1)+' ft','accent');
+  pill('20m leg',l20.toFixed(1)+' ft','');
+  pill('10m leg',l10.toFixed(1)+' ft','');
+  pill('Bands','40/20/10','good');
+
+  return {name:'Fan Dipole',effLen,stress,note:'Resonant multiband, low tuner use.'};
+}
+
+function calcLoop(){
+  const per=parseFloat(document.getElementById('loopPerim').value)||260;
+  const h=parseFloat(document.getElementById('loopHeight').value)||30;
+  const vf=parseFloat(document.getElementById('loopVF').value)||0.91;
+
+  const effLen=per*vf;
+  let stress=1.8;
+  if(h<20) stress+=0.3;
+  stress=clamp(stress,0.5,5);
+
+  const pills=document.getElementById('loopPills');
+  pills.innerHTML='';
+  function pill(label,value,mode){
+    const d=document.createElement('div');
+    d.className='pill '+(mode||'');
+    d.innerHTML='<span class="pill-label">'+label+'</span><span class="pill-value">'+value+'</span>';
+    pills.appendChild(d);
+  }
+  pill('VF len',effLen.toFixed(1)+' ft','accent');
+  pill('Height',h.toFixed(0)+' ft','');
+  pill('Bands','80+ multiband','good');
+
+  return {name:'Horizontal Loop',effLen,stress,note:'Quiet RX, NVIS + DX capable.'};
 }
 
 // --- BOOST + ERP ---
-function calcBoostAndERP(baseStress){
+function calcBoostAndERP(){
   const txPower=parseFloat(document.getElementById('txPower').value)||100;
   const hasReflector=document.getElementById('boostReflector').checked;
   const directors=parseInt(document.getElementById('boostDirectors').value)||0;
@@ -791,7 +1025,7 @@ function calcBoostAndERP(baseStress){
   const turbo=document.getElementById('boostTurbo').checked;
   const tod=document.getElementById('boostTimeOfDay').value;
 
-  let gBase=0.0; // reference vs dipole
+  let gBase=0.0;
   let gParasitic=0.0;
   if(hasReflector) gParasitic+=2.5;
   if(directors>0){
@@ -820,14 +1054,11 @@ function calcBoostAndERP(baseStress){
   document.getElementById('erpWatts').textContent=erpW.toFixed(0)+' W';
   document.getElementById('erpDb').textContent=erpDbw.toFixed(1)+' dBW / '+erpDbm.toFixed(1)+' dBm';
 
-  // simple stress adjustment: more gain often implies more complexity
-  const stressAdj=baseStress+ (hasReflector||directors>0?0.3:0) + (turbo?0.2:0);
-  return {gTotalDb,erpW,stressAdj};
+  return gTotalDb;
 }
 
 // --- CUT LENGTHS ---
 function updateCutLengths(){
-  // Use 40m and 80m as reference, vertical VF
   const vf=parseFloat(document.getElementById('vertVF').value)||0.97;
   const f40=7.1;
   const f80=3.6;
@@ -839,25 +1070,52 @@ function updateCutLengths(){
   document.getElementById('cutRadial80').textContent=radial80.toFixed(1)+' ft';
 }
 
-// --- SYSTEM UPDATE ---
-function updateAll(){
-  const v=calcVertical();
-  const d=calcDoublet();
-  const r=calcRandomWire();
+// --- SUMMARY ---
+function updateSummary(){
+  let res;
+  if(activeTab==='vertical') res=calcVertical();
+  else if(activeTab==='doublet') res=calcDoublet();
+  else if(activeTab==='random') res=calcRandomWire();
+  else if(activeTab==='efhw') res=calcEFHW();
+  else if(activeTab==='ocf') res=calcOCF();
+  else if(activeTab==='fan') res=calcFan();
+  else if(activeTab==='loop') res=calcLoop();
+  else res=calcVertical();
 
-  const avgStress=(v.stress+d.stress+r.stress)/3;
-  const boost=calcBoostAndERP(avgStress);
-  const totalStress=clamp((v.stress+d.stress+r.stress+boost.stressAdj)/4,0.5,5);
+  const gDb=calcBoostAndERP();
+  const stress=res.stress;
+  const sumName=document.getElementById('sumName');
+  const sumEff=document.getElementById('sumEffLen');
+  const sumStress=document.getElementById('sumStress');
+  const sumNote=document.getElementById('sumNote');
 
-  const stressEl=document.getElementById('sumStress');
-  stressEl.textContent=totalStress.toFixed(2);
-  stressEl.classList.remove('good','warn','bad');
-  if(totalStress<1.5) stressEl.classList.add('good');
-  else if(totalStress<3.5) stressEl.classList.add('warn');
-  else stressEl.classList.add('bad');
+  sumName.textContent=res.name;
+  sumEff.textContent=res.effLen.toFixed(1)+' ft';
+  sumNote.textContent=res.note;
+
+  sumStress.textContent=stress.toFixed(2);
+  sumStress.classList.remove('good','warn','bad');
+  if(stress<1.5) sumStress.classList.add('good');
+  else if(stress<3.5) sumStress.classList.add('warn');
+  else sumStress.classList.add('bad');
 
   updateCutLengths();
 }
+
+// --- TAB HANDLING ---
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    activeTab=btn.dataset.tab;
+
+    document.querySelectorAll('.antenna-panel').forEach(p=>p.classList.remove('active'));
+    const panel=document.getElementById('tab-'+activeTab);
+    if(panel) panel.classList.add('active');
+
+    updateSummary();
+  });
+});
 
 // mark VF as user-touched when edited
 document.getElementById('dblVF').addEventListener('input',e=>{
@@ -865,19 +1123,25 @@ document.getElementById('dblVF').addEventListener('input',e=>{
 });
 
 // listeners
-['vertHeight','vertVF','vertGroundLoss','vertRadials',
+[
+ 'vertHeight','vertVF','vertGroundLoss','vertRadials',
  'dblFeedType','dblVF','dblLineLen','dblLegLen','dblBands',
  'rwLen','rwVF','rwCP','rwBands',
+ 'efhwLen','efhwVF','efhwBands',
+ 'ocfLen','ocfOffset','ocfFeedType','ocfHeight',
+ 'fan40','fan20','fan10','fanHeight',
+ 'loopPerim','loopHeight','loopFeedType','loopVF',
  'txPower','boostReflector','boostDirectors','boostElevatedRadials',
  'boostSeaside','boostTurbo','boostTimeOfDay'
 ].forEach(id=>{
   const el=document.getElementById(id);
-  el.addEventListener('input',updateAll);
-  el.addEventListener('change',updateAll);
+  if(!el) return;
+  el.addEventListener('input',updateSummary);
+  el.addEventListener('change',updateSummary);
 });
 
 // initial
-updateAll();
+updateSummary();
 </script>
 </body>
 </html>
