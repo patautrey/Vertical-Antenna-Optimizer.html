@@ -1215,3 +1215,502 @@ document.getElementById('dblVF').addEventListener('input',e=>{
 
 updateSummary();
 </script>
+/* === PHASE 3: 2‑ELEMENT VERTICAL ARRAY === */
+
+.array-panel{
+  background:var(--panel);
+  border-radius:12px;
+  border:1px solid var(--border);
+  padding:10px 12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.array-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:6px;
+  margin-bottom:4px;
+}
+
+.array-title{
+  font-size:13px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:#f5f7ff;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.array-tag{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--muted);
+}
+
+.array-geometry-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+}
+
+.array-phase-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+  margin-top:4px;
+}
+
+.array-diagram{
+  margin-top:6px;
+  background:#050816;
+  border-radius:10px;
+  border:1px solid #1b2238;
+  padding:6px 8px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.array-diagram-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:11px;
+  color:var(--muted);
+}
+
+.array-arrow{
+  font-size:11px;
+  color:var(--accent-strong);
+}
+
+.array-pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:4px;
+}
+
+.array-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:3px 8px;
+  border-radius:999px;
+  border:1px solid var(--pill-border);
+  background:var(--pill-bg);
+  font-size:10px;
+  color:var(--muted);
+}
+
+.array-pill-label{
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+}
+
+.array-pill-value{
+  font-weight:600;
+  color:#f7f7ff;
+}
+
+.array-pill.good{
+  border-color:rgba(76,217,100,0.6);
+  background:rgba(76,217,100,0.08);
+}
+
+.array-pill.warn{
+  border-color:rgba(255,211,92,0.7);
+  background:rgba(255,211,92,0.08);
+}
+
+.array-pill.bad{
+  border-color:rgba(255,92,122,0.7);
+  background:rgba(255,92,122,0.08);
+}
+
+.array-pill.accent{
+  border-color:var(--accent-strong);
+  background:rgba(255,216,107,0.08);
+}
+
+/* Coax stub display */
+
+.coax-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+  margin-top:4px;
+}
+
+.coax-item{
+  background:#050816;
+  border-radius:8px;
+  border:1px solid #1b2238;
+  padding:5px 7px;
+}
+
+.coax-label{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--muted);
+}
+
+.coax-value{
+  margin-top:2px;
+  font-size:12px;
+  font-weight:600;
+}
+
+/* Small preset buttons */
+
+.preset-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:4px;
+}
+
+.preset-btn{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  padding:3px 8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:#11172a;
+  color:var(--muted);
+  cursor:pointer;
+}
+
+.preset-btn:hover{
+  border-color:var(--accent-strong);
+  color:#fff;
+}
+
+.preset-btn.active{
+  border-color:var(--accent-strong);
+  background:rgba(255,216,107,0.12);
+  color:#fff;
+}
+<!-- 2‑ELEMENT VERTICAL ARRAY -->
+<section class="panel array-panel antenna-panel" id="tab-array">
+  <div class="array-header">
+    <div class="array-title">
+      2‑Element Vertical Array
+      <span class="xfmr-badge">Phased / Christman</span>
+    </div>
+    <div class="array-tag">Spacing • Phase • Coax</div>
+  </div>
+
+  <!-- GEOMETRY -->
+  <div class="array-geometry-grid">
+    <div class="field">
+      <label>Element height (ft)</label>
+      <input id="arrHeight" type="number" class="primary-input" value="33">
+    </div>
+    <div class="field">
+      <label>Wire VF</label>
+      <input id="arrVF" type="number" class="primary-input" value="0.97">
+    </div>
+
+    <div class="field">
+      <label>Spacing (λ)</label>
+      <input id="arrSpacing" type="number" class="primary-input" value="0.20">
+    </div>
+    <div class="field">
+      <label>Ground loss (Ω)</label>
+      <input id="arrGroundLoss" type="number" class="primary-input" value="5">
+    </div>
+  </div>
+
+  <!-- PHASING -->
+  <div class="array-phase-grid">
+    <div class="field">
+      <label>Desired phase (°)</label>
+      <select id="arrPhase" class="primary-input">
+        <option value="0">0° (In‑phase)</option>
+        <option value="90" selected>90° Endfire</option>
+        <option value="135">135° Super‑Endfire</option>
+        <option value="180">180° Broadside</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Coax VF</label>
+      <input id="arrCoaxVF" type="number" class="primary-input" value="0.78">
+    </div>
+  </div>
+
+  <!-- PRESETS -->
+  <div class="preset-row">
+    <button class="preset-btn" id="presetEndfire">Endfire</button>
+    <button class="preset-btn" id="presetSuper">Super‑Endfire</button>
+    <button class="preset-btn" id="presetBroadside">Broadside</button>
+    <button class="preset-btn" id="presetChristman">Christman</button>
+  </div>
+
+  <!-- COAX STUB LENGTHS -->
+  <div class="coax-grid">
+    <div class="coax-item">
+      <div class="coax-label">Equal‑length stubs</div>
+      <div class="coax-value" id="coaxEqual">0.0 ft</div>
+    </div>
+
+    <div class="coax-item">
+      <div class="coax-label">Ideal phasing stub</div>
+      <div class="coax-value" id="coaxIdeal">0.0 ft</div>
+    </div>
+
+    <div class="coax-item">
+      <div class="coax-label">Christman 90°</div>
+      <div class="coax-value" id="coax90">0.0 ft</div>
+    </div>
+
+    <div class="coax-item">
+      <div class="coax-label">Christman 135°</div>
+      <div class="coax-value" id="coax135">0.0 ft</div>
+    </div>
+  </div>
+
+  <!-- ARRAY PILLS -->
+  <div class="array-pills" id="arrayPills"></div>
+
+  <!-- DIAGRAM -->
+  <div class="array-diagram">
+    <div class="array-diagram-row">
+      <span>Element 1</span>
+      <span class="array-arrow" id="arrayDirection">→</span>
+      <span>Element 2</span>
+    </div>
+    <div class="array-diagram-row">
+      <span>Spacing:</span>
+      <span id="arraySpacingLabel">0.20 λ</span>
+    </div>
+    <div class="array-diagram-row">
+      <span>Phase:</span>
+      <span id="arrayPhaseLabel">90°</span>
+    </div>
+  </div>
+</section>
+<script>
+function calcArray(){
+  const h=parseFloat(arrHeight.value)||33;
+  const vfWire=parseFloat(arrVF.value)||0.97;
+  const spacing=parseFloat(arrSpacing.value)||0.20;
+  const groundLoss=parseFloat(arrGroundLoss.value)||5;
+  const phaseDeg=parseFloat(arrPhase.value)||90;
+  const vfCoax=parseFloat(arrCoaxVF.value)||0.78;
+
+  const fMHz=7.1;
+  const lambda=984/fMHz;
+
+  const effLen=h*vfWire;
+
+  const equalStub=(10*vfCoax);
+
+  const idealStub=(phaseDeg/360)*lambda*vfCoax;
+
+  const christ90=(90/360)*lambda*vfCoax;
+  const christ135=(135/360)*lambda*vfCoax;
+
+  coaxEqual.textContent=equalStub.toFixed(1)+' ft';
+  coaxIdeal.textContent=idealStub.toFixed(1)+' ft';
+  coax90.textContent=christ90.toFixed(1)+' ft';
+  coax135.textContent=christ135.toFixed(1)+' ft';
+
+  let gainDb=0;
+  let fb=0;
+
+  if(phaseDeg===0){
+    gainDb=1.5;
+    fb=0;
+  }else if(phaseDeg===90){
+    gainDb=2.8;
+    fb=12;
+  }else if(phaseDeg===135){
+    gainDb=3.4;
+    fb=18;
+  }else if(phaseDeg===180){
+    gainDb=2.2;
+    fb=25;
+  }
+
+  if(spacing<0.15) gainDb-=0.4;
+  if(spacing>0.25) gainDb-=0.3;
+
+  const pills=document.getElementById('arrayPills');
+  pills.innerHTML='';
+
+  function pill(label,value,mode){
+    const d=document.createElement('div');
+    d.className='array-pill '+(mode||'');
+    d.innerHTML='<span class="array-pill-label">'+label+'</span><span class="array-pill-value">'+value+'</span>';
+    pills.appendChild(d);
+  }
+
+  pill('Gain',gainDb.toFixed(1)+' dB','accent');
+  pill('F/B',fb.toFixed(0)+' dB',(fb>15?'good':'warn'));
+  pill('Spacing',spacing.toFixed(2)+' λ','');
+  pill('Phase',phaseDeg+'°','');
+
+  arraySpacingLabel.textContent=spacing.toFixed(2)+' λ';
+  arrayPhaseLabel.textContent=phaseDeg+'°';
+
+  arrayDirection.textContent=(phaseDeg===180?'↔':'→');
+
+  return {gainDb,fb,effLen};
+}
+
+presetEndfire.onclick=()=>{
+  arrPhase.value=90;
+  arrSpacing.value=0.20;
+  calcArray();
+  updateSummary();
+};
+
+presetSuper.onclick=()=>{
+  arrPhase.value=135;
+  arrSpacing.value=0.20;
+  calcArray();
+  updateSummary();
+};
+
+presetBroadside.onclick=()=>{
+  arrPhase.value=180;
+  arrSpacing.value=0.25;
+  calcArray();
+  updateSummary();
+};
+
+presetChristman.onclick=()=>{
+  arrPhase.value=90;
+  arrSpacing.value=0.20;
+  calcArray();
+  updateSummary();
+};
+
+[
+ 'arrHeight','arrVF','arrSpacing','arrGroundLoss',
+ 'arrPhase','arrCoaxVF'
+].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener('input',()=>{calcArray();updateSummary();});
+  el.addEventListener('change',()=>{calcArray();updateSummary();});
+});
+</script>
+<script>
+/* === PHASE 3: ARRAY → SUMMARY + ERP INTEGRATION === */
+
+function updateSummary(){
+  let res;
+
+  if(activeTab==='vertical') res=calcVertical();
+  else if(activeTab==='doublet') res=calcDoublet();
+  else if(activeTab==='random') res=calcRandomWire();
+  else if(activeTab==='efhw') res=calcEFHW();
+  else if(activeTab==='ocf') res=calcOCF();
+  else if(activeTab==='fan') res=calcFan();
+  else if(activeTab==='loop') res=calcLoop();
+
+  /* NEW: ARRAY TAB */
+  else if(activeTab==='array'){
+    const arr=calcArray();
+    res={
+      name:'2‑Element Array',
+      effLen:arr.effLen,
+      stress:2.0,
+      note:'Directional pattern with spacing + phase.'
+    };
+  }
+
+  const gDb=calcBoostAndERP();
+
+  const sumName=document.getElementById('sumName');
+  const sumEff=document.getElementById('sumEffLen');
+  const sumStress=document.getElementById('sumStress');
+  const sumNote=document.getElementById('sumNote');
+
+  sumName.textContent=res.name;
+  sumEff.textContent=res.effLen.toFixed(1)+' ft';
+  sumNote.textContent=res.note;
+
+  const stress=res.stress;
+  sumStress.textContent=stress.toFixed(2);
+  sumStress.classList.remove('good','warn','bad');
+  if(stress<1.5) sumStress.classList.add('good');
+  else if(stress<3.5) sumStress.classList.add('warn');
+  else sumStress.classList.add('bad');
+
+  updateCutLengths();
+}
+
+/* === TAB SWITCHING (EXTENDED FOR ARRAY TAB) === */
+
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+
+    activeTab=btn.dataset.tab;
+
+    document.querySelectorAll('.antenna-panel').forEach(p=>p.classList.remove('active'));
+    const panel=document.getElementById('tab-'+activeTab);
+    if(panel) panel.classList.add('active');
+
+    updateSummary();
+  });
+});
+
+/* === ARRAY EVENT HOOKS === */
+
+[
+ 'arrHeight','arrVF','arrSpacing','arrGroundLoss',
+ 'arrPhase','arrCoaxVF'
+].forEach(id=>{
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.addEventListener('input',()=>{calcArray();updateSummary();});
+  el.addEventListener('change',()=>{calcArray();updateSummary();});
+});
+
+/* === PRESET BUTTON HOOKS === */
+
+presetEndfire.onclick=()=>{
+  arrPhase.value=90;
+  arrSpacing.value=0.20;
+  calcArray();
+  updateSummary();
+};
+
+presetSuper.onclick=()=>{
+  arrPhase.value=135;
+  arrSpacing.value=0.20;
+  calcArray();
+  updateSummary();
+};
+
+presetBroadside.onclick=()=>{
+  arrPhase.value=180;
+  arrSpacing.value=0.25;
+  calcArray();
+  updateSummary();
+};
+
+presetChristman.onclick=()=>{
+  arrPhase.value=90;
+  arrSpacing.value=0.20;
+  calcArray();
+  updateSummary();
+};
+
+/* === INITIALIZE === */
+updateSummary();
+</script>
+ 
