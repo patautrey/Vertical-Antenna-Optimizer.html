@@ -238,7 +238,6 @@ select.primary-input{
   border-color:var(--accent-strong);
   background:rgba(255,216,107,0.08);
 }
-.summary-panel{}
 .summary-grid{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
@@ -398,7 +397,190 @@ select.primary-input{
     grid-template-columns:1fr;
   }
 }
+
+/* === PHASE 3: 2‑ELEMENT VERTICAL ARRAY === */
+
+.array-panel{
+  background:var(--panel);
+  border-radius:12px;
+  border:1px solid var(--border);
+  padding:10px 12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.array-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:6px;
+  margin-bottom:4px;
+}
+
+.array-title{
+  font-size:13px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:#f5f7ff;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.array-tag{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--muted);
+}
+
+.array-geometry-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+}
+
+.array-phase-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+  margin-top:4px;
+}
+
+.array-diagram{
+  margin-top:6px;
+  background:#050816;
+  border-radius:10px;
+  border:1px solid #1b2238;
+  padding:6px 8px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.array-diagram-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:11px;
+  color:var(--muted);
+}
+
+.array-arrow{
+  font-size:11px;
+  color:var(--accent-strong);
+}
+
+.array-pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:4px;
+}
+
+.array-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:3px 8px;
+  border-radius:999px;
+  border:1px solid var(--pill-border);
+  background:var(--pill-bg);
+  font-size:10px;
+  color:var(--muted);
+}
+
+.array-pill-label{
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+}
+
+.array-pill-value{
+  font-weight:600;
+  color:#f7f7ff;
+}
+
+.array-pill.good{
+  border-color:rgba(76,217,100,0.6);
+  background:rgba(76,217,100,0.08);
+}
+
+.array-pill.warn{
+  border-color:rgba(255,211,92,0.7);
+  background:rgba(255,211,92,0.08);
+}
+
+.array-pill.bad{
+  border-color:rgba(255,92,122,0.7);
+  background:rgba(255,92,122,0.08);
+}
+
+.array-pill.accent{
+  border-color:var(--accent-strong);
+  background:rgba(255,216,107,0.08);
+}
+
+.coax-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+  margin-top:4px;
+}
+
+.coax-item{
+  background:#050816;
+  border-radius:8px;
+  border:1px solid #1b2238;
+  padding:5px 7px;
+}
+
+.coax-label{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--muted);
+}
+
+.coax-value{
+  margin-top:2px;
+  font-size:12px;
+  font-weight:600;
+}
+
+.preset-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:4px;
+}
+
+.preset-btn{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  padding:3px 8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:#11172a;
+  color:var(--muted);
+  cursor:pointer;
+}
+
+.preset-btn:hover{
+  border-color:var(--accent-strong);
+  color:#fff;
+}
+
+.preset-btn.active{
+  border-color:var(--accent-strong);
+  background:rgba(255,216,107,0.12);
+  color:#fff;
+}
+
 </style>
+
 </head>
 <body>
 <div class="app-shell">
