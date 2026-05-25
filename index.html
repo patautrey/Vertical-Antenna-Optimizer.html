@@ -95,9 +95,10 @@
     <!-- RIGHT COLUMN -->
     <section class="right-column">
 
-      <!-- ERP SUMMARY PANEL -->
-      <div class="panel">
-        <h2>ERP Summary</h2>
+      document.getElementById("summary_band").textContent = `${bandMHz} MHz`;
+document.getElementById("summary_erp_w").textContent = erpWatts.toFixed(2);
+document.getElementById("summary_erp_dbw").textContent = erpDbw.toFixed(2);
+document.getElementById("summary_erp_dbm").textContent = erpDbm.toFixed(2);
 
         <div class="summary-row">
           <span>Band:</span>
