@@ -3,151 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HF Lab</title>
+    <title>HF Lab — ERP & Antenna Modeler</title>
     <link rel="stylesheet" href="css/app.css">
 </head>
 
 <body>
 
-    <header>
-        <h1>HF Lab</h1>
-    </header>
+<header>
+    <h1>HF Lab — ERP & Antenna Modeler</h1>
+</header>
 
-    <main class="layout-grid">
+<main class="layout-grid">
 
-        <!-- LEFT COLUMN -->
-        <section class="left-column">
-            <div class="panel">
-                <h2>Operating Parameters</h2>
+    <!-- LEFT COLUMN -->
+    <section class="left-column">
+        <div class="panel">
+            <h2>Operating Parameters</h2>
 
-                <div class="param">
-                    <label for="antenna_type">Antenna Type</label>
-                    <select id="antenna_type"></select>
-                </div>
-
-                <div class="param">
-                    <label for="band_select">Band (MHz)</label>
-                    <input id="band_select" type="number" value="14">
-                </div>
-
-                <div class="param">
-                    <label for="tx_power">TX Power (W)</label>
-                    <input id="tx_power" type="number" value="100">
-                </div>
-
-                <div class="param">
-                    <label for="antenna_gain">Antenna Gain (dBi)</label>
-                    <input id="antenna_gain" type="number" value="0">
-                </div>
-
-                <div class="param">
-                    <label for="coax_loss">Coax Loss (dB)</label>
-                    <input id="coax_loss" type="number" value="1.5">
-                </div>
-
-                <div class="param checkbox-row">
-                    <label for="dx_turbo">DX Turbo Mode (0.70λ)</label>
-                    <input id="dx_turbo" type="checkbox">
-                </div>
-
-                <div class="param">
-                    <label for="boost_mode">Boost Mode</label>
-                    <select id="boost_mode">
-                        <option value="none">None</option>
-                        <option value="mild">Mild</option>
-                        <option value="strong">Strong</option>
-                    </select>
-                </div>
-
-                <div class="param">
-                    <label for="prop_mode">Propagation Mode</label>
-                    <select id="prop_mode">
-                        <option value="normal">Normal</option>
-                        <option value="enhanced">Enhanced</option>
-                    </select>
-                </div>
-
-                <div class="param">
-                    <button id="calculate_btn">Calculate</button>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- RIGHT COLUMN -->
-        <section class="right-column">
-
-            <!-- ERP SUMMARY PANEL -->
-            <div class="panel">
-                <h2>ERP Summary</h2>
-
-                <div class="summary-row">
-                    <span>Band:</span>
-                    <span id="summary_band">—</span>
-                </div>
-
-                <div class="summary-row">
-                    <span>ERP (W):</span>
-                    <span id="summary_erp_w">—</span>
-                </div>
-
-                <div class="summary-row">
-                    <span>ERP (dBW):</span>
-                    <span id="summary_erp_dbw">—</span>
-                </div>
-
-                <div class="summary-row">
-                    <span>ERP (dBm):</span>
-                    <span id="summary_erp_dbm">—</span>
-                </div>
+            <div class="param">
+                <label for="antenna_type">Antenna Type</label>
+                <select id="antenna_type"></select>
             </div>
 
-            <!-- CUT LENGTHS PANEL -->
-            <div class="panel">
-                <h2>Cut Lengths (1/4λ)</h2>
-
-                <div class="summary-row">
-                    <span>80 m:</span>
-                    <span id="cut_80m">—</span>
-                </div>
-
-                <div class="summary-row">
-                    <span>40 m:</span>
-                    <span id="cut_40m">—</span>
-                </div>
-
-                <div class="summary-row">
-                    <span>20 m:</span>
-                    <span id="cut_20m">—</span>
-                </div>
-
-                <div class="summary-row">
-                    <span>15 m:</span>
-                    <span id="cut_15m">—</span>
-                </div>
-
-                <div class="summary-row">
-                    <span>10 m:</span>
-                    <span id="cut_10m">—</span>
-                </div>
-
-                <div class="summary-row">
-                    <span>6 m:</span>
-                    <span id="cut_6m">—</span>
-                </div>
+            <div class="param">
+                <label for="band_select">Band (MHz)</label>
+                <input id="band_select" type="number" value="14">
             </div>
 
-            <!-- GEOMETRY PANEL -->
-            <div class="panel">
-                <h2>Antenna Geometry (Coming Soon)</h2>
-                <p>This section will display geometry panels for each antenna type.</p>
+            <div class="param">
+                <label for="tx_power">TX Power (W)</label>
+                <input id="tx_power" type="number" value="100">
             </div>
 
-        </section>
+            <div class="param">
+                <label for="antenna_gain">Antenna Gain (dBi)</label>
+                <input id="antenna_gain" type="number" value="0">
+            </div>
 
-    </main>
+            <div class="param">
+                <label for="coax_loss">Coax Loss (dB)</label>
+                <input id="coax_loss" type="number" value="1.5">
+            </div>
 
-    <script src="js/app.js"></script>
+            <div class="param checkbox-row">
+                <label for="dx_turbo">DX Turbo Mode (0.70λ)</label>
+                <input id="dx_turbo" type="checkbox">
+            </div>
+
+            <div class="param">
+                <label for="boost_mode">Boost Mode</label>
+                <select id="boost_mode">
+                    <option value="none">None</option>
+                    <option value="mild">Mild</option>
+                    <option value="strong">Strong</option>
+                </select>
+            </div>
+
+            <div class="param">
+                <label for="prop_mode">Propagation Mode</label>
+                <select id="prop_mode">
+                    <option value="normal">Normal</option>
+                    <option value="enhanced">Enhanced</option>
+                </select>
+            </div>
+
+            <div class="param">
+                <button id="calculate_btn">Calculate</button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- RIGHT COLUMN -->
+    <section class="right-column">
+
+        <!-- ERP SUMMARY PANEL -->
+        <div class="panel">
+            <h2>ERP Summary</h2>
+
+            <div class="summary-row">
+                <span>Band:</span>
+                <span id="summary_band">—</span>
+            </div>
+
+            <div class="summary-row">
+                <span>ERP (W):</span>
+                <span id="summary_erp_w">—</span>
+            </div>
+
+            <div class="summary-row">
+                <span>ERP (dBW):</span>
+                <span id="summary_erp_dbw">—</span>
+            </div>
+
+            <div class="summary-row">
+                <span>ERP (dBm):</span>
+                <span id="summary_erp_dbm">—</span>
+            </div>
+        </div>
+
+        <!-- CUT LENGTHS PANEL -->
+        <div class="panel">
+            <h2>Cut Lengths (1/4λ)</h2>
+
+            <div class="summary-row">
+                <span>80 m:</span>
+                <span id="cut_80m">—</span>
+            </div>
+
+            <div class="summary-row">
+                <span>40 m:</span>
+                <span id="cut_40m">—</span>
+            </div>
+
+            <div class="summary-row">
+                <span>20 m:</span>
+                <span id="cut_20m">—</span>
+            </div>
+
+            <div class="summary-row">
+                <span>15 m:</span>
+                <span id="cut_15m">—</span>
+            </div>
+
+            <div class="summary-row">
+                <span>10 m:</span>
+                <span id="cut_10m">—</span>
+            </div>
+
+            <div class="summary-row">
+                <span>6 m:</span>
+                <span id="cut_6m">—</span>
+            </div>
+        </div>
+
+        <!-- GEOMETRY PANEL -->
+        <div class="panel">
+            <h2>Antenna Geometry (Coming Soon)</h2>
+            <p>This section will display geometry panels for each antenna type.</p>
+        </div>
+
+    </section>
+
+</main>
+
+<script src="js/app.js"></script>
 
 </body>
 </html>
