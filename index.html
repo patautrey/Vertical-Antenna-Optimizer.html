@@ -1,1898 +1,1119 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>Antenna System Optimizer – Phase 2</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<style>
 :root{
-  --bg:#050814;
-  --panel:#0b1020;
-  --accent:#f5c84a;
-  --accent-strong:#ffd86b;
-  --accent-soft:rgba(245,200,74,0.25);
-  --text:#e6ecff;
-  --muted:#8a93b8;
-  --danger:#ff5c7a;
-  --good:#4cd964;
-  --warn:#ffd35c;
-  --border:#1b2238;
-  --pill-bg:#11172a;
-  --pill-border:#222b45;
-  --plot-bg:#0b1020;
-  --focus-border:#ffd86b;
-  --focus-glow:0 0 12px rgba(255,216,107,0.95);
-  --font-main:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+--bg:#0d1733;
+--panel:#162040;
+--accent:#f5c84a;
+--accent-strong:#ffe08a;
+--accent-soft:rgba(245,200,74,0.25);
+--text:#f7f9ff;
+--muted:#a8b2d6;
+--danger:#ff5c7a;
+--good:#4cd964;
+--warn:#ffd35c;
+--border:#2a3558;
+--pill-bg:#1e274a;
+--pill-border:#2f3a5f;
+--plot-bg:#162040;
+--focus-border:#ffe08a;
+--focus-glow:0 0 14px rgba(255,224,138,0.95);
+--font-main:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{
-  background:radial-gradient(circle at top,#151b3a 0,#050814 55%,#02030a 100%);
-  color:var(--text);
-  font-family:var(--font-main);
-  min-height:100vh;
-  padding:16px;
+background:radial-gradient(circle at top,#2d3a6a 0,#0d1733 55%,#0a1228 100%);
+color:var(--text);
+font-family:var(--font-main);
+font-size:17px;
+min-height:100vh;
+padding:28px;
 }
 .app-shell{
-  max-width:1400px;
-  margin:0 auto;
-  border-radius:16px;
-  background:linear-gradient(135deg,rgba(255,255,255,0.02),rgba(0,0,0,0.6));
-  box-shadow:0 18px 40px rgba(0,0,0,0.6);
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
+max-width:1600px;
+margin:0 auto;
+border-radius:22px;
+background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(0,0,0,0.45));
+box-shadow:0 24px 55px rgba(0,0,0,0.55);
+overflow:hidden;
+display:flex;
+flex-direction:column;
 }
 .app-header{
-  display:flex;
-  align-items:center;
-  padding:16px 20px 10px 20px;
-  border-bottom:1px solid rgba(255,255,255,0.04);
+display:flex;
+align-items:flex-start;
+padding:24px 28px 14px 28px;
+border-bottom:1px solid rgba(255,255,255,0.08);
 }
 .app-title-block{flex:1;}
 .app-title{
-  font-size:20px;
-  font-weight:600;
-  letter-spacing:0.06em;
-  text-transform:uppercase;
-  color:#f7f7ff;
+font-size:26px;
+font-weight:650;
+letter-spacing:0.08em;
+text-transform:uppercase;
+color:#ffffff;
 }
 .app-subtitle{
-  font-size:12px;
-  color:var(--muted);
-  margin-top:4px;
+font-size:15px;
+color:var(--muted);
+margin-top:8px;
 }
 .app-badges{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:6px;
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+margin-top:10px;
 }
 .badge{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  padding:3px 8px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.08);
-  color:var(--muted);
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:0.09em;
+padding:5px 12px;
+border-radius:999px;
+border:1px solid rgba(255,255,255,0.14);
+color:var(--muted);
+background:rgba(15,20,40,0.85);
 }
 .badge.hot{
-  border-color:var(--accent);
-  color:var(--accent);
+border-color:var(--accent);
+color:var(--accent);
+background:rgba(245,200,74,0.18);
 }
 .app-tabs{
-  display:flex;
-  gap:6px;
-  padding:8px 16px 4px 16px;
-  border-bottom:1px solid rgba(255,255,255,0.04);
-  flex-wrap:wrap;
+display:flex;
+gap:10px;
+padding:12px 24px 10px 24px;
+border-bottom:1px solid rgba(255,255,255,0.08);
+flex-wrap:wrap;
+background:rgba(10,14,30,0.85);
+backdrop-filter:blur(12px);
 }
 .tab-btn{
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  padding:5px 10px;
-  border-radius:999px;
-  border:1px solid transparent;
-  background:transparent;
-  color:var(--muted);
-  cursor:pointer;
+font-size:13px;
+text-transform:uppercase;
+letter-spacing:0.09em;
+padding:8px 16px;
+border-radius:999px;
+border:1px solid transparent;
+background:transparent;
+color:var(--muted);
+cursor:pointer;
+transition:all 0.15s ease-out;
+}
+.tab-btn:hover{
+border-color:rgba(255,255,255,0.18);
+color:#ffffff;
+background:rgba(255,255,255,0.04);
 }
 .tab-btn.active{
-  border-color:var(--accent-strong);
-  background:rgba(245,200,74,0.12);
-  color:#fff;
+border-color:var(--accent-strong);
+background:rgba(255,224,138,0.22);
+color:#0d1733;
 }
 .app-body{
-  display:grid;
-  grid-template-columns:minmax(0,1.2fr) minmax(0,0.9fr) minmax(0,1.1fr);
-  gap:12px;
-  padding:12px 16px 16px 16px;
+display:grid;
+grid-template-columns:minmax(0,1.25fr) minmax(0,0.9fr) minmax(0,1.1fr);
+gap:20px;
+padding:20px 24px 24px 24px;
 }
 .panel{
-  background:var(--panel);
-  border-radius:12px;
-  border:1px solid var(--border);
-  padding:10px 12px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
+background:var(--panel);
+border-radius:18px;
+border:1px solid var(--border);
+padding:16px 18px;
+display:flex;
+flex-direction:column;
+gap:12px;
+box-shadow:0 12px 30px rgba(0,0,0,0.45);
 }
 .panel-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:4px;
-  gap:6px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:6px;
+gap:10px;
 }
 .panel-title{
-  font-size:13px;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  color:#f5f7ff;
-  display:flex;
-  align-items:center;
-  gap:6px;
+font-size:17px;
+font-weight:600;
+text-transform:uppercase;
+letter-spacing:0.09em;
+color:#ffffff;
+display:flex;
+align-items:center;
+gap:10px;
 }
 .panel-tag{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  color:var(--muted);
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:0.08em;
+color:var(--muted);
 }
 .xfmr-badge{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  padding:2px 7px;
-  border-radius:999px;
-  border:2px solid var(--accent-strong);
-  color:var(--accent-strong);
-  background:rgba(255,216,107,0.12);
-  box-shadow:0 0 10px rgba(255,216,107,0.6);
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:0.09em;
+padding:4px 10px;
+border-radius:999px;
+border:2px solid var(--accent-strong);
+color:#0d1733;
+background:var(--accent-strong);
+box-shadow:0 0 14px rgba(255,224,138,0.85);
 }
 .field-row{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:6px;
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
 }
 .field{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
+display:flex;
+flex-direction:column;
+gap:4px;
 }
 .field label{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  color:var(--muted);
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:0.09em;
+color:var(--muted);
 }
 input[type="number"],
 input[type="text"],
 select{
-  background:#050816;
-  border-radius:8px;
-  border:1px solid #1b2238;
-  padding:5px 7px;
-  font-size:12px;
-  color:var(--text);
-  outline:none;
+background:#111b3a;
+border-radius:12px;
+border:1px solid #2a3558;
+padding:9px 12px;
+font-size:15px;
+color:var(--text);
+outline:none;
 }
 input[type="number"]::placeholder,
 input[type="text"]::placeholder{
-  color:#4b5270;
+color:#6c7598;
 }
 .primary-input{
-  background:#1b1630;
-  border:2px solid var(--accent-strong);
-  color:#ffffff;
-  box-shadow:0 0 6px rgba(255,216,107,0.55),inset 0 0 0 1px rgba(0,0,0,0.6);
+background:#1f2a52;
+border:2px solid var(--accent-strong);
+color:#ffffff;
+box-shadow:0 0 10px rgba(255,224,138,0.65),inset 0 0 0 1px rgba(0,0,0,0.7);
 }
 .primary-input:focus,
 .primary-input:focus-visible{
-  border-color:var(--focus-border);
-  box-shadow:var(--focus-glow),inset 0 0 0 1px rgba(0,0,0,0.7);
+border-color:var(--focus-border);
+box-shadow:var(--focus-glow),inset 0 0 0 1px rgba(0,0,0,0.8);
 }
 select.primary-input{
-  background:#1b1630;
+background:#1f2a52;
 }
 .pills-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-  margin-top:4px;
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-top:8px;
 }
 .pill{
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  padding:3px 8px;
-  border-radius:999px;
-  border:1px solid var(--pill-border);
-  background:var(--pill-bg);
-  font-size:10px;
-  color:var(--muted);
+display:inline-flex;
+align-items:center;
+gap:6px;
+padding:5px 12px;
+border-radius:999px;
+border:1px solid var(--pill-border);
+background:var(--pill-bg);
+font-size:12px;
+color:var(--muted);
 }
 .pill-label{
-  text-transform:uppercase;
-  letter-spacing:0.08em;
+text-transform:uppercase;
+letter-spacing:0.09em;
 }
 .pill-value{
-  font-weight:600;
-  color:#f7f7ff;
+font-weight:600;
+color:#ffffff;
 }
 .pill.good{
-  border-color:rgba(76,217,100,0.6);
-  background:rgba(76,217,100,0.08);
+border-color:rgba(76,217,100,0.7);
+background:rgba(76,217,100,0.14);
 }
 .pill.warn{
-  border-color:rgba(255,211,92,0.7);
-  background:rgba(255,211,92,0.08);
+border-color:rgba(255,211,92,0.8);
+background:rgba(255,211,92,0.14);
 }
 .pill.bad{
-  border-color:rgba(255,92,122,0.7);
-  background:rgba(255,92,122,0.08);
+border-color:rgba(255,92,122,0.85);
+background:rgba(255,92,122,0.14);
 }
 .pill.accent{
-  border-color:var(--accent-strong);
-  background:rgba(255,216,107,0.08);
+border-color:var(--accent-strong);
+background:rgba(255,224,138,0.22);
 }
 .summary-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:6px;
-  margin-top:6px;
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+margin-top:10px;
 }
 .summary-item{
-  background:#050816;
-  border-radius:10px;
-  border:1px solid #1b2238;
-  padding:6px 8px;
+background:#111b3a;
+border-radius:14px;
+border:1px solid #2a3558;
+padding:10px 12px;
 }
 .summary-label{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  color:var(--muted);
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:0.09em;
+color:var(--muted);
 }
 .summary-value{
-  margin-top:2px;
-  font-size:13px;
-  font-weight:600;
+margin-top:4px;
+font-size:17px;
+font-weight:600;
 }
 .summary-value.accent{color:var(--accent-strong);}
 .summary-value.good{color:var(--good);}
 .summary-value.warn{color:var(--warn);}
 .summary-value.bad{color:var(--danger);}
 .plot-panel{
-  background:var(--panel);
-  border-radius:12px;
-  border:1px solid var(--border);
-  padding:10px 12px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
+background:var(--panel);
+border-radius:18px;
+border:1px solid var(--border);
+padding:14px 16px;
+display:flex;
+flex-direction:column;
+gap:12px;
+box-shadow:0 12px 30px rgba(0,0,0,0.45);
 }
 .plot-title{
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  color:var(--muted);
+font-size:13px;
+text-transform:uppercase;
+letter-spacing:0.09em;
+color:var(--muted);
 }
 .plot-box{
-  background:var(--plot-bg);
-  border-radius:10px;
-  border:1px solid #1b2238;
-  height:120px;
-  position:relative;
-  overflow:hidden;
+background:var(--plot-bg);
+border-radius:14px;
+border:1px solid #2a3558;
+height:170px;
+position:relative;
+overflow:hidden;
 }
 .plot-placeholder{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:11px;
-  color:#4b5270;
+position:absolute;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:13px;
+color:#6c7598;
 }
 .legend{
-  display:flex;
-  gap:10px;
-  margin-top:4px;
-  font-size:10px;
-  color:var(--muted);
+display:flex;
+gap:14px;
+margin-top:8px;
+font-size:12px;
+color:var(--muted);
 }
 .legend-item{
-  display:flex;
-  align-items:center;
-  gap:4px;
+display:flex;
+align-items:center;
+gap:6px;
 }
 .legend-swatch{
-  width:10px;
-  height:3px;
-  border-radius:999px;
+width:14px;
+height:4px;
+border-radius:999px;
 }
 .swatch-vert{background:#ffd35c;}
 .swatch-doub{background:#4da6ff;}
 .swatch-rw{background:#ff8a4a;}
 .boost-panel{
-  background:var(--panel);
-  border-radius:12px;
-  border:1px solid var(--border);
-  padding:10px 12px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
+background:var(--panel);
+border-radius:18px;
+border:1px solid var(--border);
+padding:14px 16px;
+display:flex;
+flex-direction:column;
+gap:12px;
+box-shadow:0 12px 30px rgba(0,0,0,0.45);
 }
 .boost-section-title{
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  color:var(--muted);
-  margin-bottom:2px;
+font-size:13px;
+text-transform:uppercase;
+letter-spacing:0.09em;
+color:var(--muted);
+margin-bottom:4px;
 }
 .boost-row{
-  display:grid;
-  grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
-  gap:6px;
-  align-items:center;
+display:grid;
+grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
+gap:10px;
+align-items:center;
 }
 .boost-label{
-  font-size:11px;
-  color:var(--text);
+font-size:15px;
+color:var(--text);
 }
 .boost-toggle{
-  display:flex;
-  align-items:center;
-  gap:6px;
+display:flex;
+align-items:center;
+gap:10px;
 }
 .boost-toggle input[type="checkbox"]{
-  accent-color:var(--accent-strong);
+accent-color:var(--accent-strong);
+transform:scale(1.15);
 }
 .small-note{
-  font-size:10px;
-  color:var(--muted);
+font-size:12px;
+color:var(--muted);
 }
 .erp-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:6px;
-  margin-top:4px;
+display:grid;
+grid-template-columns:repeat(3,minmax(0,1fr));
+gap:10px;
+margin-top:8px;
 }
 .erp-item{
-  background:#050816;
-  border-radius:8px;
-  border:1px solid #1b2238;
-  padding:5px 7px;
+background:#111b3a;
+border-radius:12px;
+border:1px solid #2a3558;
+padding:9px 12px;
 }
 .erp-label{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  color:var(--muted);
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:0.09em;
+color:var(--muted);
 }
 .erp-value{
-  margin-top:2px;
-  font-size:12px;
-  font-weight:600;
+margin-top:4px;
+font-size:15px;
+font-weight:600;
 }
 .cutlength-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:6px;
-  margin-top:4px;
+display:grid;
+grid-template-columns:repeat(3,minmax(0,1fr));
+gap:10px;
+margin-top:8px;
 }
 .cut-item{
-  background:#050816;
-  border-radius:8px;
-  border:1px solid #1b2238;
-  padding:5px 7px;
+background:#111b3a;
+border-radius:12px;
+border:1px solid #2a3558;
+padding:9px 12px;
 }
 .antenna-panel{display:none;}
 .antenna-panel.active{display:flex;}
-@media(max-width:1100px){
-  .app-body{
-    grid-template-columns:1fr;
-  }
-}
-
-/* === PHASE 3: 2‑ELEMENT VERTICAL ARRAY === */
-
 .array-panel{
-  background:var(--panel);
-  border-radius:12px;
-  border:1px solid var(--border);
-  padding:10px 12px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
+background:var(--panel);
+border-radius:18px;
+border:1px solid var(--border);
+padding:16px 18px;
+display:flex;
+flex-direction:column;
+gap:12px;
+box-shadow:0 12px 30px rgba(0,0,0,0.45);
 }
-
 .array-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:6px;
-  margin-bottom:4px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-bottom:6px;
 }
-
 .array-title{
-  font-size:13px;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  color:#f5f7ff;
-  display:flex;
-  align-items:center;
-  gap:6px;
+font-size:17px;
+font-weight:600;
+text-transform:uppercase;
+letter-spacing:0.09em;
+color:#ffffff;
+display:flex;
+align-items:center;
+gap:10px;
 }
-
 .array-tag{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  color:var(--muted);
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:0.08em;
+color:var(--muted);
 }
-
 .array-geometry-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:6px;
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
 }
-
 .array-phase-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:6px;
-  margin-top:4px;
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+margin-top:8px;
 }
-
 .array-diagram{
-  margin-top:6px;
-  background:#050816;
-  border-radius:10px;
-  border:1px solid #1b2238;
-  padding:6px 8px;
-  display:flex;
-  flex-direction:column;
-  gap:4px;
+margin-top:10px;
+background:#111b3a;
+border-radius:14px;
+border:1px solid #2a3558;
+padding:10px 12px;
+display:flex;
+flex-direction:column;
+gap:6px;
 }
-
 .array-diagram-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:11px;
-  color:var(--muted);
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:13px;
+color:var(--muted);
 }
-
 .array-arrow{
-  font-size:11px;
-  color:var(--accent-strong);
+font-size:15px;
+color:var(--accent-strong);
 }
-
 .array-pills{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-  margin-top:4px;
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-top:8px;
 }
-
 .array-pill{
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  padding:3px 8px;
-  border-radius:999px;
-  border:1px solid var(--pill-border);
-  background:var(--pill-bg);
-  font-size:10px;
-  color:var(--muted);
+display:inline-flex;
+align-items:center;
+gap:6px;
+padding:5px 12px;
+border-radius:999px;
+border:1px solid var(--pill-border);
+background:var(--pill-bg);
+font-size:12px;
+color:var(--muted);
 }
-
 .array-pill-label{
-  text-transform:uppercase;
-  letter-spacing:0.08em;
+text-transform:uppercase;
+letter-spacing:0.09em;
 }
-
 .array-pill-value{
-  font-weight:600;
-  color:#f7f7ff;
+font-weight:600;
+color:#ffffff;
 }
-
 .array-pill.good{
-  border-color:rgba(76,217,100,0.6);
-  background:rgba(76,217,100,0.08);
+border-color:rgba(76,217,100,0.7);
+background:rgba(76,217,100,0.14);
 }
-
 .array-pill.warn{
-  border-color:rgba(255,211,92,0.7);
-  background:rgba(255,211,92,0.08);
+border-color:rgba(255,211,92,0.8);
+background:rgba(255,211,92,0.14);
 }
-
 .array-pill.bad{
-  border-color:rgba(255,92,122,0.7);
-  background:rgba(255,92,122,0.08);
+border-color:rgba(255,92,122,0.85);
+background:rgba(255,92,122,0.14);
 }
-
 .array-pill.accent{
-  border-color:var(--accent-strong);
-  background:rgba(255,216,107,0.08);
+border-color:var(--accent-strong);
+background:rgba(255,224,138,0.22);
 }
-
 .coax-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:6px;
-  margin-top:4px;
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+margin-top:8px;
 }
-
 .coax-item{
-  background:#050816;
-  border-radius:8px;
-  border:1px solid #1b2238;
-  padding:5px 7px;
+background:#111b3a;
+border-radius:12px;
+border:1px solid #2a3558;
+padding:9px 12px;
 }
-
 .coax-label{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  color:var(--muted);
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:0.09em;
+color:var(--muted);
 }
-
 .coax-value{
-  margin-top:2px;
-  font-size:12px;
-  font-weight:600;
+margin-top:4px;
+font-size:15px;
+font-weight:600;
 }
-
 .preset-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-  margin-top:4px;
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-top:8px;
 }
-
 .preset-btn{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  padding:3px 8px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.08);
-  background:#11172a;
-  color:var(--muted);
-  cursor:pointer;
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:0.09em;
+padding:6px 12px;
+border-radius:999px;
+border:1px solid rgba(255,255,255,0.14);
+background:#1e274a;
+color:var(--muted);
+cursor:pointer;
+transition:all 0.15s ease-out;
 }
-
 .preset-btn:hover{
-  border-color:var(--accent-strong);
-  color:#fff;
+border-color:var(--accent-strong);
+color:#ffffff;
+background:rgba(255,224,138,0.22);
 }
-
 .preset-btn.active{
-  border-color:var(--accent-strong);
-  background:rgba(255,216,107,0.12);
-  color:#fff;
+border-color:var(--accent-strong);
+background:rgba(255,224,138,0.28);
+color:#0d1733;
 }
-
-</style>
-
+@media(max-width:1300px){
+.app-body{
+grid-template-columns:1fr;
+}
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HF Lab – Antenna & ERP Workbench</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="css/app.css">
 </head>
 <body>
 <div class="app-shell">
-
-  <header class="app-header">
-    <div class="app-title-block">
-      <div class="app-title">Antenna System Optimizer</div>
-      <div class="app-subtitle">
-        HF Multiband • Verticals • Doublets • Random‑Wire 9:1 • EFHW 49:1 • OCF 4:1 • Fan Dipole • Horizontal Loop • Boost + ERP Engine
-      </div>
-      <div class="app-badges">
-        <div class="badge hot">HF Lab Mode</div>
-        <div class="badge">Phase 2</div>
-        <div class="badge">Transformer Aware</div>
-        <div class="badge">Enhanced Inputs</div>
-      </div>
-    </div>
-  </header>
-
-  <!-- TAB BAR -->
-  <nav class="app-tabs">
-    <button class="tab-btn active" data-tab="vertical">Vertical</button>
-    <button class="tab-btn" data-tab="doublet">Doublet</button>
-    <button class="tab-btn" data-tab="random">Random‑Wire</button>
-    <button class="tab-btn" data-tab="efhw">EFHW 49:1</button>
-    <button class="tab-btn" data-tab="ocf">OCF Dipole</button>
-    <button class="tab-btn" data-tab="fan">Fan Dipole</button>
-    <button class="tab-btn" data-tab="loop">Horizontal Loop</button>
-  </nav>
-
-  <main class="app-body">
-
-    <!-- LEFT COLUMN: ANTENNA PANELS -->
-    <section id="antennaColumn">
-
-      <!-- VERTICAL -->
-      <section class="panel antenna-panel active" id="tab-vertical">
-        <div class="panel-header">
-          <div class="panel-title">
-            Vertical Antenna Optimizer
-            <span class="xfmr-badge">Direct Feed</span>
-          </div>
-          <div class="panel-tag">Ground / Elevated</div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>Physical height (ft)</label>
-            <input id="vertHeight" type="number" class="primary-input" value="33">
-          </div>
-          <div class="field">
-            <label>Wire VF</label>
-            <input id="vertVF" type="number" class="primary-input" value="0.97">
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>Ground loss (Ω)</label>
-            <input id="vertGroundLoss" type="number" class="primary-input" value="5">
-          </div>
-          <div class="field">
-            <label>Radials count</label>
-            <input id="vertRadials" type="number" class="primary-input" value="16">
-          </div>
-        </div>
-
-        <div class="pills-row" id="vertPills"></div>
-      </section>
-
-      <!-- DOUBLET -->
-      <section class="panel antenna-panel" id="tab-doublet">
-        <div class="panel-header">
-          <div class="panel-title">
-            132 ft Doublet + Feedline
-            <span class="xfmr-badge">1:1 Balun</span>
-          </div>
-          <div class="panel-tag">Balanced Multiband</div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>Feedline type</label>
-            <select id="dblFeedType" class="primary-input">
-              <option value="450">450 Ω ladder line</option>
-              <option value="300">300 Ω window line</option>
-              <option value="600">600 Ω open wire</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Line VF</label>
-            <input id="dblVF" type="number" class="primary-input" value="0.91">
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>Ladder line length (ft)</label>
-            <input id="dblLineLen" type="number" class="primary-input" value="47">
-          </div>
-          <div class="field">
-            <label>Leg length (ft)</label>
-            <input id="dblLegLen" type="number" class="primary-input" value="59.4">
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>Bands</label>
-            <select id="dblBands" class="primary-input">
-              <option value="80-60">80–60 m</option>
-              <option value="80-40">80–40 m</option>
-              <option value="40-20">40–20 m</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Notes</label>
-            <input type="text" value="Multiband tuner-fed" disabled>
-          </div>
-        </div>
-
-        <div class="pills-row" id="dblPills"></div>
-      </section>
-
-      <!-- RANDOM-WIRE 9:1 -->
-      <section class="panel antenna-panel" id="tab-random">
-        <div class="panel-header">
-          <div class="panel-title">
-            Random‑Wire Planner
-            <span class="xfmr-badge">9:1 Unun</span>
-          </div>
-          <div class="panel-tag">End‑Fed Non‑Resonant</div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>Wire length (ft)</label>
-            <input id="rwLen" type="number" class="primary-input" value="41">
-          </div>
-          <div class="field">
-            <label>Wire VF</label>
-            <input id="rwVF" type="number" class="primary-input" value="0.97">
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>Counterpoise (ft)</label>
-            <input id="rwCP" type="number" class="primary-input" value="17">
-          </div>
-          <div class="field">
-            <label>Bands</label>
-            <select id="rwBands" class="primary-input">
-              <option value="80-10">80–10 m</option>
-              <option value="40-10">40–10 m</option>
-              <option value="60-20">60–20 m</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="pills-row" id="rwPills"></div>
-      </section>
-
-      <!-- EFHW 49:1 -->
-      <section class="panel antenna-panel" id="tab-efhw">
-        <div class="panel-header">
-          <div class="panel-title">
-            EFHW Multiband
-            <span class="xfmr-badge">49:1</span>
-          </div>
-          <div class="panel-tag">End‑Fed Half‑Wave</div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>Wire length (ft)</label>
-            <input id="efhwLen" type="number" class="primary-input" value="132">
-          </div>
-          <div class="field">
-            <label>Wire VF</label>
-            <input id="efhwVF" type="number" class="primary-input" value="0.97">
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>Bands</label>
-            <select id="efhwBands" class="primary-input">
-              <option value="80-10">80–10 m</option>
-              <option value="40-10">40–10 m</option>
-              <option value="20-10">20–10 m</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Notes</label>
-            <input type="text" value="49:1 transformer assumed" disabled>
-          </div>
-        </div>
-
-        <div class="pills-row" id="efhwPills"></div>
-      </section>
-
-      <!-- OCF 4:1 -->
-      <section class="panel antenna-panel" id="tab-ocf">
-        <div class="panel-header">
-          <div class="panel-title">
-            OCF Dipole
-            <span class="xfmr-badge">4:1 Balun</span>
-          </div>
-          <div class="panel-tag">Off‑Center‑Fed</div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>Total length (ft)</label>
-            <input id="ocfLen" type="number" class="primary-input" value="135">
-          </div>
-          <div class="field">
-            <label>Offset (%)</label>
-            <input id="ocfOffset" type="number" class="primary-input" value="33">
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>Feedline type</label>
-            <select id="ocfFeedType" class="primary-input">
-              <option value="coax">Coax + 4:1 balun</option>
-              <option value="ladder">Ladder line</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Height (ft)</label>
-            <input id="ocfHeight" type="number" class="primary-input" value="35">
-          </div>
-        </div>
-
-        <div class="pills-row" id="ocfPills"></div>
-      </section>
-
-      <!-- FAN DIPOLE -->
-      <section class="panel antenna-panel" id="tab-fan">
-        <div class="panel-header">
-          <div class="panel-title">
-            Fan Dipole
-            <span class="xfmr-badge">50 Ω Feed</span>
-          </div>
-          <div class="panel-tag">Resonant Multiband</div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>40 m leg (ft)</label>
-            <input id="fan40" type="number" class="primary-input" value="33">
-          </div>
-          <div class="field">
-            <label>20 m leg (ft)</label>
-            <input id="fan20" type="number" class="primary-input" value="16.5">
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>10 m leg (ft)</label>
-            <input id="fan10" type="number" class="primary-input" value="8.2">
-          </div>
-          <div class="field">
-            <label>Height (ft)</label>
-            <input id="fanHeight" type="number" class="primary-input" value="30">
-          </div>
-        </div>
-
-        <div class="pills-row" id="fanPills"></div>
-      </section>
-
-      <!-- HORIZONTAL LOOP -->
-      <section class="panel antenna-panel" id="tab-loop">
-        <div class="panel-header">
-          <div class="panel-title">
-            Horizontal Loop (Skyloop)
-            <span class="xfmr-badge">1:1 Balun</span>
-          </div>
-          <div class="panel-tag">NVIS + DX</div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>Perimeter (ft)</label>
-            <input id="loopPerim" type="number" class="primary-input" value="260">
-          </div>
-          <div class="field">
-            <label>Height (ft)</label>
-            <input id="loopHeight" type="number" class="primary-input" value="30">
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>Feedline type</label>
-            <select id="loopFeedType" class="primary-input">
-              <option value="450">450 Ω ladder line</option>
-              <option value="300">300 Ω window line</option>
-              <option value="600">600 Ω open wire</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Line VF</label>
-            <input id="loopVF" type="number" class="primary-input" value="0.91">
-          </div>
-        </div>
-
-        <div class="pills-row" id="loopPills"></div>
-      </section>
-
-    </section>
-
-    <!-- MIDDLE COLUMN: SUMMARY -->
-    <section class="panel summary-panel">
-      <div class="panel-header">
-        <div class="panel-title">System Summary</div>
-        <div class="panel-tag">Active Antenna • Length • Stress</div>
-      </div>
-
-      <div class="summary-grid">
-        <div class="summary-item">
-          <div class="summary-label">Active antenna</div>
-          <div class="summary-value accent" id="sumName">Vertical</div>
-        </div>
-
-        <div class="summary-item">
-          <div class="summary-label">Eff length (VF‑adj)</div>
-          <div class="summary-value" id="sumEffLen">32.0 ft</div>
-        </div>
-
-        <div class="summary-item">
-          <div class="summary-label">Tuner stress</div>
-          <div class="summary-value warn" id="sumStress">1.10</div>
-        </div>
-
-        <div class="summary-item">
-          <div class="summary-label">Notes</div>
-          <div class="summary-value" id="sumNote">Quarter‑wave‑ish on 40 m.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- RIGHT COLUMN: PLOTS + BOOST PANEL -->
-    <section class="plot-panel">
-      <div class="plot-title">Electrical Length (VF‑Adjusted)</div>
-      <div class="plot-box">
-        <div class="plot-placeholder">Electrical length vs band (conceptual)</div>
-      </div>
-
-      <div class="legend">
-        <div class="legend-item"><span class="legend-swatch swatch-vert"></span><span>Vertical / EFHW</span></div>
-        <div class="legend-item"><span class="legend-swatch swatch-doub"></span><span>Doublet / OCF / Fan</span></div>
-        <div class="legend-item"><span class="legend-swatch swatch-rw"></span><span>Random‑Wire / Loop</span></div>
-      </div>
-
-      <div class="plot-title" style="margin-top:8px;">Tuner Stress Zones</div>
-      <div class="plot-box">
-        <div class="plot-placeholder">Low / Medium / High stress (conceptual)</div>
-      </div>
-    </section>
-
-    <!-- BOOST PANEL -->
-    <section class="boost-panel">
-      <div class="panel-header">
-        <div class="panel-title">Boost Panel & ERP</div>
-        <div class="panel-tag">Parasitics • Ground • Time</div>
-      </div>
-
-      <div class="boost-section-title">Transmitter Power</div>
-      <div class="boost-row">
-        <div class="boost-label">TX power (W)</div>
-        <div>
-          <input id="txPower" type="number" class="primary-input" value="100">
-          <div class="small-note">Adjust to match your rig (QRP to legal limit).</div>
-        </div>
-      </div>
-
-      <div class="boost-section-title" style="margin-top:6px;">Geometry & Ground Boosts</div>
-
-      <div class="boost-row">
-        <div class="boost-label">Reflector</div>
-        <div class="boost-toggle">
-          <input id="boostReflector" type="checkbox">
-          <span class="small-note">Adds ≈+2.5 dB, 1.05× length, 0.15 λ spacing.</span>
-        </div>
-      </div>
-
-      <div class="boost-row">
-        <div class="boost-label">Directors</div>
-        <div class="boost-toggle">
-          <input id="boostDirectors" type="number" class="primary-input" value="0" min="0" max="4">
-          <span class="small-note">First ≈+2.2 dB, +1 dB each additional.</span>
-        </div>
-      </div>
-
-      <div class="boost-row">
-        <div class="boost-label">Elevated radials</div>
-        <div class="boost-toggle">
-          <input id="boostElevatedRadials" type="checkbox">
-          <span class="small-note">Reduces ground loss, ≈+1.5 dB.</span>
-        </div>
-      </div>
-
-      <div class="boost-row">
-        <div class="boost-label">Seaside mode</div>
-        <div class="boost-toggle">
-          <input id="boostSeaside" type="checkbox">
-          <span class="small-note">High conductivity, ≈+3 dB low‑angle.</span>
-        </div>
-      </div>
-
-      <div class="boost-row">
-        <div class="boost-label">70% Turbo</div>
-        <div class="boost-toggle">
-          <input id="boostTurbo" type="checkbox">
-          <span class="small-note">0.7 λ geometry, ≈+2 dB DX bias.</span>
-        </div>
-      </div>
-
-      <div class="boost-row">
-        <div class="boost-label">Time of day</div>
-        <div>
-          <select id="boostTimeOfDay" class="primary-input">
-            <option value="pre">Pre‑sunrise</option>
-            <option value="day" selected>Daytime
-                          <option value="sunset">Sunset</option>
-            <option value="night">Night</option>
-          </select>
-          <div class="small-note">Applies −1 to +2 dB propagation weighting.</div>
-        </div>
-      </div>
-
-      <div class="boost-section-title" style="margin-top:8px;">Effective Radiated Power</div>
-      <div class="erp-grid">
-        <div class="erp-item">
-          <div class="erp-label">Total gain</div>
-          <div class="erp-value" id="erpGainDb">0.0 dB</div>
-        </div>
-        <div class="erp-item">
-          <div class="erp-label">ERP (W)</div>
-          <div class="erp-value" id="erpWatts">100 W</div>
-        </div>
-        <div class="erp-item">
-          <div class="erp-label">ERP (dBW / dBm)</div>
-          <div class="erp-value" id="erpDb">20.0 dBW / 50.0 dBm</div>
-        </div>
-      </div>
-
-      <div class="boost-section-title" style="margin-top:8px;">VF‑Corrected Cut Lengths</div>
-      <div class="cutlength-grid">
-        <div class="cut-item">
-          <div class="erp-label">Driven element (40 m)</div>
-          <div class="erp-value" id="cutDriven40">~0.0 ft</div>
-        </div>
-        <div class="cut-item">
-          <div class="erp-label">Radial (40 m)</div>
-          <div class="erp-value" id="cutRadial40">~0.0 ft</div>
-        </div>
-        <div class="cut-item">
-          <div class="erp-label">Radial (80 m)</div>
-          <div class="erp-value" id="cutRadial80">~0.0 ft</div>
-        </div>
-      </div>
-
-    </section>
-  </main>
+<div class="app-header">
+<div class="app-title-block">
+<div class="app-title">HF LAB – ANTENNA WORKBENCH</div>
+<div class="app-subtitle">Multiband HF antennas • ERP • 2‑element vertical array</div>
+<div class="app-badges">
+<div class="badge hot">Bright navy dashboard</div>
+<div class="badge">Phase 2 + Phase 3</div>
+<div class="badge">NVIS + DX lab</div>
 </div>
-<script>
-function clamp(v,min,max){return Math.min(max,Math.max(min,v));}
-
-function calcVertical(){
-  const h=parseFloat(document.getElementById('vertHeight').value)||0;
-  const vf=parseFloat(document.getElementById('vertVF').value)||0.97;
-  const loss=parseFloat(document.getElementById('vertGroundLoss').value)||5;
-  const radials=parseFloat(document.getElementById('vertRadials').value)||0;
-
-  const effLen=h*vf;
-  const qtr40=234/7.1;
-  const pct40=clamp((effLen/qtr40)*100,0,200);
-
-  let stress=2.0;
-  if(pct40>80 && pct40<120) stress-=0.6;
-  if(radials>=16) stress-=0.3;
-  if(loss>10) stress+=0.4;
-  stress=clamp(stress,0.5,5);
-
-  const pills=document.getElementById('vertPills');
-  pills.innerHTML='';
-  function pill(label,value,mode){
-    const d=document.createElement('div');
-    d.className='pill '+(mode||'');
-    d.innerHTML='<span class="pill-label">'+label+'</span><span class="pill-value">'+value+'</span>';
-    pills.appendChild(d);
-  }
-  pill('EFF',effLen.toFixed(1)+' ft','accent');
-  pill('40m',pct40.toFixed(0)+'%',(pct40>80&&pct40<120)?'good':'warn');
-
-  return {name:'Vertical',effLen,stress,note:'Quarter‑wave‑ish on 40 m.'};
-}
-
-function calcDoublet(){
-  const feedSel=document.getElementById('dblFeedType').value;
-  const vfInput=document.getElementById('dblVF');
-  let vf=parseFloat(vfInput.value)||0.91;
-  if(!vfInput.dataset.userTouched){
-    if(feedSel==='300') vf=0.82;
-    if(feedSel==='450') vf=0.91;
-    if(feedSel==='600') vf=0.96;
-    vfInput.value=vf.toFixed(2);
-  }
-  const lineLen=parseFloat(document.getElementById('dblLineLen').value)||47;
-  const legLen=parseFloat(document.getElementById('dblLegLen').value)||59.4;
-  const bands=document.getElementById('dblBands').value;
-
-  const effLine=lineLen*vf;
-  const effTotal=effLine*0.5+legLen;
-
-  let sweet=false,avoid=false,stress=2.0;
-  if(bands==='80-60'){
-    if(effLine>40 && effLine<55) sweet=true;
-    if(effLine>60 && effLine<90) avoid=true;
-  }else if(bands==='80-40'){
-    if(effLine>45 && effLine<70) sweet=true;
-    if(effLine>80 && effLine<110) avoid=true;
-  }else{
-    if(effLine>30 && effLine<50) sweet=true;
-  }
-  if(sweet) stress-=0.7;
-  if(avoid) stress+=0.7;
-  stress=clamp(stress,0.5,5);
-
-  const pills=document.getElementById('dblPills');
-  pills.innerHTML='';
-  function pill(label,value,mode){
-    const d=document.createElement('div');
-    d.className='pill '+(mode||'');
-    d.innerHTML='<span class="pill-label">'+label+'</span><span class="pill-value">'+value+'</span>';
-    pills.appendChild(d);
-  }
-  pill('Sweet spot',sweet?'YES':'NO',sweet?'good':'');
-  pill('Clear',avoid?'NO':'YES',avoid?'bad':'good');
-  pill('VF len',effLine.toFixed(1)+' ft','accent');
-
-  return {name:'Doublet (1:1)',effLen:effTotal,stress,note:sweet?'In tuner‑friendly window.':'General multiband doublet.'};
-}
-
-function calcRandomWire(){
-  const len=parseFloat(document.getElementById('rwLen').value)||41;
-  const vf=parseFloat(document.getElementById('rwVF').value)||0.97;
-  const cp=parseFloat(document.getElementById('rwCP').value)||17;
-
-  const effLen=len*vf;
-  const recommended=[29,35.5,41,58,71,84,107,124];
-  const avoid=[16,32,44,55,88,110];
-
-  function nearest(list){
-    let best=list[0],bd=999;
-    list.forEach(v=>{const d=Math.abs(v-len);if(d<bd){bd=d;best=v;}});
-    return {best,bd};
-  }
-  const nearRec=nearest(recommended);
-  const nearAvoid=nearest(avoid);
-  const isRec=nearRec.bd<=2.0;
-  const isAvoid=nearAvoid.bd<=2.0;
-
-  let stress=2.2;
-  if(isRec) stress-=0.6;
-  if(isAvoid) stress+=0.8;
-  if(cp>=10 && cp<=25) stress-=0.2;
-  stress=clamp(stress,0.5,5);
-
-  const pills=document.getElementById('rwPills');
-  pills.innerHTML='';
-  function pill(label,value,mode){
-    const d=document.createElement('div');
-    d.className='pill '+(mode||'');
-    d.innerHTML='<span class="pill-label">'+label+'</span><span class="pill-value">'+value+'</span>';
-    pills.appendChild(d);
-  }
-  pill('Recommended',isRec?'YES':'NO',isRec?'good':'');
-  pill('Avoid',isAvoid?'YES':'NO',isAvoid?'bad':'');
-  pill('VF len',effLen.toFixed(1)+' ft','accent');
-
-  return {name:'Random‑Wire (9:1)',effLen,stress,note:isRec?'Known good non‑resonant length.':'General random‑wire length.'};
-}
-
-function calcEFHW(){
-  const len=parseFloat(document.getElementById('efhwLen').value)||132;
-  const vf=parseFloat(document.getElementById('efhwVF').value)||0.97;
-  const effLen=len*vf;
-
-  const pills=document.getElementById('efhwPills');
-  pills.innerHTML='';
-  function pill(label,value,mode){
-    const d=document.createElement('div');
-    d.className='pill '+(mode||'');
-    d.innerHTML='<span class="pill-label">'+label+'</span><span class="pill-value">'+value+'</span>';
-    pills.appendChild(d);
-  }
-  pill('VF len',effLen.toFixed(1)+' ft','accent');
-  pill('Bands','80–10 m','good');
-
-  let stress=2.0;
-  if(len>120 && len<140) stress-=0.4;
-  stress=clamp(stress,0.5,5);
-
-  return {name:'EFHW (49:1)',effLen,stress,note:'End‑fed half‑wave multiband.'};
-}
-
-function calcOCF(){
-  const len=parseFloat(document.getElementById('ocfLen').value)||135;
-  const offset=parseFloat(document.getElementById('ocfOffset').value)||33;
-  const h=parseFloat(document.getElementById('ocfHeight').value)||35;
-
-  const effLen=len;
-  let stress=2.0;
-  if(offset>30 && offset<36) stress-=0.4;
-  if(h<25) stress+=0.3;
-  stress=clamp(stress,0.5,5);
-
-  const pills=document.getElementById('ocfPills');
-  pills.innerHTML='';
-  function pill(label,value,mode){
-    const d=document.createElement('div');
-    d.className='pill '+(mode||'');
-    d.innerHTML='<span class="pill-label">'+label+'</span><span class="pill-value">'+value+'</span>';
-    pills.appendChild(d);
-  }
-  pill('Offset',offset.toFixed(0)+'%','accent');
-  pill('Height',h.toFixed(0)+' ft','');
-  pill('Bands','80/40/20/10','good');
-
-  return {name:'OCF Dipole (4:1)',effLen,stress,note:'Off‑center‑fed multiband dipole.'};
-}
-
-function calcFan(){
-  const l40=parseFloat(document.getElementById('fan40').value)||33;
-  const l20=parseFloat(document.getElementById('fan20').value)||16.5;
-  const l10=parseFloat(document.getElementById('fan10').value)||8.2;
-  const h=parseFloat(document.getElementById('fanHeight').value)||30;
-
-  const effLen=l40;
-  let stress=1.8;
-  if(h<20) stress+=0.4;
-  stress=clamp(stress,0.5,5);
-
-  const pills=document.getElementById('fanPills');
-  pills.innerHTML='';
-  function pill(label,value,mode){
-    const d=document.createElement('div');
-    d.className='pill '+(mode||'');
-    d.innerHTML='<span class="pill-label">'+label+'</span><span class="pill-value">'+value+'</span>';
-    pills.appendChild(d);
-  }
-  pill('40m leg',l40.toFixed(1)+' ft','accent');
-  pill('20m leg',l20.toFixed(1)+' ft','');
-  pill('10m leg',l10.toFixed(1)+' ft','');
-  pill('Bands','40/20/10','good');
-
-  return {name:'Fan Dipole (50 Ω)',effLen,stress,note:'Resonant multiband, low tuner use.'};
-}
-
-function calcLoop(){
-  const per=parseFloat(document.getElementById('loopPerim').value)||260;
-  const h=parseFloat(document.getElementById('loopHeight').value)||30;
-  const vf=parseFloat(document.getElementById('loopVF').value)||0.91;
-
-  const effLen=per*vf;
-  let stress=1.8;
-  if(h<20) stress+=0.3;
-  stress=clamp(stress,0.5,5);
-
-  const pills=document.getElementById('loopPills');
-  pills.innerHTML='';
-  function pill(label,value,mode){
-    const d=document.createElement('div');
-    d.className='pill '+(mode||'');
-    d.innerHTML='<span class="pill-label">'+label+'</span><span class="pill-value">'+value+'</span>';
-    pills.appendChild(d);
-  }
-  pill('VF len',effLen.toFixed(1)+' ft','accent');
-  pill('Height',h.toFixed(0)+' ft','');
-  pill('Bands','80+ multiband','good');
-
-  return {name:'Horizontal Loop (1:1)',effLen,stress,note:'Quiet RX, NVIS + DX capable.'};
-}
-</script>
-<script>
-let activeTab='vertical';
-
-function calcBoostAndERP(){
-  const txPower=parseFloat(document.getElementById('txPower').value)||100;
-  const hasReflector=document.getElementById('boostReflector').checked;
-  const directors=parseInt(document.getElementById('boostDirectors').value)||0;
-  const elevated=document.getElementById('boostElevatedRadials').checked;
-  const seaside=document.getElementById('boostSeaside').checked;
-  const turbo=document.getElementById('boostTurbo').checked;
-  const tod=document.getElementById('boostTimeOfDay').value;
-
-  let gBase=0.0;
-  let gParasitic=0.0;
-  if(hasReflector) gParasitic+=2.5;
-  if(directors>0){
-    gParasitic+=2.2;
-    if(directors>1) gParasitic+=(directors-1)*1.0;
-  }
-  let gRadials=0.0;
-  if(elevated) gRadials+=1.5;
-  let gSea=0.0;
-  if(seaside) gSea+=3.0;
-  let gTurbo=0.0;
-  if(turbo) gTurbo+=2.0;
-  let gTime=0.0;
-  if(tod==='pre') gTime+=2.0;
-  else if(tod==='day') gTime-=1.0;
-  else if(tod==='sunset') gTime+=1.5;
-  else if(tod==='night') gTime+=1.0;
-
-  const gTotalDb=gBase+gParasitic+gRadials+gSea+gTurbo+gTime;
-  const gLin=Math.pow(10,gTotalDb/10);
-  const erpW=txPower*gLin;
-  const erpDbw=10*Math.log10(erpW);
-  const erpDbm=erpDbw+30;
-
-  document.getElementById('erpGainDb').textContent=gTotalDb.toFixed(1)+' dB';
-  document.getElementById('erpWatts').textContent=erpW.toFixed(0)+' W';
-  document.getElementById('erpDb').textContent=erpDbw.toFixed(1)+' dBW / '+erpDbm.toFixed(1)+' dBm';
-
-  return gTotalDb;
-}
-
-function updateCutLengths(){
-  const vf=parseFloat(document.getElementById('vertVF').value)||0.97;
-  const f40=7.1;
-  const f80=3.6;
-  const driven40=234*vf/f40;
-  const radial40=234*vf/f40;
-  const radial80=234*vf/f80;
-  document.getElementById('cutDriven40').textContent=driven40.toFixed(1)+' ft';
-  document.getElementById('cutRadial40').textContent=radial40.toFixed(1)+' ft';
-  document.getElementById('cutRadial80').textContent=radial80.toFixed(1)+' ft';
-}
-
-function updateSummary(){
-  let res;
-  if(activeTab==='vertical') res=calcVertical();
-  else if(activeTab==='doublet') res=calcDoublet();
-  else if(activeTab==='random') res=calcRandomWire();
-  else if(activeTab==='efhw') res=calcEFHW();
-  else if(activeTab==='ocf') res=calcOCF();
-  else if(activeTab==='fan') res=calcFan();
-  else if(activeTab==='loop') res=calcLoop();
-  else res=calcVertical();
-
-  const gDb=calcBoostAndERP();
-  const stress=res.stress;
-
-  const sumName=document.getElementById('sumName');
-  const sumEff=document.getElementById('sumEffLen');
-  const sumStress=document.getElementById('sumStress');
-  const sumNote=document.getElementById('sumNote');
-
-  sumName.textContent=res.name;
-  sumEff.textContent=res.effLen.toFixed(1)+' ft';
-  sumNote.textContent=res.note;
-
-  sumStress.textContent=stress.toFixed(2);
-  sumStress.classList.remove('good','warn','bad');
-  if(stress<1.5) sumStress.classList.add('good');
-  else if(stress<3.5) sumStress.classList.add('warn');
-  else sumStress.classList.add('bad');
-
-  updateCutLengths();
-}
-
-document.querySelectorAll('.tab-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    activeTab=btn.dataset.tab;
-
-    document.querySelectorAll('.antenna-panel').forEach(p=>p.classList.remove('active'));
-    const panel=document.getElementById('tab-'+activeTab);
-    if(panel) panel.classList.add('active');
-
-    updateSummary();
-  });
-});
-
-document.getElementById('dblVF').addEventListener('input',e=>{
-  e.target.dataset.userTouched='1';
-});
-
-[
- 'vertHeight','vertVF','vertGroundLoss','vertRadials',
- 'dblFeedType','dblVF','dblLineLen','dblLegLen','dblBands',
- 'rwLen','rwVF','rwCP','rwBands',
- 'efhwLen','efhwVF','efhwBands',
- 'ocfLen','ocfOffset','ocfFeedType','ocfHeight',
- 'fan40','fan20','fan10','fanHeight',
- 'loopPerim','loopHeight','loopFeedType','loopVF',
- 'txPower','boostReflector','boostDirectors','boostElevatedRadials',
- 'boostSeaside','boostTurbo','boostTimeOfDay'
-].forEach(id=>{
-  const el=document.getElementById(id);
-  if(!el) return;
-  el.addEventListener('input',updateSummary);
-  el.addEventListener('change',updateSummary);
-});
-
-updateSummary();
-</script>
-/* === PHASE 3: 2‑ELEMENT VERTICAL ARRAY === */
-
-.array-panel{
-  background:var(--panel);
-  border-radius:12px;
-  border:1px solid var(--border);
-  padding:10px 12px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.array-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:6px;
-  margin-bottom:4px;
-}
-
-.array-title{
-  font-size:13px;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  color:#f5f7ff;
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-
-.array-tag{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  color:var(--muted);
-}
-
-.array-geometry-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:6px;
-}
-
-.array-phase-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:6px;
-  margin-top:4px;
-}
-
-.array-diagram{
-  margin-top:6px;
-  background:#050816;
-  border-radius:10px;
-  border:1px solid #1b2238;
-  padding:6px 8px;
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-
-.array-diagram-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:11px;
-  color:var(--muted);
-}
-
-.array-arrow{
-  font-size:11px;
-  color:var(--accent-strong);
-}
-
-.array-pills{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-  margin-top:4px;
-}
-
-.array-pill{
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  padding:3px 8px;
-  border-radius:999px;
-  border:1px solid var(--pill-border);
-  background:var(--pill-bg);
-  font-size:10px;
-  color:var(--muted);
-}
-
-.array-pill-label{
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-}
-
-.array-pill-value{
-  font-weight:600;
-  color:#f7f7ff;
-}
-
-.array-pill.good{
-  border-color:rgba(76,217,100,0.6);
-  background:rgba(76,217,100,0.08);
-}
-
-.array-pill.warn{
-  border-color:rgba(255,211,92,0.7);
-  background:rgba(255,211,92,0.08);
-}
-
-.array-pill.bad{
-  border-color:rgba(255,92,122,0.7);
-  background:rgba(255,92,122,0.08);
-}
-
-.array-pill.accent{
-  border-color:var(--accent-strong);
-  background:rgba(255,216,107,0.08);
-}
-
-/* Coax stub display */
-
-.coax-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:6px;
-  margin-top:4px;
-}
-
-.coax-item{
-  background:#050816;
-  border-radius:8px;
-  border:1px solid #1b2238;
-  padding:5px 7px;
-}
-
-.coax-label{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  color:var(--muted);
-}
-
-.coax-value{
-  margin-top:2px;
-  font-size:12px;
-  font-weight:600;
-}
-
-/* Small preset buttons */
-
-.preset-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-  margin-top:4px;
-}
-
-.preset-btn{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  padding:3px 8px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.08);
-  background:#11172a;
-  color:var(--muted);
-  cursor:pointer;
-}
-
-.preset-btn:hover{
-  border-color:var(--accent-strong);
-  color:#fff;
-}
-
-.preset-btn.active{
-  border-color:var(--accent-strong);
-  background:rgba(255,216,107,0.12);
-  color:#fff;
-}
-<!-- 2‑ELEMENT VERTICAL ARRAY -->
-<section class="panel array-panel antenna-panel" id="tab-array">
-  <div class="array-header">
-    <div class="array-title">
-      2‑Element Vertical Array
-      <span class="xfmr-badge">Phased / Christman</span>
-    </div>
-    <div class="array-tag">Spacing • Phase • Coax</div>
-  </div>
-
-  <!-- GEOMETRY -->
-  <div class="array-geometry-grid">
-    <div class="field">
-      <label>Element height (ft)</label>
-      <input id="arrHeight" type="number" class="primary-input" value="33">
-    </div>
-    <div class="field">
-      <label>Wire VF</label>
-      <input id="arrVF" type="number" class="primary-input" value="0.97">
-    </div>
-
-    <div class="field">
-      <label>Spacing (λ)</label>
-      <input id="arrSpacing" type="number" class="primary-input" value="0.20">
-    </div>
-    <div class="field">
-      <label>Ground loss (Ω)</label>
-      <input id="arrGroundLoss" type="number" class="primary-input" value="5">
-    </div>
-  </div>
-
-  <!-- PHASING -->
-  <div class="array-phase-grid">
-    <div class="field">
-      <label>Desired phase (°)</label>
-      <select id="arrPhase" class="primary-input">
-        <option value="0">0° (In‑phase)</option>
-        <option value="90" selected>90° Endfire</option>
-        <option value="135">135° Super‑Endfire</option>
-        <option value="180">180° Broadside</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Coax VF</label>
-      <input id="arrCoaxVF" type="number" class="primary-input" value="0.78">
-    </div>
-  </div>
-
-  <!-- PRESETS -->
-  <div class="preset-row">
-    <button class="preset-btn" id="presetEndfire">Endfire</button>
-    <button class="preset-btn" id="presetSuper">Super‑Endfire</button>
-    <button class="preset-btn" id="presetBroadside">Broadside</button>
-    <button class="preset-btn" id="presetChristman">Christman</button>
-  </div>
-
-  <!-- COAX STUB LENGTHS -->
-  <div class="coax-grid">
-    <div class="coax-item">
-      <div class="coax-label">Equal‑length stubs</div>
-      <div class="coax-value" id="coaxEqual">0.0 ft</div>
-    </div>
-
-    <div class="coax-item">
-      <div class="coax-label">Ideal phasing stub</div>
-      <div class="coax-value" id="coaxIdeal">0.0 ft</div>
-    </div>
-
-    <div class="coax-item">
-      <div class="coax-label">Christman 90°</div>
-      <div class="coax-value" id="coax90">0.0 ft</div>
-    </div>
-
-    <div class="coax-item">
-      <div class="coax-label">Christman 135°</div>
-      <div class="coax-value" id="coax135">0.0 ft</div>
-    </div>
-  </div>
-
-  <!-- ARRAY PILLS -->
-  <div class="array-pills" id="arrayPills"></div>
-
-  <!-- DIAGRAM -->
-  <div class="array-diagram">
-    <div class="array-diagram-row">
-      <span>Element 1</span>
-      <span class="array-arrow" id="arrayDirection">→</span>
-      <span>Element 2</span>
-    </div>
-    <div class="array-diagram-row">
-      <span>Spacing:</span>
-      <span id="arraySpacingLabel">0.20 λ</span>
-    </div>
-    <div class="array-diagram-row">
-      <span>Phase:</span>
-      <span id="arrayPhaseLabel">90°</span>
-    </div>
-  </div>
+</div>
+</div>
+<div class="app-tabs">
+<button class="tab-btn active" data-tab="vertical">Vertical</button>
+<button class="tab-btn" data-tab="doublet">Doublet</button>
+<button class="tab-btn" data-tab="randomwire">Random‑Wire</button>
+<button class="tab-btn" data-tab="efhw">EFHW</button>
+<button class="tab-btn" data-tab="ocf">OCF</button>
+<button class="tab-btn" data-tab="fandipole">Fan Dipole</button>
+<button class="tab-btn" data-tab="loop">Loop</button>
+<button class="tab-btn" data-tab="array">2‑Element Array</button>
+</div>
+<div class="app-body">
+<div class="col-left">
+<section class="panel antenna-panel active" id="tab-vertical">
+<div class="panel-header">
+<div class="panel-title">Vertical</div>
+<div class="panel-tag">Single element • Ground‑mounted or elevated</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="vert_freq_mhz">Frequency (MHz)</label>
+<input id="vert_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
+</div>
+<div class="field">
+<label for="vert_height_m">Radiator height (m)</label>
+<input id="vert_height_m" type="number" step="0.01" placeholder="10.0">
+</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="vert_radials">Radials count</label>
+<input id="vert_radials" type="number" step="1" placeholder="16">
+</div>
+<div class="field">
+<label for="vert_radial_len_m">Radial length (m)</label>
+<input id="vert_radial_len_m" type="number" step="0.1" placeholder="10.0">
+</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="vert_ground_loss_db">Ground loss (dB)</label>
+<input id="vert_ground_loss_db" type="number" step="0.1" placeholder="2.0">
+</div>
+<div class="field">
+<label for="vert_match_z_ohms">Feed Z (Ω)</label>
+<input id="vert_match_z_ohms" type="number" step="0.1" placeholder="36">
+</div>
+</div>
+<div class="pills-row" id="vert_pills_row">
+<div class="pill accent">
+<span class="pill-label">Resonant</span>
+<span class="pill-value" id="vert_resonant_status">—</span>
+</div>
+<div class="pill">
+<span class="pill-label">SWR</span>
+<span class="pill-value" id="vert_swr">—</span>
+</div>
+<div class="pill">
+<span class="pill-label">Gain dBi</span>
+<span class="pill-value" id="vert_gain_dbi">—</span>
+</div>
+<div class="pill">
+<span class="pill-label">Takeoff</span>
+<span class="pill-value" id="vert_takeoff_deg">—</span>
+</div>
+</div>
 </section>
-<script>
-function calcArray(){
-  const h=parseFloat(arrHeight.value)||33;
-  const vfWire=parseFloat(arrVF.value)||0.97;
-  const spacing=parseFloat(arrSpacing.value)||0.20;
-  const groundLoss=parseFloat(arrGroundLoss.value)||5;
-  const phaseDeg=parseFloat(arrPhase.value)||90;
-  const vfCoax=parseFloat(arrCoaxVF.value)||0.78;
-
-  const fMHz=7.1;
-  const lambda=984/fMHz;
-
-  const effLen=h*vfWire;
-
-  const equalStub=(10*vfCoax);
-
-  const idealStub=(phaseDeg/360)*lambda*vfCoax;
-
-  const christ90=(90/360)*lambda*vfCoax;
-  const christ135=(135/360)*lambda*vfCoax;
-
-  coaxEqual.textContent=equalStub.toFixed(1)+' ft';
-  coaxIdeal.textContent=idealStub.toFixed(1)+' ft';
-  coax90.textContent=christ90.toFixed(1)+' ft';
-  coax135.textContent=christ135.toFixed(1)+' ft';
-
-  let gainDb=0;
-  let fb=0;
-
-  if(phaseDeg===0){
-    gainDb=1.5;
-    fb=0;
-  }else if(phaseDeg===90){
-    gainDb=2.8;
-    fb=12;
-  }else if(phaseDeg===135){
-    gainDb=3.4;
-    fb=18;
-  }else if(phaseDeg===180){
-    gainDb=2.2;
-    fb=25;
-  }
-
-  if(spacing<0.15) gainDb-=0.4;
-  if(spacing>0.25) gainDb-=0.3;
-
-  const pills=document.getElementById('arrayPills');
-  pills.innerHTML='';
-
-  function pill(label,value,mode){
-    const d=document.createElement('div');
-    d.className='array-pill '+(mode||'');
-    d.innerHTML='<span class="array-pill-label">'+label+'</span><span class="array-pill-value">'+value+'</span>';
-    pills.appendChild(d);
-  }
-
-  pill('Gain',gainDb.toFixed(1)+' dB','accent');
-  pill('F/B',fb.toFixed(0)+' dB',(fb>15?'good':'warn'));
-  pill('Spacing',spacing.toFixed(2)+' λ','');
-  pill('Phase',phaseDeg+'°','');
-
-  arraySpacingLabel.textContent=spacing.toFixed(2)+' λ';
-  arrayPhaseLabel.textContent=phaseDeg+'°';
-
-  arrayDirection.textContent=(phaseDeg===180?'↔':'→');
-
-  return {gainDb,fb,effLen};
-}
-
-presetEndfire.onclick=()=>{
-  arrPhase.value=90;
-  arrSpacing.value=0.20;
-  calcArray();
-  updateSummary();
-};
-
-presetSuper.onclick=()=>{
-  arrPhase.value=135;
-  arrSpacing.value=0.20;
-  calcArray();
-  updateSummary();
-};
-
-presetBroadside.onclick=()=>{
-  arrPhase.value=180;
-  arrSpacing.value=0.25;
-  calcArray();
-  updateSummary();
-};
-
-presetChristman.onclick=()=>{
-  arrPhase.value=90;
-  arrSpacing.value=0.20;
-  calcArray();
-  updateSummary();
-};
-
-[
- 'arrHeight','arrVF','arrSpacing','arrGroundLoss',
- 'arrPhase','arrCoaxVF'
-].forEach(id=>{
-  const el=document.getElementById(id);
-  el.addEventListener('input',()=>{calcArray();updateSummary();});
-  el.addEventListener('change',()=>{calcArray();updateSummary();});
-});
-</script>
-<script>
-/* === PHASE 3: ARRAY → SUMMARY + ERP INTEGRATION === */
-
-function updateSummary(){
-  let res;
-
-  if(activeTab==='vertical') res=calcVertical();
-  else if(activeTab==='doublet') res=calcDoublet();
-  else if(activeTab==='random') res=calcRandomWire();
-  else if(activeTab==='efhw') res=calcEFHW();
-  else if(activeTab==='ocf') res=calcOCF();
-  else if(activeTab==='fan') res=calcFan();
-  else if(activeTab==='loop') res=calcLoop();
-
-  /* NEW: ARRAY TAB */
-  else if(activeTab==='array'){
-    const arr=calcArray();
-    res={
-      name:'2‑Element Array',
-      effLen:arr.effLen,
-      stress:2.0,
-      note:'Directional pattern with spacing + phase.'
-    };
-  }
-
-  const gDb=calcBoostAndERP();
-
-  const sumName=document.getElementById('sumName');
-  const sumEff=document.getElementById('sumEffLen');
-  const sumStress=document.getElementById('sumStress');
-  const sumNote=document.getElementById('sumNote');
-
-  sumName.textContent=res.name;
-  sumEff.textContent=res.effLen.toFixed(1)+' ft';
-  sumNote.textContent=res.note;
-
-  const stress=res.stress;
-  sumStress.textContent=stress.toFixed(2);
-  sumStress.classList.remove('good','warn','bad');
-  if(stress<1.5) sumStress.classList.add('good');
-  else if(stress<3.5) sumStress.classList.add('warn');
-  else sumStress.classList.add('bad');
-
-  updateCutLengths();
-}
-
-/* === TAB SWITCHING (EXTENDED FOR ARRAY TAB) === */
-
-document.querySelectorAll('.tab-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-
-    activeTab=btn.dataset.tab;
-
-    document.querySelectorAll('.antenna-panel').forEach(p=>p.classList.remove('active'));
-    const panel=document.getElementById('tab-'+activeTab);
-    if(panel) panel.classList.add('active');
-
-    updateSummary();
-  });
-});
-
-/* === ARRAY EVENT HOOKS === */
-
-[
- 'arrHeight','arrVF','arrSpacing','arrGroundLoss',
- 'arrPhase','arrCoaxVF'
-].forEach(id=>{
-  const el=document.getElementById(id);
-  if(!el) return;
-  el.addEventListener('input',()=>{calcArray();updateSummary();});
-  el.addEventListener('change',()=>{calcArray();updateSummary();});
-});
-
-/* === PRESET BUTTON HOOKS === */
-
-presetEndfire.onclick=()=>{
-  arrPhase.value=90;
-  arrSpacing.value=0.20;
-  calcArray();
-  updateSummary();
-};
-
-presetSuper.onclick=()=>{
-  arrPhase.value=135;
-  arrSpacing.value=0.20;
-  calcArray();
-  updateSummary();
-};
-
-presetBroadside.onclick=()=>{
-  arrPhase.value=180;
-  arrSpacing.value=0.25;
-  calcArray();
-  updateSummary();
-};
-
-presetChristman.onclick=()=>{
-  arrPhase.value=90;
-  arrSpacing.value=0.20;
-  calcArray();
-  updateSummary();
-};
-
-/* === INITIALIZE === */
-updateSummary();
-</script>
- 
+<section class="panel antenna-panel" id="tab-doublet">
+<div class="panel-header">
+<div class="panel-title">Doublet</div>
+<div class="panel-tag">Center‑fed wire • Balanced line</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="doub_freq_mhz">Frequency (MHz)</label>
+<input id="doub_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
+</div>
+<div class="field">
+<label for="doub_total_len_m">Total length (m)</label>
+<input id="doub_total_len_m" type="number" step="0.1" placeholder="40.0">
+</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="doub_height_m">Height above ground (m)</label>
+<input id="doub_height_m" type="number" step="0.1" placeholder="12.0">
+</div>
+<div class="field">
+<label for="doub_feedline_len_m">Feedline length (m)</label>
+<input id="doub_feedline_len_m" type="number" step="0.1" placeholder="20.0">
+</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="doub_feedline_z_ohms">Feedline Z (Ω)</label>
+<input id="doub_feedline_z_ohms" type="number" step="1" placeholder="450">
+</div>
+<div class="field">
+<label for="doub_tuner_loss_db">Tuner loss (dB)</label>
+<input id="doub_tuner_loss_db" type="number" step="0.1" placeholder="1.0">
+</div>
+</div>
+<div class="pills-row" id="doub_pills_row">
+<div class="pill accent">
+<span class="pill-label">Band</span>
+<span class="pill-value" id="doub_band_label">—</span>
+</div>
+<div class="pill">
+<span class="pill-label">SWR at tuner</span>
+<span class="pill-value" id="doub_swr_tuner">—</span>
+</div>
+<div class="pill">
+<span class="pill-label">Pattern</span>
+<span class="pill-value" id="doub_pattern_hint">—</span>
+</div>
+</div>
+</section>
+<section class="panel antenna-panel" id="tab-randomwire">
+<div class="panel-header">
+<div class="panel-title">Random‑Wire</div>
+<div class="panel-tag">End‑fed • Tuner‑dependent</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="rw_freq_mhz">Frequency (MHz)</label>
+<input id="rw_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
+</div>
+<div class="field">
+<label for="rw_len_m">Wire length (m)</label>
+<input id="rw_len_m" type="number" step="0.1" placeholder="26.0">
+</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="rw_counterpoise_m">Counterpoise length (m)</label>
+<input id="rw_counterpoise_m" type="number" step="0.1" placeholder="8.0">
+</div>
+<div class="field">
+<label for="rw_tuner_loss_db">Tuner loss (dB)</label>
+<input id="rw_tuner_loss_db" type="number" step="0.1" placeholder="1.5">
+</div>
+</div>
+<div class="pills-row" id="rw_pills_row">
+<div class="pill accent">
+<span class="pill-label">Forbidden lengths</span>
+<span class="pill-value" id="rw_forbidden_flag">—</span>
+</div>
+<div class="pill">
+<span class="pill-label">Matchable</span>
+<span class="pill-value" id="rw_matchable_flag">—</span>
+</div>
+</div>
+</section>
+<section class="panel antenna-panel" id="tab-efhw">
+<div class="panel-header">
+<div class="panel-title">EFHW</div>
+<div class="panel-tag">End‑fed half‑wave • 49:1</div>
+<div class="xfmr-badge">49:1 XFMR</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="efhw_freq_mhz">Frequency (MHz)</label>
+<input id="efhw_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
+</div>
+<div class="field">
+<label for="efhw_len_m">Wire length (m)</label>
+<input id="efhw_len_m" type="number" step="0.1" placeholder="20.0">
+</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="efhw_height_m">Height (m)</label>
+<input id="efhw_height_m" type="number" step="0.1" placeholder="10.0">
+</div>
+<div class="field">
+<label for="efhw_xfmr_loss_db">Transformer loss (dB)</label>
+<input id="efhw_xfmr_loss_db" type="number" step="0.1" placeholder="1.0">
+</div>
+</div>
+<div class="pills-row" id="efhw_pills_row">
+<div class="pill accent">
+<span class="pill-label">Primary band</span>
+<span class="pill-value" id="efhw_primary_band">—</span>
+</div>
+<div class="pill">
+<span class="pill-label">Harmonics</span>
+<span class="pill-value" id="efhw_harmonics">—</span>
+</div>
+</div>
+</section>
+<section class="panel antenna-panel" id="tab-ocf">
+<div class="panel-header">
+<div class="panel-title">OCF Dipole</div>
+<div class="panel-tag">Off‑center‑fed • Multiband</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="ocf_freq_mhz">Design frequency (MHz)</label>
+<input id="ocf_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
+</div>
+<div class="field">
+<label for="ocf_total_len_m">Total length (m)</label>
+<input id="ocf_total_len_m" type="number" step="0.1" placeholder="40.0">
+</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="ocf_offset_pct">Feedpoint offset (%)</label>
+<input id="ocf_offset_pct" type="number" step="0.1" placeholder="33.0">
+</div>
+<div class="field">
+<label for="ocf_balun_ratio">Balun ratio</label>
+<input id="ocf_balun_ratio" type="text" placeholder="4:1 or 6:1">
+</div>
+</div>
+<div class="pills-row" id="ocf_pills_row">
+<div class="pill accent">
+<span class="pill-label">Bands</span>
+<span class="pill-value" id="ocf_bands">—</span>
+</div>
+<div class="pill">
+<span class="pill-label">Feed Z</span>
+<span class="pill-value" id="ocf_feed_z">—</span>
+</div>
+</div>
+</section>
+<section class="panel antenna-panel" id="tab-fandipole">
+<div class="panel-header">
+<div class="panel-title">Fan Dipole</div>
+<div class="panel-tag">Multiple legs • Shared feed</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="fan_freq1_mhz">Band 1 freq (MHz)</label>
+<input id="fan_freq1_mhz" type="number" step="0.01" class="primary-input" placeholder="3.5">
+</div>
+<div class="field">
+<label for="fan_len1_m">Band 1 leg length (m)</label>
+<input id="fan_len1_m" type="number" step="0.1" placeholder="40.0">
+</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="fan_freq2_mhz">Band 2 freq (MHz)</label>
+<input id="fan_freq2_mhz" type="number" step="0.01" placeholder="7.1">
+</div>
+<div class="field">
+<label for="fan_len2_m">Band 2 leg length (m)</label>
+<input id="fan_len2_m" type="number" step="0.1" placeholder="20.0">
+</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="fan_freq3_mhz">Band 3 freq (MHz)</label>
+<input id="fan_freq3_mhz" type="number" step="0.01" placeholder="14.2">
+</div>
+<div class="field">
+<label for="fan_len3_m">Band 3 leg length (m)</label>
+<input id="fan_len3_m" type="number" step="0.1" placeholder="10.0">
+</div>
+</div>
+<div class="pills-row" id="fan_pills_row">
+<div class="pill accent">
+<span class="pill-label">Active leg</span>
+<span class="pill-value" id="fan_active_leg">—</span>
+</div>
+<div class="pill">
+<span class="pill-label">Coupling</span>
+<span class="pill-value" id="fan_coupling_hint">—</span>
+</div>
+</div>
+</section>
+<section class="panel antenna-panel" id="tab-loop">
+<div class="panel-header">
+<div class="panel-title">Loop</div>
+<div class="panel-tag">Full‑wave or magnetic loop</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="loop_freq_mhz">Frequency (MHz)</label>
+<input id="loop_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
+</div>
+<div class="field">
+<label for="loop_perimeter_m">Perimeter (m)</label>
+<input id="loop_perimeter_m" type="number" step="0.1" placeholder="30.0">
+</div>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="loop_height_m">Height (m)</label>
+<input id="loop_height_m" type="number" step="0.1" placeholder="10.0">
+</div>
+<div class="field">
+<label for="loop_type">Loop type</label>
+<select id="loop_type">
+<option value="fullwave">Full‑wave horizontal</option>
+<option value="delta">Delta loop</option>
+<option value="magloop">Small magnetic loop</option>
+</select>
+</div>
+</div>
+<div class="pills-row" id="loop_pills_row">
+<div class="pill accent">
+<span class="pill-label">Mode</span>
+<span class="pill-value" id="loop_mode_label">—</span>
+</div>
+<div class="pill">
+<span class="pill-label">Pattern</span>
+<span class="pill-value" id="loop_pattern_hint">—</span>
+</div>
+</div>
+</section>
+<section class="array-panel antenna-panel" id="tab-array">
+<div class="array-header">
+<div class="array-title">2‑Element Vertical Array</div>
+<div class="array-tag">End‑fire / broadside • Phased verticals</div>
+</div>
+<div class="array-geometry-grid">
+<div class="field">
+<label for="array_freq_mhz">Frequency (MHz)</label>
+<input id="array_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
+</div>
+<div class="field">
+<label for="array_spacing_m">Element spacing (m)</label>
+<input id="array_spacing_m" type="number" step="0.1" placeholder="10.0">
+</div>
+</div>
+<div class="array-phase-grid">
+<div class="field">
+<label for="array_phase_deg">Phase shift (deg)</label>
+<input id="array_phase_deg" type="number" step="1" placeholder="90">
+</div>
+<div class="field">
+<label for="array_mode">Array mode</label>
+<select id="array_mode">
+<option value="endfire">End‑fire</option>
+<option value="broadside">Broadside</option>
+<option value="cardioid">Cardioid</option>
+</select>
+</div>
+</div>
+<div class="coax-grid">
+<div class="coax-item">
+<div class="coax-label">Ideal phasing stub (m)</div>
+<div class="coax-value" id="array_stub_ideal_m">—</div>
+</div>
+<div class="coax-item">
+<div class="coax-label">Equal‑length stubs (m)</div>
+<div class="coax-value" id="array_stub_equal_m">—</div>
+</div>
+</div>
+<div class="array-diagram">
+<div class="array-diagram-row">
+<span>Element 1</span>
+<span class="array-arrow" id="array_elem1_arrow">⇢</span>
+<span id="array_elem1_phase_label">0°</span>
+</div>
+<div class="array-diagram-row">
+<span>Element 2</span>
+<span class="array-arrow" id="array_elem2_arrow">⇢</span>
+<span id="array_elem2_phase_label">+90°</span>
+</div>
+<div class="array-diagram-row">
+<span>Main lobe azimuth</span>
+<span id="array_main_lobe_deg">—</span>
+</div>
+</div>
+<div class="array-pills" id="array_pills_row">
+<div class="array-pill accent">
+<span class="array-pill-label">Array gain</span>
+<span class="array-pill-value" id="array_gain_db">—</span>
+</div>
+<div class="array-pill">
+<span class="array-pill-label">F/B</span>
+<span class="array-pill-value" id="array_fb_db">—</span>
+</div>
+<div class="array-pill">
+<span class="array-pill-label">TO angle</span>
+<span class="array-pill-value" id="array_to_deg">—</span>
+</div>
+</div>
+<div class="preset-row">
+<button class="preset-btn" data-array-preset="40m_endfire">40m end‑fire</button>
+<button class="preset-btn" data-array-preset="40m_broadside">40m broadside</button>
+<button class="preset-btn" data-array-preset="80m_endfire">80m end‑fire</button>
+<button class="preset-btn" data-array-preset="80m_cardioid">80m cardioid</button>
+</div>
+</section>
+</div>
+<div class="col-right">
+<section class="panel" id="summary_panel">
+<div class="panel-header">
+<div class="panel-title">Summary</div>
+<div class="panel-tag">Active element • Stress • Notes</div>
+</div>
+<div class="summary-grid">
+<div class="summary-item">
+<div class="summary-label">Active antenna</div>
+<div class="summary-value accent" id="summary_active_antenna">Vertical</div>
+</div>
+<div class="summary-item">
+<div class="summary-label">Band</div>
+<div class="summary-value" id="summary_band_label">—</div>
+</div>
+<div class="summary-item">
+<div class="summary-label">Effective length</div>
+<div class="summary-value" id="summary_eff_len_m">—</div>
+</div>
+<div class="summary-item">
+<div class="summary-label">Pattern hint</div>
+<div class="summary-value" id="summary_pattern_hint">—</div>
+</div>
+<div class="summary-item">
+<div class="summary-label">System stress</div>
+<div class="summary-value warn" id="summary_stress_label">—</div>
+</div>
+<div class="summary-item">
+<div class="summary-label">Notes</div>
+<div class="summary-value" id="summary_notes">—</div>
+</div>
+</div>
+</section>
+<section class="boost-panel" id="boost_panel">
+<div class="boost-section-title">Boost panel</div>
+<div class="boost-row">
+<div class="boost-label">Transmitter power (W)</div>
+<div class="field">
+<input id="boost_tx_power_w" type="number" step="1" class="primary-input" placeholder="100">
+</div>
+</div>
+<div class="boost-row">
+<div class="boost-label">Feedline loss (dB)</div>
+<div class="field">
+<input id="boost_feedline_loss_db" type="number" step="0.1" placeholder="1.0">
+</div>
+</div>
+<div class="boost-row">
+<div class="boost-label">Additional gain (dB)</div>
+<div class="field">
+<input id="boost_additional_gain_db" type="number" step="0.1" placeholder="0.0">
+</div>
+</div>
+<div class="boost-row">
+<div class="boost-label">Include array gain</div>
+<div class="boost-toggle">
+<input id="boost_include_array" type="checkbox">
+<span class="small-note">When 2‑element array is active</span>
+</div>
+</div>
+</section>
+<section class="panel" id="erp_panel">
+<div class="panel-header">
+<div class="panel-title">ERP Engine</div>
+<div class="panel-tag">Effective radiated power</div>
+</div>
+<div class="erp-grid">
+<div class="erp-item">
+<div class="erp-label">ERP (W)</div>
+<div class="erp-value" id="erp_w">—</div>
+</div>
+<div class="erp-item">
+<div class="erp-label">ERP (dBW)</div>
+<div class="erp-value" id="erp_dbw">—</div>
+</div>
+<div class="erp-item">
+<div class="erp-label">ERP (dBm)</div>
+<div class="erp-value" id="erp_dbm">—</div>
+</div>
+</div>
+</section>
+<section class="panel" id="cutlength_panel">
+<div class="panel-header">
+<div class="panel-title">Cut lengths</div>
+<div class="panel-tag">Per‑band wire lengths</div>
+</div>
+<div class="cutlength-grid">
+<div class="cut-item">
+<div class="erp-label">80m (m)</div>
+<div class="erp-value" id="cut_80m_m">—</div>
+</div>
+<div class="cut-item">
+<div class="erp-label">40m (m)</div>
+<div class="erp-value" id="cut_40m_m">—</div>
+</div>
+<div class="cut-item">
+<div class="erp-label">20m (m)</div>
+<div class="erp-value" id="cut_20m_m">—</div>
+</div>
+<div class="cut-item">
+<div class="erp-label">15m (m)</div>
+<div class="erp-value" id="cut_15m_m">—</div>
+</div>
+<div class="cut-item">
+<div class="erp-label">10m (m)</div>
+<div class="erp-value" id="cut_10m_m">—</div>
+</div>
+<div class="cut-item">
+<div class="erp-label">6m (m)</div>
+<div class="erp-value" id="cut_6m_m">—</div>
+</div>
+</div>
+</section>
+<section class="plot-panel" id="plot_panel">
+<div class="plot-title">Band overview</div>
+<div class="plot-box">
+<canvas id="plot_canvas"></canvas>
+<div class="plot-placeholder" id="plot_placeholder">Plots will appear here when calculations run.</div>
+</div>
+<div class="legend">
+<div class="legend-item">
+<div class="legend-swatch swatch-vert"></div>
+<span>Vertical / array</span>
+</div>
+<div class="legend-item">
+<div class="legend-swatch swatch-doub"></div>
+<span>Doublet / OCF / fan</span>
+</div>
+<div class="legend-item">
+<div class="legend-swatch swatch-rw"></div>
+<span>Random‑wire / EFHW / loop</span>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<script src="js/engines/antennas.js"></script>
+<script src="js/engines/array.js"></script>
+<script src="js/engines/erp.js"></script>
+<script src="js/ui/summary.js"></script>
+<script src="js/ui/tabs.js"></script>
+<script src="js/ui/events.js"></script>
+<script src="js/ui/pills.js"></script>
+</body>
+</html>
