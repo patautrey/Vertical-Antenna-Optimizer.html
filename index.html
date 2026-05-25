@@ -695,3 +695,127 @@ body {
     transition:transform 0.15s ease, box-shadow 0.2s ease;
   }
 }
+/* GLOBAL BACKGROUND GRADIENT */
+body {
+  background:linear-gradient(180deg, #0a1224 0%, #0f1b33 40%, #152544 100%);
+}
+
+/* HEADER BAR */
+.app-header {
+  background:linear-gradient(90deg, #0f1b33, #152544);
+  padding:var(--pad-lg) var(--pad-md);
+  border-radius:var(--radius);
+  box-shadow:0 6px 18px rgba(0,0,0,0.45);
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+/* HEADER TITLE GLOW */
+.app-title {
+  text-shadow:0 0 12px rgba(63,208,255,0.45);
+}
+
+/* BADGE STRIP ENHANCEMENT */
+.app-badges {
+  padding-top:var(--pad-sm);
+  border-top:1px solid rgba(255,255,255,0.08);
+}
+
+/* PANEL SURFACE GRADIENT */
+.panel,
+.array-panel,
+.boost-panel,
+.plot-panel {
+  background:linear-gradient(180deg, #0f1b33 0%, #152544 100%);
+  border:1px solid rgba(255,255,255,0.06);
+}
+
+/* PANEL TITLE GLOW */
+.panel-title,
+.array-title {
+  text-shadow:0 0 10px rgba(63,208,255,0.35);
+}
+
+/* TAB STRIP SURFACE */
+.app-tabs {
+  background:linear-gradient(180deg, #0f1b33 0%, #152544 100%);
+  border:1px solid rgba(255,255,255,0.06);
+}
+
+/* ACTIVE TAB GLOW */
+.tab-btn.active {
+  box-shadow:0 0 12px rgba(63,208,255,0.45);
+}
+
+/* INPUT SURFACE GRADIENT */
+input,
+select {
+  background:linear-gradient(180deg, #152544 0%, #1d325a 100%);
+  border:2px solid #1d325a;
+}
+
+/* INPUT FOCUS GLOW */
+input:focus,
+select:focus {
+  border-color:var(--cyan-400);
+  box-shadow:0 0 12px rgba(63,208,255,0.45);
+}
+
+/* PILL SURFACE GRADIENT */
+.pill,
+.array-pill {
+  background:linear-gradient(180deg, #152544 0%, #1d325a 100%);
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+/* ACCENT PILL GLOW */
+.pill.accent,
+.array-pill.accent {
+  box-shadow:0 0 14px rgba(63,208,255,0.55);
+}
+
+/* SUMMARY + ERP + CUT PANELS: LEFT BORDER GLOW */
+.summary-item,
+.erp-item,
+.cut-item {
+  border-left:4px solid rgba(63,208,255,0.45);
+  background:linear-gradient(180deg, #152544 0%, #1d325a 100%);
+}
+
+/* ERP + CUT GOLD OVERRIDE */
+.erp-item,
+.cut-item {
+  border-left-color:rgba(255,204,77,0.55);
+}
+
+/* LEGEND SWATCH GLOW */
+.legend-swatch {
+  box-shadow:0 0 10px rgba(0,0,0,0.5);
+}
+
+/* PLOT PANEL SURFACE */
+.plot-box {
+  background:linear-gradient(180deg, #152544 0%, #1d325a 100%);
+  border:1px solid rgba(255,255,255,0.06);
+}
+
+/* ARRAY DIAGRAM SURFACE */
+.array-diagram {
+  background:linear-gradient(180deg, #152544 0%, #1d325a 100%);
+  border:1px solid rgba(255,255,255,0.06);
+}
+
+/* COAX VALUES GLOW */
+.coax-value {
+  text-shadow:0 0 8px rgba(255,204,77,0.35);
+}
+
+/* FINAL TOUCH: PANEL HOVER (DESKTOP ONLY) */
+@media (hover:hover) {
+  .panel:hover,
+  .array-panel:hover,
+  .boost-panel:hover,
+  .plot-panel:hover {
+    transform:translateY(-2px);
+    box-shadow:0 10px 26px rgba(0,0,0,0.55);
+  }
+}
