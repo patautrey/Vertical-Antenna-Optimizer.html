@@ -1,2 +1,200 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HF Lab • Vertical Antenna Optimizer</title><link rel="stylesheet" href="css/app.css"></head><body><div class="app-shell"><header class="app-header"><h1 class="app-title">Vertical Antenna Optimizer</h1><p class="app-subtitle">HF Lab • KG5IEF • Live Calculator</p><div class="app-badges"><span class="badge hot">HF Lab Engine</span><span class="badge">ERP + Cut Lengths</span><span class="badge">Rybakov 25 ft Mode</span></div></header><main class="app-body"><section class="panel"><div class="panel-header"><h2 class="panel-title">Operating Parameters</h2><p class="panel-tag">Band, power, antenna type, feed losses</p></div><div class="field-grid"><div class="field"><label class="field-label" for="antenna_type">Antenna Type</label><select id="antenna_type"><option value="quarter_vertical">Simple 1/4λ Vertical</option><option value="rybakov25">Rybakov 25 ft (9:1)</option></select></div><div class="field"><label class="field-label" for="band_select">Band</label><select id="band_select"><option value="3.5">80 m</option><option value="7">40 m</option><option value="10.1">30 m</option><option value="14">20 m</option><option value="18.1">17 m</option><option value="21">15 m</option><option value="24.9">12 m</option><option value="28">10 m</option></select></div><div class="field"><label class="field-label" for="tx_power_w">TX Power (W)</label><input id="tx_power_w" type="number" min="1" step="1" value="100"></div><div class="field"><label class="field-label" for="gain_dbi">Antenna Gain (dBi)</label><input id="gain_dbi" type="number" step="0.1" value="2.1"></div><div class="field"><label class="field-label" for="coax_loss_db">Coax + System Loss (dB)</label><input id="coax_loss_db" type="number" step="0.1" value="0.8"></div><div class="field"><label class="field-label">&nbsp;</label><button id="calc_btn" class="primary-btn">Recalculate</button></div></div></section><section class="panel"><div class="panel-header"><h2 class="panel-title">Summary</h2><p class="panel-tag">ERP and band info</p></div><div class="summary-grid"><div class="summary-item"><div class="summary-label">Band</div><div id="summary_band" class="summary-value">80 m</div></div><div class="summary-item"><div class="summary-label">ERP (W)</div><div id="summary_erp_w" class="summary-value">0.0</div></div><div class="summary-item"><div class="summary-label">ERP (dBW)</div><div id="summary_erp_dbw" class="summary-value">0.0</div></div><div class="summary-item"><div class="summary-label">ERP (dBm)</div><div id="summary_erp_dbm" class="summary-value">0.0</div></div></div></section><section class="panel"><div class="panel-header"><h2 class="panel-title">Cut Lengths</h2><p class="panel-tag">Quarter-wave approximations (free space)</p></div><div class="cut-grid"><div class="cut-item"><div class="cut-label">80 m</div><div id="cut_80m_m" class="cut-value">–</div></div><div class="cut-item"><div class="cut-label">40 m</div><div id="cut_40m_m" class="cut-value">–</div></div><div class="cut-item"><div class="cut-label">20 m</div><div id="cut_20m_m" class="cut-value">–</div></div><div class="cut-item"><div class="cut-label">15 m</div><div id="cut_15m_m" class="cut-value">–</div></div><div class="cut-item"><div class="cut-label">10 m</div><div id="cut_10m_m" class="cut-value">–</div></div><div class="cut-item"><div class="cut-label">6 m</div><div id="cut_6m_m" class="cut-value">–</div></div></div></section><section class="panel"><div class="panel-header"><h2 class="panel-title">Rybakov 25 ft (9:1)</h2><p class="panel-tag">Active only when selected above</p></div><div class="field-grid"><div class="field"><label class="field-label">Radiator Length</label><div class="cut-value"><span id="ryb_radiator_m">7.62</span> m • <span id="ryb_radiator_ft">25</span> ft</div></div><div class="field"><label class="field-label">Tunable Bands</label><div id="ryb_bands" class="cut-value">Inactive</div></div><div class="field"><label class="field-label">Efficiency Note</label><div id="ryb_eff_note" class="cut-value">Inactive</div></div></div></section></main></div><script src="js/app.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HF Lab — ERP & Antenna Modeler</title>
+  <link rel="stylesheet" href="app.css">
+</head>
 
+<body>
+
+  <header>
+    <h1>HF Lab — ERP & Antenna Modeler</h1>
+  </header>
+
+  <main class="layout-grid">
+    <!-- LEFT COLUMN -->
+    <section class="left-column">
+
+      <div class="panel">
+        <h2>Operating Parameters</h2>
+
+        <div class="param">
+          <label for="antenna_type">Antenna Type</label>
+          <select id="antenna_type"></select>
+        </div>
+
+        <div class="param">
+          <label for="band_select">Band (MHz)</label>
+          <input id="band_select" type="number" value="14">
+        </div>
+
+        <div class="param">
+          <label for="tx_power_w">TX Power (W)</label>
+          <input id="tx_power_w" type="number" value="100">
+        </div>
+
+        <div class="param">
+          <label for="gain_dbi">Antenna Gain (dBi)</label>
+          <input id="gain_dbi" type="number" value="0">
+        </div>
+
+        <div class="param">
+          <label for="coax_loss_db">Coax Loss (dB)</label>
+          <input id="coax_loss_db" type="number" value="1.5">
+        </div>
+
+        <div class="param checkbox-row">
+          <label for="dx_turbo">DX Turbo Mode (0.70λ)</label>
+          <input id="dx_turbo" type="checkbox">
+        </div>
+
+        <div class="param">
+          <label for="boost_mode">Boost Mode</label>
+          <select id="boost_mode">
+            <option value="">None</option>
+            <option value="reflector">Reflector Added</option>
+            <option value="director">Director Added</option>
+            <option value="elev_radials">Elevated Radials</option>
+            <option value="seaside">Seaside / Saltwater</option>
+            <option value="soil_good">Good Soil</option>
+            <option value="soil_poor">Poor Soil</option>
+          </select>
+        </div>
+
+        <div class="param">
+          <label for="prop_mode">Propagation Mode</label>
+          <select id="prop_mode">
+            <option value="">Normal</option>
+            <option value="grayline">Grayline</option>
+            <option value="night">Nighttime</option>
+            <option value="day">Daytime</option>
+            <option value="poor">Poor Conditions</option>
+          </select>
+        </div>
+
+        <div class="param">
+          <label for="vf_element">Velocity Factor — Element</label>
+          <input id="vf_element" type="number" value="1.00" step="0.01">
+        </div>
+
+        <div class="param">
+          <label for="vf_feedline">Velocity Factor — Feedline</label>
+          <input id="vf_feedline" type="number" value="0.66" step="0.01">
+        </div>
+
+        <div class="param">
+          <button id="calc_btn">Calculate</button>
+        </div>
+
+      </div>
+    </section>
+    <!-- RIGHT COLUMN -->
+    <section class="right-column">
+
+      <!-- ERP SUMMARY PANEL -->
+      <div class="panel">
+        <h2>ERP Summary</h2>
+
+        <div class="summary-row">
+          <span>Band:</span>
+          <span id="summary_band">—</span>
+        </div>
+
+        <div class="summary-row">
+          <span>ERP (W):</span>
+          <span id="summary_erp_w">—</span>
+        </div>
+
+        <div class="summary-row">
+          <span>ERP (dBW):</span>
+          <span id="summary_erp_dbw">—</span>
+        </div>
+
+        <div class="summary-row">
+          <span>ERP (dBm):</span>
+          <span id="summary_erp_dbm">—</span>
+        </div>
+      </div>
+
+
+      <!-- RYBAKOV PANEL -->
+      <div class="panel" id="rybakov_panel" style="display:none;">
+        <h2>Rybakov 25 ft (9:1)</h2>
+
+        <div class="summary-row">
+          <span>Radiator Length (m):</span>
+          <span id="ryb_radiator_m">—</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Radiator Length (ft):</span>
+          <span id="ryb_radiator_ft">—</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Band Efficiency:</span>
+          <span id="ryb_bands">—</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Current Band Note:</span>
+          <span id="ryb_eff_note">—</span>
+        </div>
+      </div>
+
+
+      <!-- CUT LENGTH PANEL -->
+      <div class="panel">
+        <h2>Cut Lengths (1/4λ)</h2>
+
+        <div class="summary-row">
+          <span>80 m:</span>
+          <span id="cut_80m_m">—</span>
+        </div>
+
+        <div class="summary-row">
+          <span>40 m:</span>
+          <span id="cut_40m_m">—</span>
+        </div>
+
+        <div class="summary-row">
+          <span>20 m:</span>
+          <span id="cut_20m_m">—</span>
+        </div>
+
+        <div class="summary-row">
+          <span>15 m:</span>
+          <span id="cut_15m_m">—</span>
+        </div>
+
+        <div class="summary-row">
+          <span>10 m:</span>
+          <span id="cut_10m_m">—</span>
+        </div>
+
+        <div class="summary-row">
+          <span>6 m:</span>
+          <span id="cut_6m_m">—</span>
+        </div>
+      </div>
+
+
+      <!-- PLACEHOLDER GEOMETRY PANELS -->
+      <div class="panel">
+        <h2>Antenna Geometry (Coming Soon)</h2>
+        <p>This section will display geometry panels for each antenna type.</p>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    <p>HF Lab — Experimental Antenna & ERP Modeling Tool</p>
+  </footer>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
