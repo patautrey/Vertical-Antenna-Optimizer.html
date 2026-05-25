@@ -15,6 +15,12 @@ body {
   line-height: 1.5;
 }
 
+/* Center the whole app and limit width for a more "lab console" feel */
+body > main.layout-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
 h1, h2 {
   font-weight: 600;
   margin-bottom: 12px;
@@ -40,6 +46,13 @@ header h1 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 25px;
+  align-items: flex-start;
+}
+
+/* Make sure columns behave nicely */
+.left-column,
+.right-column {
+  min-width: 0;
 }
 
 /* Mobile collapse */
@@ -90,6 +103,13 @@ header h1 {
   background: #fafafa;
 }
 
+.param input:focus,
+.param select:focus {
+  outline: 2px solid #1a3d7c;
+  outline-offset: 1px;
+  background: #ffffff;
+}
+
 .checkbox-row {
   flex-direction: row;
   align-items: center;
@@ -111,11 +131,15 @@ button {
   background: #1a3d7c;
   color: white;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.05s ease;
 }
 
 button:hover {
   background: #244d9c;
+}
+
+button:active {
+  transform: scale(0.98);
 }
 
 /* --------------------------------------------------
@@ -127,6 +151,15 @@ button:hover {
   padding: 6px 0;
   border-bottom: 1px solid #e5e5e5;
   font-size: 0.95rem;
+}
+
+.summary-row span:first-child {
+  color: #555;
+}
+
+.summary-row span:last-child {
+  font-weight: 600;
+  color: #111;
 }
 
 .summary-row:last-child {
