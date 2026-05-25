@@ -1,372 +1,697 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>HF Lab – Antenna & ERP Workbench</title>
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="stylesheet" href="css/app.css">
-</head>
-<body>
-<div class="app-shell">
-<div class="app-header">
-<div class="app-title-block">
-<div class="app-title">HF LAB – ANTENNA WORKBENCH</div>
-<div class="app-subtitle">Multiband HF antennas • ERP • 2‑element vertical array</div>
-<div class="app-badges">
-<div class="badge hot">Bright navy dashboard</div>
-<div class="badge">Phase 2 + Phase 3</div>
-<div class="badge">NVIS + DX lab</div>
-</div>
-</div>
-</div>
-<div class="app-tabs">
-<button class="tab-btn active" data-tab="vertical">Vertical</button>
-<button class="tab-btn" data-tab="doublet">Doublet</button>
-<button class="tab-btn" data-tab="randomwire">Random‑Wire</button>
-<button class="tab-btn" data-tab="efhw">EFHW</button>
-<button class="tab-btn" data-tab="ocf">OCF</button>
-<button class="tab-btn" data-tab="fandipole">Fan Dipole</button>
-<button class="tab-btn" data-tab="loop">Loop</button>
-<button class="tab-btn" data-tab="array">2‑Element Array</button>
-</div>
-<div class="app-body">
-<div class="col-left">
-<section class="panel antenna-panel active" id="tab-vertical">
-<div class="panel-header">
-<div class="panel-title">Vertical</div>
-<div class="panel-tag">Single element • Ground‑mounted or elevated</div>
-</div>
+:root {
+  --navy-900:#0a1224;
+  --navy-800:#0f1b33;
+  --navy-700:#152544;
+  --navy-600:#1d325a;
 
-<div class="field-row">
-<div class="field">
-<label for="vert_freq_mhz">Frequency (MHz)</label>
-<input id="vert_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
-</div>
-<div class="field">
-<label for="vert_height_m">Radiator height (m)</label>
-<input id="vert_height_m" type="number" step="0.01" placeholder="10.0">
-</div>
-</div>
+  --cyan-400:#3fd0ff;
+  --cyan-300:#2bb8e6;
+  --cyan-200:#1fa0cc;
 
-<div class="field-row">
-<div class="field">
-<label for="vert_radials">Radials count</label>
-<input id="vert_radials" type="number" step="1" placeholder="16">
-</div>
-<div class="field">
-<label for="vert_radial_len_m">Radial length (m)</label>
-<input id="vert_radial_len_m" type="number" step="0.1" placeholder="10.0">
-</div>
-</div>
+  --gold-400:#ffcc4d;
+  --gold-300:#e6b63f;
 
-<div class="field-row">
-<div class="field">
-<label for="vert_ground_loss_db">Ground loss (dB)</label>
-<input id="vert_ground_loss_db" type="number" step="0.1" placeholder="2.0">
-</div>
-<div class="field">
-<label for="vert_match_z_ohms">Feed Z (Ω)</label>
-<input id="vert_match_z_ohms" type="number" step="0.1" placeholder="36">
-</div>
-</div>
+  --gray-200:#d0d4dc;
+  --gray-100:#f0f2f7;
 
-<div class="pills-row" id="vert_pills_row">
-<div class="pill accent"><span class="pill-label">Resonant</span><span class="pill-value" id="vert_resonant_status">—</span></div>
-<div class="pill"><span class="pill-label">SWR</span><span class="pill-value" id="vert_swr">—</span></div>
-<div class="pill"><span class="pill-label">Gain dBi</span><span class="pill-value" id="vert_gain_dbi">—</span></div>
-<div class="pill"><span class="pill-label">Takeoff</span><span class="pill-value" id="vert_takeoff_deg">—</span></div>
-</div>
-</section>
-<section class="panel antenna-panel" id="tab-ocf">
-<div class="panel-header">
-<div class="panel-title">OCF Dipole</div>
-<div class="panel-tag">Off‑center‑fed • Multiband</div>
-</div>
+  --text-strong:#ffffff;
+  --text-soft:#c7d0e0;
 
-<div class="field-row">
-<div class="field">
-<label for="ocf_freq_mhz">Design frequency (MHz)</label>
-<input id="ocf_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
-</div>
-<div class="field">
-<label for="ocf_total_len_m">Total length (m)</label>
-<input id="ocf_total_len_m" type="number" step="0.1" placeholder="40.0">
-</div>
-</div>
+  --radius:12px;
+  --shadow:0 4px 12px rgba(0,0,0,0.35);
 
-<div class="field-row">
-<div class="field">
-<label for="ocf_offset_pct">Feedpoint offset (%)</label>
-<input id="ocf_offset_pct" type="number" step="0.1" placeholder="33.0">
-</div>
-<div class="field">
-<label for="ocf_balun_ratio">Balun ratio</label>
-<input id="ocf_balun_ratio" type="text" placeholder="4:1 or 6:1">
-</div>
-</div>
+  --font-main:"Inter",system-ui,sans-serif;
 
-<div class="pills-row" id="ocf_pills_row">
-<div class="pill accent"><span class="pill-label">Bands</span><span class="pill-value" id="ocf_bands">—</span></div>
-<div class="pill"><span class="pill-label">Feed Z</span><span class="pill-value" id="ocf_feed_z">—</span></div>
-</div>
-</section>
+  --fs-xl:1.6rem;
+  --fs-lg:1.3rem;
+  --fs-md:1.1rem;
+  --fs-sm:0.95rem;
 
-<section class="panel antenna-panel" id="tab-fandipole">
-<div class="panel-header">
-<div class="panel-title">Fan Dipole</div>
-<div class="panel-tag">Multiple legs • Shared feed</div>
-</div>
+  --pad-lg:22px;
+  --pad-md:16px;
+  --pad-sm:10px;
+}
 
-<div class="field-row">
-<div class="field">
-<label for="fan_freq1_mhz">Band 1 freq (MHz)</label>
-<input id="fan_freq1_mhz" type="number" step="0.01" class="primary-input" placeholder="3.5">
-</div>
-<div class="field">
-<label for="fan_len1_m">Band 1 leg length (m)</label>
-<input id="fan_len1_m" type="number" step="0.1" placeholder="40.0">
-</div>
-</div>
+html,body {
+  margin:0;
+  padding:0;
+  background:var(--navy-900);
+  color:var(--text-strong);
+  font-family:var(--font-main);
+  font-size:18px;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
 
-<div class="field-row">
-<div class="field">
-<label for="fan_freq2_mhz">Band 2 freq (MHz)</label>
-<input id="fan_freq2_mhz" type="number" step="0.01" placeholder="7.1">
-</div>
-<div class="field">
-<label for="fan_len2_m">Band 2 leg length (m)</label>
-<input id="fan_len2_m" type="number" step="0.1" placeholder="20.0">
-</div>
-</div>
+.app-shell {
+  width:100%;
+  max-width:1200px;
+  margin:0 auto;
+  padding:var(--pad-md);
+}
 
-<div class="field-row">
-<div class="field">
-<label for="fan_freq3_mhz">Band 3 freq (MHz)</label>
-<input id="fan_freq3_mhz" type="number" step="0.01" placeholder="14.2">
-</div>
-<div class="field">
-<label for="fan_len3_m">Band 3 leg length (m)</label>
-<input id="fan_len3_m" type="number" step="0.1" placeholder="10.0">
-</div>
-</div>
+.app-header {
+  padding:var(--pad-md) 0;
+}
 
-<div class="pills-row" id="fan_pills_row">
-<div class="pill accent"><span class="pill-label">Active leg</span><span class="pill-value" id="fan_active_leg">—</span></div>
-<div class="pill"><span class="pill-label">Coupling</span><span class="pill-value" id="fan_coupling_hint">—</span></div>
-</div>
-</section>
-<section class="panel antenna-panel" id="tab-loop">
-<div class="panel-header">
-<div class="panel-title">Loop</div>
-<div class="panel-tag">Full‑wave or magnetic loop</div>
-</div>
+.app-title {
+  font-size:var(--fs-xl);
+  font-weight:700;
+  color:var(--cyan-400);
+}
 
-<div class="field-row">
-<div class="field">
-<label for="loop_freq_mhz">Frequency (MHz)</label>
-<input id="loop_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
-</div>
-<div class="field">
-<label for="loop_perimeter_m">Perimeter (m)</label>
-<input id="loop_perimeter_m" type="number" step="0.1" placeholder="30.0">
-</div>
-</div>
+.app-subtitle {
+  font-size:var(--fs-md);
+  color:var(--text-soft);
+  margin-top:4px;
+}
 
-<div class="field-row">
-<div class="field">
-<label for="loop_height_m">Height (m)</label>
-<input id="loop_height_m" type="number" step="0.1" placeholder="10.0">
-</div>
-<div class="field">
-<label for="loop_type">Loop type</label>
-<select id="loop_type">
-<option value="fullwave">Full‑wave horizontal</option>
-<option value="delta">Delta loop</option>
-<option value="magloop">Small magnetic loop</option>
-</select>
-</div>
-</div>
+.app-badges {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
 
-<div class="pills-row" id="loop_pills_row">
-<div class="pill accent"><span class="pill-label">Mode</span><span class="pill-value" id="loop_mode_label">—</span></div>
-<div class="pill"><span class="pill-label">Pattern</span><span class="pill-value" id="loop_pattern_hint">—</span></div>
-</div>
-</section>
+.badge {
+  background:var(--navy-700);
+  padding:6px 12px;
+  border-radius:var(--radius);
+  font-size:var(--fs-sm);
+  color:var(--cyan-300);
+  box-shadow:var(--shadow);
+}
 
-<section class="array-panel antenna-panel" id="tab-array">
-<div class="array-header">
-<div class="array-title">2‑Element Vertical Array</div>
-<div class="array-tag">End‑fire / broadside • Phased verticals</div>
-</div>
+.badge.hot {
+  background:var(--gold-400);
+  color:#000;
+}
 
-<div class="array-geometry-grid">
-<div class="field">
-<label for="array_freq_mhz">Frequency (MHz)</label>
-<input id="array_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
-</div>
-<div class="field">
-<label for="array_spacing_m">Element spacing (m)</label>
-<input id="array_spacing_m" type="number" step="0.1" placeholder="10.0">
-</div>
-</div>
+.app-tabs {
+  display:flex;
+  overflow-x:auto;
+  gap:10px;
+  padding:var(--pad-sm) 0;
+}
 
-<div class="array-phase-grid">
-<div class="field">
-<label for="array_phase_deg">Phase shift (deg)</label>
-<input id="array_phase_deg" type="number" step="1" placeholder="90">
-</div>
-<div class="field">
-<label for="array_mode">Array mode</label>
-<select id="array_mode">
-<option value="endfire">End‑fire</option>
-<option value="broadside">Broadside</option>
-<option value="cardioid">Cardioid</option>
-</select>
-</div>
-</div>
+.tab-btn {
+  flex:0 0 auto;
+  padding:12px 18px;
+  font-size:var(--fs-md);
+  background:var(--navy-700);
+  color:var(--text-soft);
+  border:none;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
 
-<div class="coax-grid">
-<div class="coax-item">
-<div class="coax-label">Ideal phasing stub (m)</div>
-<div class="coax-value" id="array_stub_ideal_m">—</div>
-</div>
-<div class="coax-item">
-<div class="coax-label">Equal‑length stubs (m)</div>
-<div class="coax-value" id="array_stub_equal_m">—</div>
-</div>
-</div>
+.tab-btn.active {
+  background:var(--cyan-300);
+  color:#000;
+  font-weight:700;
+}
 
-<div class="array-diagram">
-<div class="array-diagram-row"><span>Element 1</span><span class="array-arrow" id="array_elem1_arrow">⇢</span><span id="array_elem1_phase_label">0°</span></div>
-<div class="array-diagram-row"><span>Element 2</span><span class="array-arrow" id="array_elem2_arrow">⇢</span><span id="array_elem2_phase_label">+90°</span></div>
-<div class="array-diagram-row"><span>Main lobe azimuth</span><span id="array_main_lobe_deg">—</span></div>
-</div>
+.app-body {
+  display:flex;
+  flex-direction:column;
+  gap:var(--pad-lg);
+  margin-top:var(--pad-lg);
+}
+.panel,
+.boost-panel,
+.plot-panel,
+.array-panel {
+  background:var(--navy-800);
+  padding:var(--pad-md);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
 
-<div class="array-pills" id="array_pills_row">
-<div class="array-pill accent"><span class="array-pill-label">Array gain</span><span class="array-pill-value" id="array_gain_db">—</span></div>
-<div class="array-pill"><span class="array-pill-label">F/B</span><span class="array-pill-value" id="array_fb_db">—</span></div>
-<div class="array-pill"><span class="array-pill-label">TO angle</span><span class="array-pill-value" id="array_to_deg">—</span></div>
-</div>
+.panel-header,
+.array-header {
+  margin-bottom:var(--pad-sm);
+}
 
-<div class="preset-row">
-<button class="preset-btn" data-array-preset="40m_endfire">40m end‑fire</button>
-<button class="preset-btn" data-array-preset="40m_broadside">40m broadside</button>
-<button class="preset-btn" data-array-preset="80m_endfire">80m end‑fire</button>
-<button class="preset-btn" data-array-preset="80m_cardioid">80m cardioid</button>
-</div>
-</section>
-</div> <!-- end col-left -->
+.panel-title,
+.array-title {
+  font-size:var(--fs-lg);
+  font-weight:700;
+  color:var(--cyan-400);
+}
 
-<div class="col-right">
+.panel-tag,
+.array-tag {
+  font-size:var(--fs-sm);
+  color:var(--text-soft);
+  margin-top:4px;
+}
 
-<section class="panel" id="summary_panel">
-<div class="panel-header">
-<div class="panel-title">Summary</div>
-<div class="panel-tag">Active element • Stress • Notes</div>
-</div>
+.field-row,
+.boost-row,
+.array-geometry-grid,
+.array-phase-grid {
+  display:flex;
+  flex-direction:column;
+  gap:var(--pad-sm);
+  margin-bottom:var(--pad-md);
+}
 
-<div class="summary-grid">
-<div class="summary-item">
-<div class="summary-label">Active antenna</div>
-<div class="summary-value accent" id="summary_active_antenna">Vertical</div>
-</div>
+.field label {
+  font-size:var(--fs-sm);
+  color:var(--text-soft);
+  margin-bottom:4px;
+  display:block;
+}
 
-<div class="summary-item">
-<div class="summary-label">Band</div>
-<div class="summary-value" id="summary_band_label">—</div>
-</div>
+input,
+select {
+  width:100%;
+  padding:14px 16px;
+  font-size:var(--fs-md);
+  background:var(--navy-700);
+  color:var(--text-strong);
+  border:2px solid var(--navy-600);
+  border-radius:var(--radius);
+}
 
-<div class="summary-item">
-<div class="summary-label">Effective length</div>
-<div class="summary-value" id="summary_eff_len_m">—</div>
-</div>
+input.primary-input {
+  border-color:var(--cyan-300);
+}
 
-<div class="summary-item">
-<div class="summary-label">Pattern hint</div>
-<div class="summary-value" id="summary_pattern_hint">—</div>
-</div>
+input:focus,
+select:focus {
+  outline:none;
+  border-color:var(--cyan-400);
+  background:var(--navy-600);
+}
 
-<div class="summary-item">
-<div class="summary-label">System stress</div>
-<div class="summary-value warn" id="summary_stress_label">—</div>
-</div>
+.pills-row,
+.array-pills {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:var(--pad-sm);
+}
 
-<div class="summary-item">
-<div class="summary-label">Notes</div>
-<div class="summary-value" id="summary_notes">—</div>
-</div>
-</div>
-</section>
+.pill,
+.array-pill {
+  background:var(--navy-700);
+  padding:10px 14px;
+  border-radius:var(--radius);
+  font-size:var(--fs-sm);
+  color:var(--cyan-300);
+  box-shadow:var(--shadow);
+}
 
-<section class="boost-panel" id="boost_panel">
-<div class="boost-section-title">Boost panel</div>
+.pill.accent,
+.array-pill.accent {
+  background:var(--cyan-300);
+  color:#000;
+  font-weight:700;
+}
 
-<div class="boost-row">
-<div class="boost-label">Transmitter power (W)</div>
-<div class="field">
-<input id="boost_tx_power_w" type="number" step="1" class="primary-input" placeholder="100">
-</div>
-</div>
+.summary-grid,
+.erp-grid,
+.cutlength-grid {
+  display:flex;
+  flex-direction:column;
+  gap:var(--pad-sm);
+}
 
-<div class="boost-row">
-<div class="boost-label">Feedline loss (dB)</div>
-<div class="field">
-<input id="boost_feedline_loss_db" type="number" step="0.1" placeholder="1.0">
-</div>
-</div>
+.summary-item,
+.erp-item,
+.cut-item {
+  background:var(--navy-700);
+  padding:var(--pad-sm);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
 
-<div class="boost-row">
-<div class="boost-label">Additional gain (dB)</div>
-<div class="field">
-<input id="boost_additional_gain_db" type="number" step="0.1" placeholder="0.0">
-</div>
-</div>
+.summary-label,
+.erp-label {
+  font-size:var(--fs-sm);
+  color:var(--text-soft);
+}
 
-<div class="boost-row">
-<div class="boost-label">Include array gain</div>
-<div class="boost-toggle">
-<input id="boost_include_array" type="checkbox">
-<span class="small-note">When 2‑element array is active</span>
-</div>
-</div>
-</section>
-<section class="plot-panel" id="plot_panel">
-<div class="plot-title">Band overview</div>
+.summary-value,
+.erp-value {
+  font-size:var(--fs-md);
+  margin-top:4px;
+}
 
-<div class="plot-box">
-<canvas id="plot_canvas"></canvas>
-<div class="plot-placeholder" id="plot_placeholder">Plots will appear here when calculations run.</div>
-</div>
+.summary-value.warn {
+  color:var(--gold-400);
+}
 
-<div class="legend">
-<div class="legend-item">
-<div class="legend-swatch swatch-vert"></div>
-<span>Vertical / array</span>
-</div>
+.plot-box {
+  background:var(--navy-700);
+  border-radius:var(--radius);
+  padding:var(--pad-md);
+  box-shadow:var(--shadow);
+  position:relative;
+}
 
-<div class="legend-item">
-<div class="legend-swatch swatch-doub"></div>
-<span>Doublet / OCF / fan</span>
-</div>
+.plot-placeholder {
+  font-size:var(--fs-sm);
+  color:var(--text-soft);
+  text-align:center;
+  padding:var(--pad-md) 0;
+}
 
-<div class="legend-item">
-<div class="legend-swatch swatch-rw"></div>
-<span>Random‑wire / EFHW / loop</span>
-</div>
-</div>
-</section>
+.legend {
+  margin-top:var(--pad-md);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
 
-</div> <!-- end col-right -->
-</div> <!-- end app-body -->
+.legend-item {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
 
-</div> <!-- end app-shell -->
-<script src="js/engines/antennas.js"></script>
-<script src="js/engines/array.js"></script>
-<script src="js/engines/erp.js"></script>
-<script src="js/ui/summary.js"></script>
-<script src="js/ui/tabs.js"></script>
-<script src="js/ui/events.js"></script>
-<script src="js/ui/pills.js"></script>
+.legend-swatch {
+  width:20px;
+  height:20px;
+  border-radius:4px;
+}
 
-</body>
-</html>
+.swatch-vert { background:var(--cyan-300); }
+.swatch-doub { background:var(--gold-400); }
+.swatch-rw   { background:#ff6f6f; }
+.array-diagram {
+  background:var(--navy-700);
+  padding:var(--pad-md);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  margin-top:var(--pad-md);
+  display:flex;
+  flex-direction:column;
+  gap:var(--pad-sm);
+}
+
+.array-diagram-row {
+  display:flex;
+  justify-content:space-between;
+  font-size:var(--fs-md);
+  color:var(--text-strong);
+}
+
+.array-arrow {
+  color:var(--cyan-300);
+  font-weight:700;
+}
+
+.preset-row {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:var(--pad-md);
+}
+
+.preset-btn {
+  flex:0 0 auto;
+  padding:12px 18px;
+  font-size:var(--fs-sm);
+  background:var(--navy-700);
+  color:var(--cyan-300);
+  border:none;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+.preset-btn:hover {
+  background:var(--cyan-300);
+  color:#000;
+  font-weight:700;
+}
+
+.col-left,
+.col-right {
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:var(--pad-lg);
+}
+
+/* MOBILE-FIRST: STACKED LAYOUT */
+@media (min-width:900px) {
+  .app-body {
+    flex-direction:row;
+  }
+  .col-left,
+  .col-right {
+    width:50%;
+  }
+}
+
+/* IMPROVED TOUCH TARGETS */
+button,
+input,
+select {
+  min-height:48px;
+}
+
+/* SCROLL SMOOTHNESS */
+html {
+  scroll-behavior:smooth;
+}
+/* TAB STRIP REFINEMENT */
+.app-tabs {
+  background:var(--navy-800);
+  padding:var(--pad-sm);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+
+.app-tabs::-webkit-scrollbar {
+  display:none;
+}
+
+.tab-btn {
+  flex:0 0 auto;
+  padding:14px 20px;
+  font-size:var(--fs-md);
+  border-radius:var(--radius);
+  background:var(--navy-700);
+  color:var(--text-soft);
+  border:2px solid var(--navy-600);
+  transition:background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.tab-btn.active {
+  background:var(--cyan-300);
+  border-color:var(--cyan-400);
+  color:#000;
+  font-weight:700;
+}
+
+/* PANEL SPACING + MOBILE VISIBILITY */
+.panel,
+.array-panel,
+.boost-panel,
+.plot-panel {
+  margin-bottom:var(--pad-lg);
+}
+
+.panel-title,
+.array-title {
+  letter-spacing:0.5px;
+}
+
+.panel-tag,
+.array-tag {
+  opacity:0.85;
+}
+
+/* INPUT VISIBILITY BOOST */
+input,
+select {
+  font-weight:500;
+  letter-spacing:0.3px;
+}
+
+input::placeholder,
+select::placeholder {
+  color:var(--gray-200);
+  opacity:0.7;
+}
+
+/* PILL VISIBILITY BOOST */
+.pill,
+.array-pill {
+  letter-spacing:0.3px;
+  font-weight:500;
+}
+
+.pill.accent,
+.array-pill.accent {
+  font-weight:700;
+}
+
+/* SUMMARY PANEL VISIBILITY */
+.summary-item {
+  border-left:4px solid var(--cyan-300);
+}
+
+.summary-value {
+  font-weight:600;
+}
+
+/* ERP + CUT PANELS */
+.erp-item,
+.cut-item {
+  border-left:4px solid var(--gold-400);
+}
+
+/* PLOT PANEL ENHANCEMENT */
+.plot-title {
+  font-size:var(--fs-lg);
+  font-weight:700;
+  color:var(--cyan-400);
+  margin-bottom:var(--pad-sm);
+}
+
+canvas#plot_canvas {
+  width:100%;
+  height:260px;
+  display:block;
+}
+
+/* MOBILE OVERSIZE MODE (PHONES < 480px) */
+@media (max-width:480px) {
+  :root {
+    --fs-xl:1.8rem;
+    --fs-lg:1.45rem;
+    --fs-md:1.2rem;
+    --fs-sm:1.05rem;
+  }
+
+  input,
+  select,
+  button {
+    padding:16px 20px;
+    min-height:52px;
+  }
+
+  .panel,
+  .array-panel,
+  .boost-panel,
+  .plot-panel {
+    padding:var(--pad-lg);
+  }
+}
+/* MICRO-ANIMATIONS FOR INTERACTIVITY */
+button,
+input,
+select,
+.pill,
+.array-pill,
+.preset-btn,
+.tab-btn {
+  transition:background 0.18s ease, 
+             color 0.18s ease, 
+             border-color 0.18s ease,
+             transform 0.12s ease;
+}
+
+button:active,
+.preset-btn:active,
+.tab-btn:active {
+  transform:scale(0.97);
+}
+
+/* PANEL SHADOW POLISH */
+.panel,
+.array-panel,
+.boost-panel,
+.plot-panel {
+  box-shadow:0 6px 18px rgba(0,0,0,0.45);
+}
+
+/* INPUT SHADOW + GLOW */
+input:focus,
+select:focus {
+  box-shadow:0 0 0 3px rgba(63,208,255,0.35);
+}
+
+/* PILL GLOW */
+.pill.accent,
+.array-pill.accent {
+  box-shadow:0 0 10px rgba(63,208,255,0.45);
+}
+
+/* BADGE GLOW */
+.badge.hot {
+  box-shadow:0 0 10px rgba(255,204,77,0.45);
+}
+
+/* LEGEND SWATCH GLOW */
+.legend-swatch {
+  box-shadow:0 0 8px rgba(0,0,0,0.4);
+}
+
+/* SCROLL CONTAINMENT FOR MOBILE */
+body {
+  overscroll-behavior-y:none;
+}
+
+/* TIGHTER PANEL SPACING ON LARGE SCREENS */
+@media (min-width:900px) {
+  .panel,
+  .array-panel,
+  .boost-panel,
+  .plot-panel {
+    margin-bottom:var(--pad-md);
+  }
+}
+
+/* HIGH-CONTRAST MODE FOR OUTDOOR VIEWING */
+@media (prefers-contrast:more) {
+  :root {
+    --navy-900:#000814;
+    --navy-800:#001226;
+    --navy-700:#001a33;
+    --cyan-400:#5fe1ff;
+    --cyan-300:#3fd0ff;
+    --gold-400:#ffd75e;
+  }
+  body {
+    background:var(--navy-900);
+  }
+  .panel,
+  .array-panel,
+  .boost-panel,
+  .plot-panel {
+    background:var(--navy-800);
+  }
+  input,
+  select {
+    background:var(--navy-700);
+    border-color:var(--cyan-300);
+  }
+}
+/* PANEL RHYTHM + FLOW */
+.panel,
+.array-panel,
+.boost-panel,
+.plot-panel {
+  border:1px solid rgba(255,255,255,0.05);
+  backdrop-filter:blur(4px);
+}
+
+/* SECTION TITLES */
+.boost-section-title {
+  font-size:var(--fs-lg);
+  font-weight:700;
+  color:var(--cyan-300);
+  margin-bottom:var(--pad-md);
+}
+
+/* BOOST PANEL LABELS */
+.boost-label {
+  font-size:var(--fs-sm);
+  color:var(--text-soft);
+  margin-bottom:6px;
+}
+
+/* BOOST TOGGLE */
+.boost-toggle {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.boost-toggle input[type="checkbox"] {
+  width:24px;
+  height:24px;
+  accent-color:var(--cyan-300);
+}
+
+.small-note {
+  font-size:var(--fs-sm);
+  color:var(--text-soft);
+}
+
+/* ARRAY PANEL ENHANCEMENTS */
+.coax-grid {
+  display:flex;
+  flex-direction:column;
+  gap:var(--pad-sm);
+  margin-top:var(--pad-md);
+}
+
+.coax-item {
+  background:var(--navy-700);
+  padding:var(--pad-sm);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+.coax-label {
+  font-size:var(--fs-sm);
+  color:var(--text-soft);
+}
+
+.coax-value {
+  font-size:var(--fs-md);
+  margin-top:4px;
+  font-weight:600;
+}
+
+/* ARRAY PRESET BUTTONS */
+.preset-btn {
+  border:2px solid var(--navy-600);
+}
+
+.preset-btn:active {
+  transform:scale(0.96);
+}
+
+/* HIGH-VISIBILITY VALUES */
+#summary_active_antenna,
+#array_gain_db,
+#array_fb_db,
+#array_to_deg,
+#erp_w,
+#erp_dbw,
+#erp_dbm {
+  color:var(--cyan-300);
+  font-weight:700;
+}
+
+/* CUT LENGTH VALUES */
+#cut_80m_m,
+#cut_40m_m,
+#cut_20m_m,
+#cut_15m_m,
+#cut_10m_m,
+#cut_6m_m {
+  color:var(--gold-400);
+  font-weight:700;
+}
+
+/* MOBILE PANEL SPACING */
+@media (max-width:600px) {
+  .panel,
+  .array-panel,
+  .boost-panel,
+  .plot-panel {
+    margin-bottom:calc(var(--pad-lg) * 1.2);
+  }
+}
+
+/* FINAL TOUCH: SMOOTH PANEL HOVER (DESKTOP ONLY) */
+@media (hover:hover) {
+  .panel:hover,
+  .array-panel:hover,
+  .boost-panel:hover,
+  .plot-panel:hover {
+    box-shadow:0 8px 22px rgba(0,0,0,0.55);
+    transform:translateY(-2px);
+    transition:transform 0.15s ease, box-shadow 0.2s ease;
+  }
+}
