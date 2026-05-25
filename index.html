@@ -1,567 +1,4 @@
-:root{
---bg:#0d1733;
---panel:#162040;
---accent:#f5c84a;
---accent-strong:#ffe08a;
---accent-soft:rgba(245,200,74,0.25);
---text:#f7f9ff;
---muted:#a8b2d6;
---danger:#ff5c7a;
---good:#4cd964;
---warn:#ffd35c;
---border:#2a3558;
---pill-bg:#1e274a;
---pill-border:#2f3a5f;
---plot-bg:#162040;
---focus-border:#ffe08a;
---focus-glow:0 0 14px rgba(255,224,138,0.95);
---font-main:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{
-background:radial-gradient(circle at top,#2d3a6a 0,#0d1733 55%,#0a1228 100%);
-color:var(--text);
-font-family:var(--font-main);
-font-size:17px;
-min-height:100vh;
-padding:28px;
-}
-.app-shell{
-max-width:1600px;
-margin:0 auto;
-border-radius:22px;
-background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(0,0,0,0.45));
-box-shadow:0 24px 55px rgba(0,0,0,0.55);
-overflow:hidden;
-display:flex;
-flex-direction:column;
-}
-.app-header{
-display:flex;
-align-items:flex-start;
-padding:24px 28px 14px 28px;
-border-bottom:1px solid rgba(255,255,255,0.08);
-}
-.app-title-block{flex:1;}
-.app-title{
-font-size:26px;
-font-weight:650;
-letter-spacing:0.08em;
-text-transform:uppercase;
-color:#ffffff;
-}
-.app-subtitle{
-font-size:15px;
-color:var(--muted);
-margin-top:8px;
-}
-.app-badges{
-display:flex;
-gap:12px;
-flex-wrap:wrap;
-margin-top:10px;
-}
-.badge{
-font-size:12px;
-text-transform:uppercase;
-letter-spacing:0.09em;
-padding:5px 12px;
-border-radius:999px;
-border:1px solid rgba(255,255,255,0.14);
-color:var(--muted);
-background:rgba(15,20,40,0.85);
-}
-.badge.hot{
-border-color:var(--accent);
-color:var(--accent);
-background:rgba(245,200,74,0.18);
-}
-.app-tabs{
-display:flex;
-gap:10px;
-padding:12px 24px 10px 24px;
-border-bottom:1px solid rgba(255,255,255,0.08);
-flex-wrap:wrap;
-background:rgba(10,14,30,0.85);
-backdrop-filter:blur(12px);
-}
-.tab-btn{
-font-size:13px;
-text-transform:uppercase;
-letter-spacing:0.09em;
-padding:8px 16px;
-border-radius:999px;
-border:1px solid transparent;
-background:transparent;
-color:var(--muted);
-cursor:pointer;
-transition:all 0.15s ease-out;
-}
-.tab-btn:hover{
-border-color:rgba(255,255,255,0.18);
-color:#ffffff;
-background:rgba(255,255,255,0.04);
-}
-.tab-btn.active{
-border-color:var(--accent-strong);
-background:rgba(255,224,138,0.22);
-color:#0d1733;
-}
-.app-body{
-display:grid;
-grid-template-columns:minmax(0,1.25fr) minmax(0,0.9fr) minmax(0,1.1fr);
-gap:20px;
-padding:20px 24px 24px 24px;
-}
-.panel{
-background:var(--panel);
-border-radius:18px;
-border:1px solid var(--border);
-padding:16px 18px;
-display:flex;
-flex-direction:column;
-gap:12px;
-box-shadow:0 12px 30px rgba(0,0,0,0.45);
-}
-.panel-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:6px;
-gap:10px;
-}
-.panel-title{
-font-size:17px;
-font-weight:600;
-text-transform:uppercase;
-letter-spacing:0.09em;
-color:#ffffff;
-display:flex;
-align-items:center;
-gap:10px;
-}
-.panel-tag{
-font-size:12px;
-text-transform:uppercase;
-letter-spacing:0.08em;
-color:var(--muted);
-}
-.xfmr-badge{
-font-size:12px;
-text-transform:uppercase;
-letter-spacing:0.09em;
-padding:4px 10px;
-border-radius:999px;
-border:2px solid var(--accent-strong);
-color:#0d1733;
-background:var(--accent-strong);
-box-shadow:0 0 14px rgba(255,224,138,0.85);
-}
-.field-row{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:10px;
-}
-.field{
-display:flex;
-flex-direction:column;
-gap:4px;
-}
-.field label{
-font-size:12px;
-text-transform:uppercase;
-letter-spacing:0.09em;
-color:var(--muted);
-}
-input[type="number"],
-input[type="text"],
-select{
-background:#111b3a;
-border-radius:12px;
-border:1px solid #2a3558;
-padding:9px 12px;
-font-size:15px;
-color:var(--text);
-outline:none;
-}
-input[type="number"]::placeholder,
-input[type="text"]::placeholder{
-color:#6c7598;
-}
-.primary-input{
-background:#1f2a52;
-border:2px solid var(--accent-strong);
-color:#ffffff;
-box-shadow:0 0 10px rgba(255,224,138,0.65),inset 0 0 0 1px rgba(0,0,0,0.7);
-}
-.primary-input:focus,
-.primary-input:focus-visible{
-border-color:var(--focus-border);
-box-shadow:var(--focus-glow),inset 0 0 0 1px rgba(0,0,0,0.8);
-}
-select.primary-input{
-background:#1f2a52;
-}
-.pills-row{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-margin-top:8px;
-}
-.pill{
-display:inline-flex;
-align-items:center;
-gap:6px;
-padding:5px 12px;
-border-radius:999px;
-border:1px solid var(--pill-border);
-background:var(--pill-bg);
-font-size:12px;
-color:var(--muted);
-}
-.pill-label{
-text-transform:uppercase;
-letter-spacing:0.09em;
-}
-.pill-value{
-font-weight:600;
-color:#ffffff;
-}
-.pill.good{
-border-color:rgba(76,217,100,0.7);
-background:rgba(76,217,100,0.14);
-}
-.pill.warn{
-border-color:rgba(255,211,92,0.8);
-background:rgba(255,211,92,0.14);
-}
-.pill.bad{
-border-color:rgba(255,92,122,0.85);
-background:rgba(255,92,122,0.14);
-}
-.pill.accent{
-border-color:var(--accent-strong);
-background:rgba(255,224,138,0.22);
-}
-.summary-grid{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:10px;
-margin-top:10px;
-}
-.summary-item{
-background:#111b3a;
-border-radius:14px;
-border:1px solid #2a3558;
-padding:10px 12px;
-}
-.summary-label{
-font-size:12px;
-text-transform:uppercase;
-letter-spacing:0.09em;
-color:var(--muted);
-}
-.summary-value{
-margin-top:4px;
-font-size:17px;
-font-weight:600;
-}
-.summary-value.accent{color:var(--accent-strong);}
-.summary-value.good{color:var(--good);}
-.summary-value.warn{color:var(--warn);}
-.summary-value.bad{color:var(--danger);}
-.plot-panel{
-background:var(--panel);
-border-radius:18px;
-border:1px solid var(--border);
-padding:14px 16px;
-display:flex;
-flex-direction:column;
-gap:12px;
-box-shadow:0 12px 30px rgba(0,0,0,0.45);
-}
-.plot-title{
-font-size:13px;
-text-transform:uppercase;
-letter-spacing:0.09em;
-color:var(--muted);
-}
-.plot-box{
-background:var(--plot-bg);
-border-radius:14px;
-border:1px solid #2a3558;
-height:170px;
-position:relative;
-overflow:hidden;
-}
-.plot-placeholder{
-position:absolute;
-inset:0;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:13px;
-color:#6c7598;
-}
-.legend{
-display:flex;
-gap:14px;
-margin-top:8px;
-font-size:12px;
-color:var(--muted);
-}
-.legend-item{
-display:flex;
-align-items:center;
-gap:6px;
-}
-.legend-swatch{
-width:14px;
-height:4px;
-border-radius:999px;
-}
-.swatch-vert{background:#ffd35c;}
-.swatch-doub{background:#4da6ff;}
-.swatch-rw{background:#ff8a4a;}
-.boost-panel{
-background:var(--panel);
-border-radius:18px;
-border:1px solid var(--border);
-padding:14px 16px;
-display:flex;
-flex-direction:column;
-gap:12px;
-box-shadow:0 12px 30px rgba(0,0,0,0.45);
-}
-.boost-section-title{
-font-size:13px;
-text-transform:uppercase;
-letter-spacing:0.09em;
-color:var(--muted);
-margin-bottom:4px;
-}
-.boost-row{
-display:grid;
-grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
-gap:10px;
-align-items:center;
-}
-.boost-label{
-font-size:15px;
-color:var(--text);
-}
-.boost-toggle{
-display:flex;
-align-items:center;
-gap:10px;
-}
-.boost-toggle input[type="checkbox"]{
-accent-color:var(--accent-strong);
-transform:scale(1.15);
-}
-.small-note{
-font-size:12px;
-color:var(--muted);
-}
-.erp-grid{
-display:grid;
-grid-template-columns:repeat(3,minmax(0,1fr));
-gap:10px;
-margin-top:8px;
-}
-.erp-item{
-background:#111b3a;
-border-radius:12px;
-border:1px solid #2a3558;
-padding:9px 12px;
-}
-.erp-label{
-font-size:12px;
-text-transform:uppercase;
-letter-spacing:0.09em;
-color:var(--muted);
-}
-.erp-value{
-margin-top:4px;
-font-size:15px;
-font-weight:600;
-}
-.cutlength-grid{
-display:grid;
-grid-template-columns:repeat(3,minmax(0,1fr));
-gap:10px;
-margin-top:8px;
-}
-.cut-item{
-background:#111b3a;
-border-radius:12px;
-border:1px solid #2a3558;
-padding:9px 12px;
-}
-.antenna-panel{display:none;}
-.antenna-panel.active{display:flex;}
-.array-panel{
-background:var(--panel);
-border-radius:18px;
-border:1px solid var(--border);
-padding:16px 18px;
-display:flex;
-flex-direction:column;
-gap:12px;
-box-shadow:0 12px 30px rgba(0,0,0,0.45);
-}
-.array-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-margin-bottom:6px;
-}
-.array-title{
-font-size:17px;
-font-weight:600;
-text-transform:uppercase;
-letter-spacing:0.09em;
-color:#ffffff;
-display:flex;
-align-items:center;
-gap:10px;
-}
-.array-tag{
-font-size:12px;
-text-transform:uppercase;
-letter-spacing:0.08em;
-color:var(--muted);
-}
-.array-geometry-grid{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:10px;
-}
-.array-phase-grid{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:10px;
-margin-top:8px;
-}
-.array-diagram{
-margin-top:10px;
-background:#111b3a;
-border-radius:14px;
-border:1px solid #2a3558;
-padding:10px 12px;
-display:flex;
-flex-direction:column;
-gap:6px;
-}
-.array-diagram-row{
-display:flex;
-justify-content:space-between;
-align-items:center;
-font-size:13px;
-color:var(--muted);
-}
-.array-arrow{
-font-size:15px;
-color:var(--accent-strong);
-}
-.array-pills{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-margin-top:8px;
-}
-.array-pill{
-display:inline-flex;
-align-items:center;
-gap:6px;
-padding:5px 12px;
-border-radius:999px;
-border:1px solid var(--pill-border);
-background:var(--pill-bg);
-font-size:12px;
-color:var(--muted);
-}
-.array-pill-label{
-text-transform:uppercase;
-letter-spacing:0.09em;
-}
-.array-pill-value{
-font-weight:600;
-color:#ffffff;
-}
-.array-pill.good{
-border-color:rgba(76,217,100,0.7);
-background:rgba(76,217,100,0.14);
-}
-.array-pill.warn{
-border-color:rgba(255,211,92,0.8);
-background:rgba(255,211,92,0.14);
-}
-.array-pill.bad{
-border-color:rgba(255,92,122,0.85);
-background:rgba(255,92,122,0.14);
-}
-.array-pill.accent{
-border-color:var(--accent-strong);
-background:rgba(255,224,138,0.22);
-}
-.coax-grid{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:10px;
-margin-top:8px;
-}
-.coax-item{
-background:#111b3a;
-border-radius:12px;
-border:1px solid #2a3558;
-padding:9px 12px;
-}
-.coax-label{
-font-size:12px;
-text-transform:uppercase;
-letter-spacing:0.09em;
-color:var(--muted);
-}
-.coax-value{
-margin-top:4px;
-font-size:15px;
-font-weight:600;
-}
-.preset-row{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-margin-top:8px;
-}
-.preset-btn{
-font-size:12px;
-text-transform:uppercase;
-letter-spacing:0.09em;
-padding:6px 12px;
-border-radius:999px;
-border:1px solid rgba(255,255,255,0.14);
-background:#1e274a;
-color:var(--muted);
-cursor:pointer;
-transition:all 0.15s ease-out;
-}
-.preset-btn:hover{
-border-color:var(--accent-strong);
-color:#ffffff;
-background:rgba(255,224,138,0.22);
-}
-.preset-btn.active{
-border-color:var(--accent-strong);
-background:rgba(255,224,138,0.28);
-color:#0d1733;
-}
-@media(max-width:1300px){
-.app-body{
-grid-template-columns:1fr;
-}
-}<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -582,7 +19,6 @@ grid-template-columns:1fr;
 </div>
 </div>
 </div>
-
 <div class="app-tabs">
 <button class="tab-btn active" data-tab="vertical">Vertical</button>
 <button class="tab-btn" data-tab="doublet">Doublet</button>
@@ -593,10 +29,8 @@ grid-template-columns:1fr;
 <button class="tab-btn" data-tab="loop">Loop</button>
 <button class="tab-btn" data-tab="array">2‑Element Array</button>
 </div>
-
 <div class="app-body">
 <div class="col-left">
-
 <section class="panel antenna-panel active" id="tab-vertical">
 <div class="panel-header">
 <div class="panel-title">Vertical</div>
@@ -643,121 +77,175 @@ grid-template-columns:1fr;
 <div class="pill"><span class="pill-label">Takeoff</span><span class="pill-value" id="vert_takeoff_deg">—</span></div>
 </div>
 </section>
-
-<section class="panel antenna-panel" id="tab-doublet">
+<section class="panel antenna-panel" id="tab-ocf">
 <div class="panel-header">
-<div class="panel-title">Doublet</div>
-<div class="panel-tag">Center‑fed wire • Balanced line</div>
+<div class="panel-title">OCF Dipole</div>
+<div class="panel-tag">Off‑center‑fed • Multiband</div>
 </div>
 
 <div class="field-row">
 <div class="field">
-<label for="doub_freq_mhz">Frequency (MHz)</label>
-<input id="doub_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
+<label for="ocf_freq_mhz">Design frequency (MHz)</label>
+<input id="ocf_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
 </div>
 <div class="field">
-<label for="doub_total_len_m">Total length (m)</label>
-<input id="doub_total_len_m" type="number" step="0.1" placeholder="40.0">
-</div>
-</div>
-
-<div class="field-row">
-<div class="field">
-<label for="doub_height_m">Height above ground (m)</label>
-<input id="doub_height_m" type="number" step="0.1" placeholder="12.0">
-</div>
-<div class="field">
-<label for="doub_feedline_len_m">Feedline length (m)</label>
-<input id="doub_feedline_len_m" type="number" step="0.1" placeholder="20.0">
+<label for="ocf_total_len_m">Total length (m)</label>
+<input id="ocf_total_len_m" type="number" step="0.1" placeholder="40.0">
 </div>
 </div>
 
 <div class="field-row">
 <div class="field">
-<label for="doub_feedline_z_ohms">Feedline Z (Ω)</label>
-<input id="doub_feedline_z_ohms" type="number" step="1" placeholder="450">
+<label for="ocf_offset_pct">Feedpoint offset (%)</label>
+<input id="ocf_offset_pct" type="number" step="0.1" placeholder="33.0">
 </div>
 <div class="field">
-<label for="doub_tuner_loss_db">Tuner loss (dB)</label>
-<input id="doub_tuner_loss_db" type="number" step="0.1" placeholder="1.0">
+<label for="ocf_balun_ratio">Balun ratio</label>
+<input id="ocf_balun_ratio" type="text" placeholder="4:1 or 6:1">
 </div>
 </div>
 
-<div class="pills-row" id="doub_pills_row">
-<div class="pill accent"><span class="pill-label">Band</span><span class="pill-value" id="doub_band_label">—</span></div>
-<div class="pill"><span class="pill-label">SWR at tuner</span><span class="pill-value" id="doub_swr_tuner">—</span></div>
-<div class="pill"><span class="pill-label">Pattern</span><span class="pill-value" id="doub_pattern_hint">—</span></div>
+<div class="pills-row" id="ocf_pills_row">
+<div class="pill accent"><span class="pill-label">Bands</span><span class="pill-value" id="ocf_bands">—</span></div>
+<div class="pill"><span class="pill-label">Feed Z</span><span class="pill-value" id="ocf_feed_z">—</span></div>
 </div>
 </section>
 
-<section class="panel antenna-panel" id="tab-randomwire">
+<section class="panel antenna-panel" id="tab-fandipole">
 <div class="panel-header">
-<div class="panel-title">Random‑Wire</div>
-<div class="panel-tag">End‑fed • Tuner‑dependent</div>
+<div class="panel-title">Fan Dipole</div>
+<div class="panel-tag">Multiple legs • Shared feed</div>
 </div>
 
 <div class="field-row">
 <div class="field">
-<label for="rw_freq_mhz">Frequency (MHz)</label>
-<input id="rw_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
+<label for="fan_freq1_mhz">Band 1 freq (MHz)</label>
+<input id="fan_freq1_mhz" type="number" step="0.01" class="primary-input" placeholder="3.5">
 </div>
 <div class="field">
-<label for="rw_len_m">Wire length (m)</label>
-<input id="rw_len_m" type="number" step="0.1" placeholder="26.0">
+<label for="fan_len1_m">Band 1 leg length (m)</label>
+<input id="fan_len1_m" type="number" step="0.1" placeholder="40.0">
 </div>
 </div>
 
 <div class="field-row">
 <div class="field">
-<label for="rw_counterpoise_m">Counterpoise length (m)</label>
-<input id="rw_counterpoise_m" type="number" step="0.1" placeholder="8.0">
+<label for="fan_freq2_mhz">Band 2 freq (MHz)</label>
+<input id="fan_freq2_mhz" type="number" step="0.01" placeholder="7.1">
 </div>
 <div class="field">
-<label for="rw_tuner_loss_db">Tuner loss (dB)</label>
-<input id="rw_tuner_loss_db" type="number" step="0.1" placeholder="1.5">
+<label for="fan_len2_m">Band 2 leg length (m)</label>
+<input id="fan_len2_m" type="number" step="0.1" placeholder="20.0">
 </div>
 </div>
 
-<div class="pills-row" id="rw_pills_row">
-<div class="pill accent"><span class="pill-label">Forbidden lengths</span><span class="pill-value" id="rw_forbidden_flag">—</span></div>
-<div class="pill"><span class="pill-label">Matchable</span><span class="pill-value" id="rw_matchable_flag">—</span></div>
+<div class="field-row">
+<div class="field">
+<label for="fan_freq3_mhz">Band 3 freq (MHz)</label>
+<input id="fan_freq3_mhz" type="number" step="0.01" placeholder="14.2">
+</div>
+<div class="field">
+<label for="fan_len3_m">Band 3 leg length (m)</label>
+<input id="fan_len3_m" type="number" step="0.1" placeholder="10.0">
+</div>
+</div>
+
+<div class="pills-row" id="fan_pills_row">
+<div class="pill accent"><span class="pill-label">Active leg</span><span class="pill-value" id="fan_active_leg">—</span></div>
+<div class="pill"><span class="pill-label">Coupling</span><span class="pill-value" id="fan_coupling_hint">—</span></div>
+</div>
+</section>
+<section class="panel antenna-panel" id="tab-loop">
+<div class="panel-header">
+<div class="panel-title">Loop</div>
+<div class="panel-tag">Full‑wave or magnetic loop</div>
+</div>
+
+<div class="field-row">
+<div class="field">
+<label for="loop_freq_mhz">Frequency (MHz)</label>
+<input id="loop_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
+</div>
+<div class="field">
+<label for="loop_perimeter_m">Perimeter (m)</label>
+<input id="loop_perimeter_m" type="number" step="0.1" placeholder="30.0">
+</div>
+</div>
+
+<div class="field-row">
+<div class="field">
+<label for="loop_height_m">Height (m)</label>
+<input id="loop_height_m" type="number" step="0.1" placeholder="10.0">
+</div>
+<div class="field">
+<label for="loop_type">Loop type</label>
+<select id="loop_type">
+<option value="fullwave">Full‑wave horizontal</option>
+<option value="delta">Delta loop</option>
+<option value="magloop">Small magnetic loop</option>
+</select>
+</div>
+</div>
+
+<div class="pills-row" id="loop_pills_row">
+<div class="pill accent"><span class="pill-label">Mode</span><span class="pill-value" id="loop_mode_label">—</span></div>
+<div class="pill"><span class="pill-label">Pattern</span><span class="pill-value" id="loop_pattern_hint">—</span></div>
 </div>
 </section>
 
-<section class="panel antenna-panel" id="tab-efhw">
-<div class="panel-header">
-<div class="panel-title">EFHW</div>
-<div class="panel-tag">End‑fed half‑wave • 49:1</div>
-<div class="xfmr-badge">49:1 XFMR</div>
+<section class="array-panel antenna-panel" id="tab-array">
+<div class="array-header">
+<div class="array-title">2‑Element Vertical Array</div>
+<div class="array-tag">End‑fire / broadside • Phased verticals</div>
 </div>
 
-<div class="field-row">
+<div class="array-geometry-grid">
 <div class="field">
-<label for="efhw_freq_mhz">Frequency (MHz)</label>
-<input id="efhw_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
+<label for="array_freq_mhz">Frequency (MHz)</label>
+<input id="array_freq_mhz" type="number" step="0.01" class="primary-input" placeholder="7.1">
 </div>
 <div class="field">
-<label for="efhw_len_m">Wire length (m)</label>
-<input id="efhw_len_m" type="number" step="0.1" placeholder="20.0">
-</div>
-</div>
-
-<div class="field-row">
-<div class="field">
-<label for="efhw_height_m">Height (m)</label>
-<input id="efhw_height_m" type="number" step="0.1" placeholder="10.0">
-</div>
-<div class="field">
-<label for="efhw_xfmr_loss_db">Transformer loss (dB)</label>
-<input id="efhw_xfmr_loss_db" type="number" step="0.1" placeholder="1.0">
+<label for="array_spacing_m">Element spacing (m)</label>
+<input id="array_spacing_m" type="number" step="0.1" placeholder="10.0">
 </div>
 </div>
 
-<div class="pills-row" id="efhw_pills_row">
-<div class="pill accent"><span class="pill-label">Primary band</span><span class="pill-value" id="efhw_primary_band">—</span></div>
-<div class="pill"><span class="pill-label">Harmonics</span><span class="pill-value" id="efhw_harmonics">—</span></div>
+<div class="array-phase-grid">
+<div class="field">
+<label for="array_phase_deg">Phase shift (deg)</label>
+<input id="array_phase_deg" type="number" step="1" placeholder="90">
 </div>
-</section><div class="array-pill-value" id="array_to_deg">—</span></div>
+<div class="field">
+<label for="array_mode">Array mode</label>
+<select id="array_mode">
+<option value="endfire">End‑fire</option>
+<option value="broadside">Broadside</option>
+<option value="cardioid">Cardioid</option>
+</select>
+</div>
+</div>
+
+<div class="coax-grid">
+<div class="coax-item">
+<div class="coax-label">Ideal phasing stub (m)</div>
+<div class="coax-value" id="array_stub_ideal_m">—</div>
+</div>
+<div class="coax-item">
+<div class="coax-label">Equal‑length stubs (m)</div>
+<div class="coax-value" id="array_stub_equal_m">—</div>
+</div>
+</div>
+
+<div class="array-diagram">
+<div class="array-diagram-row"><span>Element 1</span><span class="array-arrow" id="array_elem1_arrow">⇢</span><span id="array_elem1_phase_label">0°</span></div>
+<div class="array-diagram-row"><span>Element 2</span><span class="array-arrow" id="array_elem2_arrow">⇢</span><span id="array_elem2_phase_label">+90°</span></div>
+<div class="array-diagram-row"><span>Main lobe azimuth</span><span id="array_main_lobe_deg">—</span></div>
+</div>
+
+<div class="array-pills" id="array_pills_row">
+<div class="array-pill accent"><span class="array-pill-label">Array gain</span><span class="array-pill-value" id="array_gain_db">—</span></div>
+<div class="array-pill"><span class="array-pill-label">F/B</span><span class="array-pill-value" id="array_fb_db">—</span></div>
+<div class="array-pill"><span class="array-pill-label">TO angle</span><span class="array-pill-value" id="array_to_deg">—</span></div>
 </div>
 
 <div class="preset-row">
@@ -767,7 +255,6 @@ grid-template-columns:1fr;
 <button class="preset-btn" data-array-preset="80m_cardioid">80m cardioid</button>
 </div>
 </section>
-
 </div> <!-- end col-left -->
 
 <div class="col-right">
@@ -843,70 +330,6 @@ grid-template-columns:1fr;
 </div>
 </div>
 </section>
-
-<section class="panel" id="erp_panel">
-<div class="panel-header">
-<div class="panel-title">ERP Engine</div>
-<div class="panel-tag">Effective radiated power</div>
-</div>
-
-<div class="erp-grid">
-<div class="erp-item">
-<div class="erp-label">ERP (W)</div>
-<div class="erp-value" id="erp_w">—</div>
-</div>
-
-<div class="erp-item">
-<div class="erp-label">ERP (dBW)</div>
-<div class="erp-value" id="erp_dbw">—</div>
-</div>
-
-<div class="erp-item">
-<div class="erp-label">ERP (dBm)</div>
-<div class="erp-value" id="erp_dbm">—</div>
-</div>
-</div>
-</section>
-
-<section class="panel" id="cutlength_panel">
-<div class="panel-header">
-<div class="panel-title">Cut lengths</div>
-<div class="panel-tag">Per‑band wire lengths</div>
-</div>
-
-<div class="cutlength-grid">
-<div class="cut-item">
-<div class="erp-label">80m (m)</div>
-<div class="erp-value" id="cut_80m_m">—</div>
-</div>
-
-<div class="cut-item">
-<div class="erp-label">40m (m)</div>
-<div class="erp-value" id="cut_40m_m">—</div>
-</div>
-
-<div class="cut-item">
-<div class="erp-label">20m (m)</div>
-<div class="erp-value" id="cut_20m_m">—</div>
-</div>
-
-<div class="cut-item">
-<div class="erp-label">15m (m)</div>
-<div class="erp-value" id="cut_15m_m">—</div>
-</div>
-
-<div class="cut-item">
-<div class="erp-label">10m (m)</div>
-<div class="erp-value" id="cut_10m_m">—</div>
-</div>
-
-<div class="cut-item">
-<div class="erp-label">6m (m)</div>
-<div class="erp-value" id="cut_6m_m">—</div>
-</div>
-</div>
-</section>
-
 <section class="plot-panel" id="plot_panel">
 <div class="plot-title">Band overview</div>
 
@@ -937,7 +360,6 @@ grid-template-columns:1fr;
 </div> <!-- end app-body -->
 
 </div> <!-- end app-shell -->
-
 <script src="js/engines/antennas.js"></script>
 <script src="js/engines/array.js"></script>
 <script src="js/engines/erp.js"></script>
@@ -948,5 +370,3 @@ grid-template-columns:1fr;
 
 </body>
 </html>
-
-
