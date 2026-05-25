@@ -110,4 +110,5 @@ function populateDropdown(){
 populateDropdown();
 updatePanels();
 calc();
+});
 
